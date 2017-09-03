@@ -1,4 +1,5 @@
 #include "rt.h"
+#include "libft.h"
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
@@ -49,7 +50,7 @@ double	ft_min(double u, double v)
 	return (u < v ? u : v);
 }
 
-double	ft_abs(double u)
+double	ft_abs_double(double u)
 {
 	return (u > 0 ? u : -u);
 }
@@ -59,6 +60,7 @@ size_t	calc_lum(double norm_sphere[3])
 	double	lum_pos[3];
 	double	lum_vect[3];
 	double	lum;
+	size_t intensite_color;
 
 	lum_pos[0] = 2;
 	lum_pos[1] = 2;
@@ -66,8 +68,12 @@ size_t	calc_lum(double norm_sphere[3])
 
 	ft_memset(lum_vect, 0, sizeof(double) * 3);
 	sub_vect(lum_vect, norm_sphere, lum_pos);
-	lum = scalar_product(lum_vect, norm_sphere);
-	return ((lum - 1) * 0x00FF00);
+	lum = ft_abs_double(scalar_product(lum_vect, norm_sphere));
+			printf("lum %f\n", lum);
+	intensite_color = (1 - (lum / 40.0)) * 255;
+			printf("intensite_color %zu\n", intensite_color);
+	intensite_color <<= 8;
+	return (intensite_color);
 }
 
 size_t	throw_ray(t_cam cam, double ray[3])
@@ -87,7 +93,7 @@ size_t	throw_ray(t_cam cam, double ray[3])
 	c = norme_carre(cam.pos) - rayon * rayon;
 
 	delta = calc_delta(a, b, c);
-	printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
+	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0x0);
 	t = ft_min((b - sqrt(delta)) / (2 * a), (b + sqrt(delta)) / (2 * a));
@@ -142,12 +148,12 @@ void	calc(t_env *env)
 			ray[2] = 0;
 
 			coef = (((double)pix_vert - (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2)) * 0.66; //varie entre -0.66 et +0.66
-			printf("coef %f", coef);
+			//printf("coef %f", coef);
 			ray[2] += coef * norm_vert[2];
 			coef = (((double)pix_hor - (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2)) * 0.66 * WIDTH_PER_HEIGHT; //varie entre -0.66 et +0.66
-			printf("coef %f", coef);
+			//printf("coef %f", coef);
 			ray[1] += coef * norm_hor[1];
-			printf("\nray %f, %f, %f\n", ray[0], ray[1], ray[2]);
+			//printf("\nray %f, %f, %f\n", ray[0], ray[1], ray[2]);
 			ft_pixelput(env, pix_hor, pix_vert, throw_ray(cam, ray));
 			pix_hor++;
 		}

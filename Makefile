@@ -6,7 +6,7 @@
 #    By: vcombey <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/03 20:43:57 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/03 23:18:53 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRC =	main.c			\
 		calc.c	\
 		env.c			\
 
-INCLUDE = -I ./libft -I ./includes -g
+INCLUDE = -I ./libft/includes -I ./includes -g
 
 OBJS = $(addprefix objs/, $(SRC:.c=.o))
 

@@ -14,12 +14,6 @@ typedef struct		s_cam
 	double			pos[3];
 }					t_cam;
 
-typedef struct		s_lum
-{
-	double			dir[3];
-	double			pos[3];
-}					t_lum;
-
 typedef struct		s_env
 {
 	void			*mlx;
@@ -36,7 +30,6 @@ typedef struct		s_env
 # define WIDTH_PER_HEIGHT SCREEN_WIDTH/SCREEN_HEIGHT
 
 t_env				*env(void);
-int					fatal(char *message);
 int					init_env(t_env *env);
 void	calc(t_env *env);
 
