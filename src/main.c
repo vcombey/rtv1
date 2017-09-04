@@ -1,5 +1,6 @@
 #include <mlx.h>
 #include "rt.h"
+#include "libft.h"
 
 t_env	*singleton_env()
 {
@@ -8,10 +9,18 @@ t_env	*singleton_env()
 	return (&env);
 }
 
-int		main()
+int		main(int ac, char **av)
 {
 	t_env	*env;
+	t_scene	scene;
 
+
+		if (ac != 2)
+			fatal ("usage: rt_v1 <filename>");
+
+	(void)ac;
+	(void)av;
+	parse_file(av[1], &scene);
 	env = singleton_env();
 	init_env(env);
 	calc(env);

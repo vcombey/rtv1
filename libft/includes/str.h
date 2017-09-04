@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 12:42:28 by vcombey           #+#    #+#             */
-/*   Updated: 2017/08/27 12:45:19 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/04 19:43:21 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # ifndef WHITESPACES
 #  define WHITESPACES " 	\n\t\v"
 # endif
+int			get_next_line(const int fd, char **line);
 
 /*
 ** In file ft_strlen.c
