@@ -14,18 +14,20 @@ static	t_func	g_scene_func[] =
 	{NULL, NULL},
 };
 
-size_t	get_name(t_yaml *lines, size_t i, t_scene *scene)
+size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
+	(void)len;
 	if (!lines[i].value[0])
 		fatal("parse error");
 	scene->name = ft_strdup(lines[i].value);
 	return (i + 1);
 }
 
-size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene)
+size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	char	*coord;
 
+	(void)len;
 	if (!lines[i].value[0])
 		fatal("parse error");
 	coord = lines[i].value;
@@ -34,10 +36,11 @@ size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene)
 	return (i + 1);
 }
 
-size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene)
+size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t	tab;
 
+	(void)len;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
@@ -48,6 +51,7 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene)
 			get_coordinates((double **)&scene->cam.pos, lines[i].value);
 		if (ft_strequ(lines[i].key, "rotatexyz"))
 			get_coordinates((double **)&scene->cam.pos, lines[i].value);
+		i++;
 	}
 	return (i + 1);
 }
@@ -71,6 +75,6 @@ void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
 			k++;
 		if (g_scene_func[k].f == NULL)
 			fatal("parse error");
-		g_scene_func[k].f(lines + i, i, scene, len);
+		i = g_scene_func[k].f(lines + i, i, scene, len);
 	}
 }

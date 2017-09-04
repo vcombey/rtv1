@@ -31,6 +31,7 @@ typedef struct		s_obj
 {
 	double			pos[3];
 	double			rot[3];
+	size_t			color;
 	double			alpha;
 	char			*name;
 	struct s_obj	*next;
@@ -82,9 +83,13 @@ void	normalize(double v[3]);
 void	parse_file(char *filename, t_scene *scene);
 void	get_coordinates(double	*res[3], char *value);
 void	parse_scene(t_yaml *lines, size_t len, t_scene *scene);
-size_t	get_name(t_yaml *lines, size_t i, t_scene *scene);
-size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene);
-size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene);
-size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene);
+size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 
 #endif

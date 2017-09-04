@@ -1,17 +1,26 @@
 scene:
-	name: demo_1 #nom de fenetre
+	name: demo_1 					#nom de fenetre
 	camera:
 		origin: 200.0 0.0 0.0
-		rotatexyz: 100 100 100
+		rotatexyz: 100 100 100		#en degre, par default la camera est centre sur ( 0 0 0 )
 	windows_size: 1080 80
 	object:
 		sphere:
+			origin: 10 10 10
 			rayon: 100.0
-			color:
-				rgb: 0xFF00 0x000 0x000
+			colorRGB: 0xFF00FF
 			rotatexyz: 100 100 100
-		sphere:
+		plan:
+			origin: 10 10 10
+			colorRGB: 0xFF00FF
+			rotatexyz: 100 100 100
+		cylindre:
+			origin: 10 10 10
 			rayon: 100.0
-			color:
-				rgb: 0xFF00 0x000 0x000
+			colorRGB: 0xFF00FF
+			rotatexyz: 100 100 100
+		cone:
+			alpha: 75.12
+			origin: 10 10 10
+			colorRGB: 0xFF00FF
 			rotatexyz: 100 100 100
