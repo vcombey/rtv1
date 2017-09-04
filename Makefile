@@ -6,7 +6,7 @@
 #    By: vcombey <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/04 23:23:32 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/05 01:25:26 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC =	main.c			\
 		parse_scene.c	\
 		parse_objects.c	\
 		get_coordinates.c	\
+		obj.c	\
 
 INCLUDE = -I ./libft/includes -I ./includes -g
 

@@ -29,12 +29,12 @@ typedef struct		s_env
 
 typedef struct		s_obj
 {
-	double			pos[3];
-	double			rot[3];
+	char			*name;
+	double			*pos;
+	double			*rot;
 	size_t			color;
 	double			alpha;
 	double			rayon;
-	char			*name;
 	struct s_obj	*next;
 }					t_obj;
 
@@ -95,5 +95,7 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	ft_obj_add(t_obj *new_node, t_obj **first);
 double	get_rayon(char *value);
 double	get_hexa(char *value);
+void	ft_obj_add(t_obj *new_node, t_obj **first);
+t_obj	*ft_new_obj(void);
 
 #endif

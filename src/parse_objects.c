@@ -21,7 +21,7 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	printf("sphere\n");
-	new = ft_memalloc(sizeof(t_obj));
+	new = ft_new_obj();
 	new->name = ft_strdup("sphere");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -42,8 +42,8 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	return (i);
 	ft_obj_add(new, &scene->objs);
+	return (i);
 }
 
 size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -53,7 +53,7 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	printf("plan\n");
-	new = ft_memalloc(sizeof(t_obj));
+	new = ft_new_obj();
 	new->name = ft_strdup("plan");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -72,8 +72,8 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	return (i);
 	ft_obj_add(new, &scene->objs);
+	return (i);
 }
 
 size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -83,7 +83,7 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	printf("cylindre\n");
-	new = ft_memalloc(sizeof(t_obj));
+	new = ft_new_obj();
 	new->name = ft_strdup("cylindre");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -104,8 +104,8 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	return (i);
 	ft_obj_add(new, &scene->objs);
+	return (i);
 }
 
 size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -115,7 +115,7 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	printf("cone\n");
-	new = ft_memalloc(sizeof(t_obj));
+	new = ft_new_obj();
 	new->name = ft_strdup("cone");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -136,8 +136,8 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	return (i);
 	ft_obj_add(new, &scene->objs);
+	return (i);
 }
 
 size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)

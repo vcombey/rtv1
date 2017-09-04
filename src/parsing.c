@@ -61,7 +61,7 @@ void	debug_obj(t_obj *obj)
 	t_obj	*tmp;
 
 	tmp = obj;
-		printf("tmp %zu\n", (size_t)tmp);
+	printf("tmp %zu\n", (size_t)tmp);
 	while (tmp)
 	{
 		printf("name %s\n", tmp->name);

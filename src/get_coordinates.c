@@ -14,6 +14,7 @@ int		ft_str_is_clear(char *str)
 	{
 		if (!ft_is_space(str[i]))
 			return (0);
+		i++;
 	}
 	return (1);
 }
