@@ -21,6 +21,7 @@
 *.dylib
 
 # Executables
+rt_v1
 *.exe
 *.out
 a.out
