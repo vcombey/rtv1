@@ -93,5 +93,7 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	ft_obj_add(t_obj *new_node, t_obj **first);
+double	get_rayon(char *value);
+double	get_hexa(char *value);
 
 #endif
