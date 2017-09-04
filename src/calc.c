@@ -4,69 +4,9 @@
 #include <math.h>
 #include <stdio.h>
 
-double	calc_delta(double a, double b, double c)
-{
-	return (b * b - 4 * a * c);
-}
-
 void	calc_pixel(t_env *env)
 {
 	(void)env;
-}
-
-double	norme_carre(double v[3])
-{
-	return (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-}
-
-double	scalar_product(double u[3], double v[3])
-{
-	return (v[0] * u[0] + v[1] * u[1] + v[2] * u[2]);
-}
-
-void	mult_vect(double res[3], double v[3], double t)
-{
-	res[0] = v[0] * t;
-	res[1] = v[1] * t;
-	res[2] = v[2] * t;
-}
-
-void	div_vect(double res[3], double v[3], double t)
-{
-	if (t == 0)
-		return ;
-	res[0] = v[0] / t;
-	res[1] = v[1] / t;
-	res[2] = v[2] / t;
-}
-
-void	normalize(double v[3])
-{
-	div_vect(v, v, sqrt(norme_carre(v)));
-}
-
-void	add_vect(double res[3], double u[3], double v[3])
-{
-	res[0] = u[0] + v[0];
-	res[1] = u[1] + v[1];
-	res[2] = u[2] + v[2];
-}
-
-void	sub_vect(double res[3], double u[3], double v[3])
-{
-	res[0] = u[0] - v[0];
-	res[1] = u[1] - v[1];
-	res[2] = u[2] - v[2];
-}
-
-double	ft_min(double u, double v)
-{
-	return (u < v ? u : v);
-}
-
-double	ft_abs_double(double u)
-{
-	return (u > 0 ? u : -u);
 }
 
 size_t	calc_lum(double intersect[3], double norm[3])

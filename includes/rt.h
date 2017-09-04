@@ -35,4 +35,14 @@ void	calc(t_env *env);
 
 void				ft_pixelput(t_env *env, int x, int y, int color);
 
+double	calc_delta(double a, double b, double c);
+double	ft_min(double u, double v);
+double	ft_abs_double(double u);
+void	mult_vect(double res[3], double v[3], double t);
+void	div_vect(double res[3], double v[3], double t);
+void	add_vect(double res[3], double u[3], double v[3]);
+void	sub_vect(double res[3], double u[3], double v[3]);
+double	norme_carre(double v[3]);
+double	scalar_product(double u[3], double v[3]);
+void	normalize(double v[3]);
 #endif
