@@ -69,7 +69,7 @@ double	ft_abs_double(double u)
 	return (u > 0 ? u : -u);
 }
 
-size_t	calc_lum(double norm_sphere[3])
+size_t	calc_lum(double norm[3])
 {
 	double	lum_pos[3];
 	double	lum_vect[3];
@@ -81,11 +81,11 @@ size_t	calc_lum(double norm_sphere[3])
 	lum_pos[2] = 1;
 
 	ft_memset(lum_vect, 0, sizeof(double) * 3);
-	sub_vect(lum_vect, norm_sphere, lum_pos);
+	sub_vect(lum_vect, norm, lum_pos);
 	normalize(lum_vect);
-	printf("\nnorm_sphere x %f, y %f, z %f\n", norm_sphere[0], norm_sphere[1], norm_sphere[2]);
-//	normalize(norm_sphere); // pk norm-sphere n est pas de norme rayon ?
-	lum = scalar_product(lum_vect, norm_sphere);
+	printf("\nnorm x %f, y %f, z %f\n", norm[0], norm[1], norm[2]);
+//	normalize(norm); // pk norm-sphere n est pas de norme rayon ?
+	lum = scalar_product(lum_vect, norm);
 	if (lum > 0)
 		return (0x001000);
 	lum = ft_abs_double(lum);
@@ -94,43 +94,34 @@ size_t	calc_lum(double norm_sphere[3])
 			printf("intensite_color %zu\n", intensite_color);
 	if (intensite_color < 10)
 		intensite_color = 10;
-	intensite_color <<= 8;
+	intensite_color <<= 16;
 	return (intensite_color);
 }
 
 size_t	calc_plan(t_cam cam, double ray[3])
 {
-	double	rayon;
-	double	delta;
-	double	a;
-	double	b;
-	double	c;
 	double	t;
 	double	dist;
-	double	norm_cone[3];
-	double	alpha = 0.7;
-	double	tan_alpha_carre = tan(alpha) * tan(alpha);
+	double	norm_plan[3];
+	double	diviseur;
 
-	ft_memset(norm_cone, 0, sizeof(double) * 3);
-	rayon = 1;
-	a = ray[0] * ray[0] + ray[1] * ray[1] - ray[2] * ray[2] * tan_alpha_carre;
-	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1] - 2 * cam.pos[2] * ray[2] * tan_alpha_carre;
-	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - cam.pos[2] * cam.pos[2] * tan_alpha_carre;
+	norm_plan[0] = 0;	
+	norm_plan[1] = 1;	
+	norm_plan[2] = 1;	
 
-	delta = calc_delta(a, b, c);
-	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
-	if (delta < 0)
-		return (0x0);
-	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	diviseur = norm_plan[0] * ray[0] + norm_plan[1] * ray[1] + norm_plan[2] * ray[2];
+	if (diviseur < 0.001)
+		return (0);
+	t = cam.pos[0] * norm_plan[0] + cam.pos[1] * norm_plan[1] + cam.pos[2] * norm_plan[2];
+	t = -t / diviseur;
+	mult_vect(norm_plan, ray, t);
+	dist = norme_carre(norm_plan);
+	add_vect(norm_plan, norm_plan, cam.pos);
 
-	mult_vect(norm_cone, ray, t);
-	dist = norme_carre(norm_cone);
-	add_vect(norm_cone, norm_cone, cam.pos);
-
-	if (norm_cone[2] < 0)
-		norm_cone[2] = -norm_cone[2];
+	if (norm_plan[2] < 0)
+		norm_plan[2] = -norm_plan[2];
 //  return (0xFF0000);
-	return (calc_lum(norm_cone));
+	return (calc_lum(norm_plan));
 }
 
 size_t	calc_cone(t_cam cam, double ray[3])
@@ -178,23 +169,28 @@ size_t	calc_cylindre(t_cam cam, double ray[3])
 	double	c;
 	double	t;
 	double	dist;
-	double	norm_sphere[3];
+	double	norm_cylindre[3];
 
-	ft_memset(norm_sphere, 0, sizeof(double) * 3);
+	ft_memset(norm_cylindre, 0, sizeof(double) * 3);
 	rayon = 1;
-	a = norme_carre(ray);
-	b = 2 * scalar_product(ray, cam.pos);
-	c = norme_carre(cam.pos) - rayon * rayon;
+	a = ray[0] * ray[0] + ray[1] * ray[1];
+	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1];
+	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - rayon * rayon;
 
 	delta = calc_delta(a, b, c);
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0x0);
 	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-	mult_vect(norm_sphere, ray, t);
-	dist = norme_carre(norm_sphere);
-	add_vect(norm_sphere, norm_sphere, cam.pos);
-	return (calc_lum(norm_sphere));
+
+	mult_vect(norm_cylindre, ray, t);
+	dist = norme_carre(norm_cylindre);
+	add_vect(norm_cylindre, norm_cylindre, cam.pos);
+
+	norm_cylindre[2] = 0;
+//  return (0xFF0000);
+	return (calc_lum(norm_cylindre));
+
 }
 
 size_t	calc_sphere(t_cam cam, double ray[3])
@@ -277,7 +273,7 @@ void	calc(t_env *env)
 			//printf("coef %f", coef);
 			ray[1] += coef * norm_hor[1];
 			//printf("\nray %f, %f, %f\n", ray[0], ray[1], ray[2]);
-			ft_pixelput(env, pix_hor, pix_vert, calc_sphere(cam, ray));
+			ft_pixelput(env, pix_hor, pix_vert, calc_plan(cam, ray));
 			pix_hor++;
 		}
 		pix_vert++;
