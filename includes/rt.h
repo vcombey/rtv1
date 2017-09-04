@@ -33,6 +33,7 @@ typedef struct		s_obj
 	double			rot[3];
 	size_t			color;
 	double			alpha;
+	double			rayon;
 	char			*name;
 	struct s_obj	*next;
 }					t_obj;
@@ -91,5 +92,6 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len);
+void	ft_obj_add(t_obj *new_node, t_obj **first);
 
 #endif

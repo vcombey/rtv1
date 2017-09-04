@@ -32,3 +32,12 @@ void	get_coordinates(double	*res[3], char *value)
 	if (!ft_str_is_clear(coord))
 		fatal("invalid coordinates");
 }
+
+double	get_rayon(char *value)
+{
+
+}
+
+double	get_hexa(char *value)
+{
+}

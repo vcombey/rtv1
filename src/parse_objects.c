@@ -19,6 +19,7 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
+	(void)len;
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("sphere");
 	tab = lines[i].tab;
@@ -40,7 +41,7 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		i++;
 	}
 	return (i);
-	ft_obj_add(new, &scene->obj);
+	ft_obj_add(new, &scene->objs);
 }
 
 size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -48,6 +49,7 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
+	(void)len;
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("plan");
 	tab = lines[i].tab;
@@ -67,7 +69,7 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		i++;
 	}
 	return (i);
-	ft_obj_add(new, &scene->obj);
+	ft_obj_add(new, &scene->objs);
 }
 
 size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -75,6 +77,7 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
+	(void)len;
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("cylindre");
 	tab = lines[i].tab;
@@ -96,7 +99,7 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		i++;
 	}
 	return (i);
-	ft_obj_add(new, &scene->obj);
+	ft_obj_add(new, &scene->objs);
 }
 
 size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -104,6 +107,7 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
+	(void)len;
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("cone");
 	tab = lines[i].tab;
@@ -125,7 +129,7 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		i++;
 	}
 	return (i);
-	ft_obj_add(new, &scene->obj);
+	ft_obj_add(new, &scene->objs);
 }
 
 size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
@@ -143,7 +147,7 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			k++;
 		if (g_scene_func[k].f == NULL)
 			fatal("parse error");
-		if (line[i].value[0])
+		if (lines[i].value[0])
 			fatal("object has bad value");
 		i = g_scene_func[k].f(lines + i, i, scene, len);
 	}
