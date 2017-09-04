@@ -20,18 +20,20 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	printf("sphere\n");
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("sphere");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
 	i++;
-	while (lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1)
 	{
+		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
-			get_coordinates((double **)&new->pos, lines[i].value);
+			get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates((double **)&new->rot, lines[i].value);
+			get_coordinates(new->rot, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -50,18 +52,20 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	printf("plan\n");
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("plan");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
 	i++;
-	while (lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1)
 	{
+		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
-			get_coordinates((double **)&new->pos, lines[i].value);
+			get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates((double **)&new->rot, lines[i].value);
+			get_coordinates(new->rot, lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
 			new->color = get_hexa(lines[i].value);
 		else
@@ -78,18 +82,20 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	printf("cylindre\n");
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("cylindre");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
 	i++;
-	while (lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1)
 	{
+		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
-			get_coordinates((double **)&new->pos, lines[i].value);
+			get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates((double **)&new->rot, lines[i].value);
+			get_coordinates(new->rot, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -108,19 +114,21 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	printf("cone\n");
 	new = ft_memalloc(sizeof(t_obj));
 	new->name = ft_strdup("cone");
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
 	i++;
-	while (lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1)
 	{
+		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
-			get_coordinates((double **)&new->pos, lines[i].value);
+			get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates((double **)&new->rot, lines[i].value);
-		else if (ft_strequ(lines[i].key, "rayon"))
+			get_coordinates(new->rot, lines[i].value);
+		else if (ft_strequ(lines[i].key, "alpha"))
 			new->alpha = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
 			new->color = get_hexa(lines[i].value);
@@ -139,17 +147,18 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	if (lines[i].value[0])
 		fatal("invalid objects value");
 	scene->name = ft_strdup(lines[i].value);
+	scene->objs = NULL;
 	i++;
 	while (i < len)
 	{
 		k = 0;
-		while (g_scene_func[k].key && !ft_strequ(g_scene_func[i].key, lines[i].key))
+		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))
 			k++;
 		if (g_scene_func[k].f == NULL)
-			fatal("parse error");
+			fatal("invalid object name");
 		if (lines[i].value[0])
 			fatal("object has bad value");
-		i = g_scene_func[k].f(lines + i, i, scene, len);
+		i = g_scene_func[k].f(lines, i, scene, len);
 	}
 	return (i);
 }

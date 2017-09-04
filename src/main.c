@@ -1,6 +1,7 @@
 #include <mlx.h>
 #include "rt.h"
 #include "libft.h"
+#include <stdio.h>
 
 t_env	*singleton_env()
 {
@@ -20,6 +21,8 @@ int		main(int ac, char **av)
 
 	(void)ac;
 	(void)av;
+	scene.cam.dir[0] = 4;
+	printf("%f", scene.cam.dir[0] = 4);
 	parse_file(av[1], &scene);
 	env = singleton_env();
 	init_env(env);

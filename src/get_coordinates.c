@@ -18,14 +18,14 @@ int		ft_str_is_clear(char *str)
 	return (1);
 }
 
-void	get_coordinates(double	*res[3], char *value)
+void	get_coordinates(double	res[3], char *value)
 {
 	char	*coord;
 
 	coord = value;
-	(*res)[0] = strtod(coord, &coord);
-	(*res)[1] = strtod(coord, &coord);
-	(*res)[2] = strtod(coord, &coord);
+	res[0] = strtod(coord, &coord);
+	res[1] = strtod(coord, &coord);
+	res[2] = strtod(coord, &coord);
 	if (!ft_str_is_clear(coord))
 		fatal("invalid coordinates");
 }

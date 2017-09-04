@@ -82,7 +82,7 @@ double	norme_carre(double v[3]);
 double	scalar_product(double u[3], double v[3]);
 void	normalize(double v[3]);
 void	parse_file(char *filename, t_scene *scene);
-void	get_coordinates(double	*res[3], char *value);
+void	get_coordinates(double	res[3], char *value);
 void	parse_scene(t_yaml *lines, size_t len, t_scene *scene);
 size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene, size_t len);

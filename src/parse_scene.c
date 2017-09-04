@@ -18,7 +18,7 @@ size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	(void)len;
 	if (!lines[i].value[0])
-		fatal("parse error");
+		fatal("bad name");
 	scene->name = ft_strdup(lines[i].value);
 	return (i + 1);
 }
@@ -29,7 +29,7 @@ size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	if (!lines[i].value[0])
-		fatal("parse error");
+		fatal("bad windows size");
 	coord = lines[i].value;
 	scene->width = strtod(coord, &coord);
 	scene->height = strtod(coord, &coord);
@@ -40,20 +40,22 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t	tab;
 
-	(void)len;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
-		fatal("parse error");
+		fatal("bad camera");
 	i++;
-	while (lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1)
 	{
-		if (ft_strequ(lines[i].key, "origin"))
-			get_coordinates((double **)&scene->cam.pos, lines[i].value);
 		if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates((double **)&scene->cam.pos, lines[i].value);
+			get_coordinates(scene->rot, lines[i].value);
+		printf("rotate\n");
+		printf("origin\n");
+		if (ft_strequ(lines[i].key, "origin"))
+			get_coordinates(scene->cam.pos, lines[i].value);
+		printf("origin\n");
 		i++;
 	}
-	return (i + 1);
+	return (i);
 }
 
 void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
@@ -62,19 +64,22 @@ void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
 	size_t		k;
 
 	if (len == 0 || len == 1)
-		fatal("parse error");
+		fatal("to short file");
 	i = 0;
 	if (!ft_strequ(lines[0].key, "scene"))
-		fatal("parse error");
+		fatal("need scene");
 	i++;
 	while (i < len)
 	{
 		printf("tab: %zu, key: %s, value: %s\n", lines[i].tab, lines[i].key, lines[i].value);
 		k = 0;
-		while (g_scene_func[k].key && !ft_strequ(g_scene_func[i].key, lines[i].key))
+		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))
+		{
+			printf("key: %s\n", g_scene_func[k].key);
 			k++;
+		}
 		if (g_scene_func[k].f == NULL)
-			fatal("parse error");
-		i = g_scene_func[k].f(lines + i, i, scene, len);
+			fatal("bad scene content");
+		i = g_scene_func[k].f(lines, i, scene, len);
 	}
 }
