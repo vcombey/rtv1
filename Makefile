@@ -6,7 +6,7 @@
 #    By: vcombey <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/05 03:44:36 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/05 04:04:14 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SRC =	main.c			\
 		get_coordinates.c	\
 		obj.c	\
 
-INCLUDE = -I ./libft/includes -I ./includes -g
+INCLUDE = -I ./libft/ -I ./includes -g
 
 OBJS = $(addprefix objs/, $(SRC:.c=.o))
 

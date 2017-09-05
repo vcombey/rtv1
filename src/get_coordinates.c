@@ -12,7 +12,7 @@ int		ft_str_is_clear(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_is_space(str[i]))
+		if (!ft_isblanckspace(str[i]))
 			return (0);
 		i++;
 	}
