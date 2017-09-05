@@ -25,8 +25,11 @@ int		main(int ac, char **av)
 	printf("%f", scene.cam.dir[0] = 4);
 	parse_file(av[1], &scene);
 	env = singleton_env();
+	env->width = scene.width;
+	env->height = scene.height;
+	env->width_per_height = (double)env->width / (double)env->height;
 	init_env(env);
-	calc(env);
+	calc(env, &scene);
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	mlx_loop(env->mlx);
 	return (0);

@@ -10,11 +10,11 @@ int		init_env(t_env *env)
 	env->mlx = NULL;
 	if (!(env->mlx = mlx_init()))
 		fatal("mlx problem");
-	if (!(env->win = mlx_new_window(env->mlx, SCREEN_WIDTH,
-	SCREEN_HEIGHT, "rt")))
+	if (!(env->win = mlx_new_window(env->mlx, env->width,
+	env->height, "rt")))
 		fatal("mlx problem");
-	if (!(env->img = mlx_new_image(env->mlx, SCREEN_WIDTH,
-	SCREEN_HEIGHT)))
+	if (!(env->img = mlx_new_image(env->mlx, env->width,
+	env->height)))
 		fatal("mlx problem");
 	env->ptr = mlx_get_data_addr(env->img, &env->bpp, &env->size_line,
 	&env->endian);

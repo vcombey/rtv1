@@ -166,7 +166,7 @@ size_t	calc_sphere(t_cam cam, double ray[3])
 	return (calc_lum(intersect_sphere, intersect_sphere));
 }
 
-void	calc(t_env *env)
+void	calc(t_env *env, t_scene *scene)
 {
 	t_cam	cam;
 	double	ray[3];
@@ -177,6 +177,7 @@ void	calc(t_env *env)
 	size_t	pix_hor;
 
 	(void)ray;
+	(void)scene;
 	cam.pos[0] = 3;
 	cam.pos[1] = 0;
 	cam.pos[2] = 0;
@@ -211,10 +212,10 @@ void	calc(t_env *env)
 			ray[1] = 0;
 			ray[2] = 0;
 
-			coef = (((double)pix_vert - (SCREEN_HEIGHT / 2)) / (SCREEN_HEIGHT / 2)) * 0.66; //varie entre -0.66 et +0.66
+			coef = (((double)pix_vert - (env->height/ 2)) / (env->height/ 2)) * 0.66; //varie entre -0.66 et +0.66
 			//printf("coef %f", coef);
 			ray[2] += coef * norm_vert[2];
-			coef = (((double)pix_hor - (SCREEN_WIDTH / 2)) / (SCREEN_WIDTH / 2)) * 0.66 * WIDTH_PER_HEIGHT; //varie entre -0.66 et +0.66
+			coef = (((double)pix_hor - (env->width/ 2)) / (env->width/ 2)) * 0.66 * env->width_per_height; //varie entre -0.66 et +0.66
 			//printf("coef %f", coef);
 			ray[1] += coef * norm_hor[1];
 			//printf("\nray %f, %f, %f\n", ray[0], ray[1], ray[2]);

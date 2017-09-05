@@ -19,7 +19,7 @@ size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	(void)len;
 	if (!lines[i].value[0])
 		fatal("bad name");
-	scene->name = ft_strdup(lines[i].value);
+	scene->name = ft_strtrim(lines[i].value);
 	return (i + 1);
 }
 

@@ -47,7 +47,6 @@ void	valid_yaml(t_yaml *lines, size_t len)
 	i = 0;
 	while (i < len && i + 1 < len)
 	{
-//		printf("tab: %zu, key: %s, value: %s\n", lines[i+1].tab, lines[i+1].key, lines[i+1].value);
 		if (lines[i].value[0] && (lines[i].tab != lines[i + 1].tab) && (lines[i].tab - 1 != lines[i + 1].tab))
 			fatal("bad yaml");
 		if (!lines[i].value[0] && lines[i].tab + 1 != lines[i + 1].tab)
@@ -85,6 +84,19 @@ void	debug_scene(t_scene *scene)
 	debug_obj(scene->objs);
 }
 
+void	free_yaml(t_yaml *lines, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		free(lines[i].value);
+		free(lines[i].key);
+		i++;
+	}
+}
+
 void	parse_file(char *filename, t_scene *scene)
 {
 	int		fd;
@@ -103,13 +115,17 @@ void	parse_file(char *filename, t_scene *scene)
 	while (get_next_line(fd, &line))
 	{
 		parse_line(line, lines + i);
+		free(line);
+		if (i > 998)
+			fatal("file too long, fuck you" );
 		i++;
 	}
 	close(fd);
 	valid_yaml(lines, i);
 	parse_scene(lines, i, scene);
 	//debug(lines, i);
-	//free yaml
+	free_yaml(lines, i);
+	free(lines);
 	debug_scene(scene);
-	exit(1);
+//	exit(1);
 }

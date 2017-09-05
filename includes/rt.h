@@ -21,6 +21,9 @@ typedef struct		s_env
 	void			*mlx;
 	void			*win;
 	void			*img;
+	size_t			width;
+	size_t			height;
+	double			width_per_height;
 	char			*ptr;
 	int				bpp;
 	int				size_line;
@@ -67,7 +70,7 @@ typedef struct	s_func
 
 t_env				*env(void);
 int					init_env(t_env *env);
-void	calc(t_env *env);
+void	calc(t_env *env, t_scene *scene);
 
 void				ft_pixelput(t_env *env, int x, int y, int color);
 
