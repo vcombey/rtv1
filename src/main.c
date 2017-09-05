@@ -16,20 +16,21 @@ int		main(int ac, char **av)
 	t_scene	scene;
 
 
-		if (ac != 2)
-			fatal ("usage: rt_v1 <filename>");
-
+	if (ac != 2)
+		fatal ("usage: rt_v1 <filename>");
 	(void)ac;
 	(void)av;
-	scene.cam.dir[0] = 4;
-	printf("%f", scene.cam.dir[0] = 4);
 	parse_file(av[1], &scene);
 	env = singleton_env();
 	env->width = scene.width;
 	env->height = scene.height;
+	printf("env width %zu, env height %zu\n", env->width, env->height);
 	env->width_per_height = (double)env->width / (double)env->height;
+	printf("coucou\n");
 	init_env(env);
+	printf("coucou\n");
 	calc(env, &scene);
+	printf("coucou\n");
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	mlx_loop(env->mlx);
 	return (0);
