@@ -8,24 +8,25 @@ static	int		ft_char_is_space(char c)
 	return (0);
 }
 
-char			*ft_strtrim(char const *s)
+char	*ft_strtrim(char const *s)
 {
-	char	*new_str;
-	size_t	i;
-	size_t	j;
+	unsigned int	i;
+	unsigned int	start;
+	size_t			len;
 
 	i = 0;
-	j = 0;
-	if (s == NULL || (new_str = ft_strnew(ft_strlen(s))) == NULL)
+	start = 0;
+	len = 0;
+	if (!s)
 		return (NULL);
-	while (i != ft_strlen(s))
+	while (s[i] && ft_char_is_space(s[i]))
+		i++;
+	start = i;
+	while (s[i])
 	{
-		if (ft_char_is_space(s[i]) && !j)
-			i++;
-		else
-			new_str[j++] = s[i++];
+		if (!(ft_char_is_space(s[i])))
+			len = i - start + 1;
+		i++;
 	}
-	while (ft_char_is_space(new_str[--j]))
-		new_str[j] = '\0';
-	return (new_str);
+	return (ft_strsub(s, start, len));
 }

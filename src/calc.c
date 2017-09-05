@@ -102,7 +102,6 @@ size_t	calc_cone(t_cam cam, double ray[3])
 		intersect_cone[2] = -intersect_cone[2];
 //  return (0xFF0000);
 	return (calc_lum(intersect_cone, intersect_cone));
-
 }
 
 size_t	calc_cylindre(t_cam cam, double ray[3])
@@ -135,7 +134,6 @@ size_t	calc_cylindre(t_cam cam, double ray[3])
 	intersect_cylindre[2] = 0;
 //  return (0xFF0000);
 	return (calc_lum(intersect_cylindre, intersect_cylindre));
-
 }
 
 size_t	calc_sphere(t_cam cam, double ray[3])

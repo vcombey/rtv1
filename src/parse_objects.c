@@ -146,7 +146,6 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	if (lines[i].value[0])
 		fatal("invalid objects value");
-	scene->name = ft_strdup(lines[i].value);
 	scene->objs = NULL;
 	i++;
 	while (i < len)

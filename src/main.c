@@ -16,16 +16,21 @@ int		main(int ac, char **av)
 	t_scene	scene;
 
 
+	printf("coucou\n");
 	if (ac != 2)
 		fatal ("usage: rt_v1 <filename>");
 	(void)ac;
 	(void)av;
 	parse_file(av[1], &scene);
 	env = singleton_env();
-	env->width = scene.width;
-	env->height = scene.height;
-	printf("env width %zu, env height %zu\n", env->width, env->height);
-	env->width_per_height = (double)env->width / (double)env->height;
+	/*
+**		env->width = scene.width;
+**		env->height = scene.height;
+**		printf("env width %zu, env height %zu\n", env->width, env->height);
+*/
+	env->width = 1280;
+  env->height = 800;
+  env->width_per_height = (double)env->width / (double)env->height;
 	printf("coucou\n");
 	init_env(env);
 	printf("coucou\n");
