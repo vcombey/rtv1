@@ -9,7 +9,7 @@ void	calc_pixel(t_env *env)
 	(void)env;
 }
 
-size_t	calc_lum(double intersect[3], double norm[3], size_t color)
+size_t	calc_lum(t_obj *obj)
 {
 	double	lum_pos[3];
 	double	lum_vect[3];
@@ -20,25 +20,26 @@ size_t	calc_lum(double intersect[3], double norm[3], size_t color)
 	lum_pos[1] = 1;
 	lum_pos[2] = 1;
 
+	sub_vect(lum_pos, lum_pos, obj->pos);
 	ft_memset(lum_vect, 0, sizeof(double) * 3);
-	sub_vect(lum_vect, intersect, lum_pos);
+	sub_vect(lum_vect, obj->intersect, lum_pos);
 	normalize(lum_vect);
-	normalize(norm);
-	//printf("\nintersect x %f, y %f, z %f\n", intersect[0], intersect[1], intersect[2]);
-//	intersectalize(intersect); // pk intersect-sphere n est pas de intersecte rayon ?
-	lum = scalar_product(lum_vect, norm);
+	normalize(obj->norm);
+	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect[0], obj->intersect[1], obj->intersect[2]);
+//	obj->intersectalize(obj->intersect); // pk obj->intersect-sphere n est pas de obj->intersecte rayon ?
+	lum = scalar_product(lum_vect, obj->norm);
 /*
 **		if (lum > 0)
 **			return (0x001000);
 */
 	lum = ft_abs_double(lum);
 	//		printf("lum %f\n", lum);
-	intensite_lum = (size_t)(lum * (color >> 16)) << 16;
-	intensite_lum += (size_t)(lum * ((color & 0xFF00) >> 8)) << 8;
-	intensite_lum += lum * (color & 0xFF);
+	intensite_lum = (size_t)(lum * (obj->color >> 16)) << 16;
+	intensite_lum += (size_t)(lum * ((obj->color & 0xFF00) >> 8)) << 8;
+	intensite_lum += lum * (obj->color & 0xFF);
 	return (intensite_lum);
-//	return (((size_t)(lum * (color >> 16)) << 16) & (((size_t)(lum * (color & 0xFF00 >> 8)) << 8) & ((size_t)(lum * (color & 0xFF))));
-	//		printf("intensite_color %zu\n", intensite_color);
+//	return (((size_t)(lum * (obj->color >> 16)) << 16) & (((size_t)(lum * (obj->color & 0xFF00 >> 8)) << 8) & ((size_t)(lum * (obj->color & 0xFF))));
+	//		printf("intensite_obj->color %zu\n", intensite_obj->color);
 }
 
 void	translate_base(t_obj *obj, double cam_pos[3], double scene_cam_pos[3])
@@ -70,7 +71,7 @@ size_t	hit(t_scene *scene, double ray[3])
 		tmp = tmp->next;
 	}
 	if (shortest_obj)
-		return (calc_lum(shortest_obj->intersect, shortest_obj->norm, shortest_obj->color));
+		return (calc_lum(shortest_obj));
 	else
 		return (0);
 }

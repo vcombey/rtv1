@@ -69,7 +69,6 @@ size_t	calc_cone(t_obj *obj, t_cam cam, double ray[3])
 
 size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 {
-	double	rayon;
 	double	delta;
 	double	a;
 	double	b;
@@ -78,17 +77,15 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	double	dist;
 
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
-	rayon = 1;
 	a = ray[0] * ray[0] + ray[1] * ray[1];
 	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1];
-	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - rayon * rayon;
+	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0x0);
 	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
 	add_vect(obj->intersect, obj->intersect, cam.pos);

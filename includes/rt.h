@@ -106,6 +106,6 @@ double	get_hexa(char *value);
 void	ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj	*ft_new_obj(void);
 void	assign_obj_func(t_scene *scene);
-size_t	calc_lum(double intersect[3], double norm[3], size_t color);
+size_t	calc_lum(t_obj *obj);
 
 #endif
