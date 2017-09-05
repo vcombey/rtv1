@@ -9,12 +9,12 @@ void	calc_pixel(t_env *env)
 	(void)env;
 }
 
-size_t	calc_lum(double intersect[3], double norm[3])
+size_t	calc_lum(double intersect[3], double norm[3], size_t color)
 {
 	double	lum_pos[3];
 	double	lum_vect[3];
 	double	lum;
-	size_t intensite_color;
+	size_t	intensite_lum;
 
 	lum_pos[0] = 3;
 	lum_pos[1] = 1;
@@ -27,18 +27,18 @@ size_t	calc_lum(double intersect[3], double norm[3])
 	//printf("\nintersect x %f, y %f, z %f\n", intersect[0], intersect[1], intersect[2]);
 //	intersectalize(intersect); // pk intersect-sphere n est pas de intersecte rayon ?
 	lum = scalar_product(lum_vect, norm);
-	/*
+/*
 **		if (lum > 0)
 **			return (0x001000);
 */
 	lum = ft_abs_double(lum);
 	//		printf("lum %f\n", lum);
-	intensite_color = lum * 255;
+	intensite_lum = (size_t)(lum * (color >> 16)) << 16;
+	intensite_lum += (size_t)(lum * ((color & 0xFF00) >> 8)) << 8;
+	intensite_lum += lum * (color & 0xFF);
+	return (intensite_lum);
+//	return (((size_t)(lum * (color >> 16)) << 16) & (((size_t)(lum * (color & 0xFF00 >> 8)) << 8) & ((size_t)(lum * (color & 0xFF))));
 	//		printf("intensite_color %zu\n", intensite_color);
-	if (intensite_color < 10)
-		intensite_color = 10;
-	intensite_color <<= 16;
-	return (intensite_color);
 }
 
 size_t	hit(t_scene *scene, double ray[3])
@@ -62,7 +62,7 @@ size_t	hit(t_scene *scene, double ray[3])
 		tmp = tmp->next;
 	}
 	if (shortest_obj)
-		return (calc_lum(shortest_obj->intersect, shortest_obj->norm));
+		return (calc_lum(shortest_obj->intersect, shortest_obj->norm, shortest_obj->color));
 	else
 		return (0);
 }
