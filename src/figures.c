@@ -100,7 +100,6 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 
 size_t	calc_sphere(t_obj *obj, t_cam cam, double ray[3])
 {
-	double	rayon;
 	double	delta;
 	double	a;
 	double	b;
@@ -109,10 +108,9 @@ size_t	calc_sphere(t_obj *obj, t_cam cam, double ray[3])
 	size_t	dist;
 
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
-	rayon = 1;
 	a = norme_carre(ray);
 	b = 2 * scalar_product(ray, cam.pos);
-	c = norme_carre(cam.pos) - rayon * rayon;
+	c = norme_carre(cam.pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
