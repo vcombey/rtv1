@@ -11,7 +11,7 @@ int		init_env(t_env *env)
 	if (!(env->mlx = mlx_init()))
 		fatal("mlx problem");
 	if (!(env->win = mlx_new_window(env->mlx, env->width,
-	env->height, "rt")))
+	env->height, env->name)))
 		fatal("mlx problem");
 	if (!(env->img = mlx_new_image(env->mlx, env->width,
 	env->height)))

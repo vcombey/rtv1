@@ -25,7 +25,8 @@ int		main(int ac, char **av)
 	env = singleton_env();
 	env->width = scene.width;
 	env->height = scene.height;
-	printf("env width %zu, env height %zu\n", env->width, env->height);
+	env->name = "rt";
+	printf("env width %zu, env height %zu env name %s\n", env->width, env->height, env->name);
 	env->width_per_height = (double)env->width / (double)env->height;
 	printf("coucou\n");
 	init_env(env);

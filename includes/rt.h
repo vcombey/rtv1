@@ -28,6 +28,7 @@ typedef struct		s_env
 	int				bpp;
 	int				size_line;
 	int				endian;
+	char			*name;
 }					t_env;
 
 typedef struct		s_obj
@@ -39,6 +40,9 @@ typedef struct		s_obj
 	double			alpha;
 	double			rayon;
 	struct s_obj	*next;
+	double			*intersect;
+	double			*norm;
+	size_t			(*f)(struct s_obj *, t_cam, double[3]);
 }					t_obj;
 
 typedef struct		s_yaml
@@ -81,6 +85,7 @@ void	mult_vect(double res[3], double v[3], double t);
 void	div_vect(double res[3], double v[3], double t);
 void	add_vect(double res[3], double u[3], double v[3]);
 void	sub_vect(double res[3], double u[3], double v[3]);
+void	cpy_vect(double u[3], double v[3]);
 double	norme_carre(double v[3]);
 double	scalar_product(double u[3], double v[3]);
 void	normalize(double v[3]);
@@ -100,5 +105,7 @@ double	get_rayon(char *value);
 double	get_hexa(char *value);
 void	ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj	*ft_new_obj(void);
+void	assign_obj_func(t_scene *scene);
+size_t	calc_lum(double intersect[3], double norm[3]);
 
 #endif
