@@ -118,14 +118,14 @@ void	calc(t_env *env, t_scene *scene)
 		while (pix_hor < SCREEN_WIDTH)
 		{
 		
-			ray[0] = -0.66;
+			ray[0] = -1;
 			ray[1] = 0;
 			ray[2] = 0;
 
-			coef = (((double)pix_vert - ((double)env->height / 2)) / ((double)env->height / 2)) * 0.66; //varie entre -0.66 et +0.66
+			coef = (((double)pix_vert - ((double)env->height / 2)) / ((double)env->height / 2)) * 0.1; //varie entre -0.66 et +0.66
 			//printf("coef %f\n", coef);
 			ray[2] += coef * norm_vert[2];
-			coef = (((double)pix_hor - ((double)env->width / 2)) / ((double)env->width / 2)) * 0.66 * env->width_per_height; //varie entre -0.66 et +0.66
+			coef = (((double)pix_hor - ((double)env->width / 2)) / ((double)env->width / 2)) * 0.1 * env->width_per_height; //varie entre -0.66 et +0.66
 			//printf("coef %f\n", coef);
 			ray[1] += coef * norm_hor[1];
 			//printf("\nray %f, %f, %f\n", ray[0], ray[1], ray[2]);

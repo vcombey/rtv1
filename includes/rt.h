@@ -107,5 +107,6 @@ void	ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj	*ft_new_obj(void);
 void	assign_obj_func(t_scene *scene);
 size_t	calc_lum(t_obj *obj);
+void	calc_rotation_figure(double ray[3], double v[3]);
 
 #endif

@@ -23,7 +23,6 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
-
 	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect[0], obj->intersect[1], obj->intersect[2]);
 	if (obj->intersect[2] < 0)
 		obj->intersect[2] = -obj->intersect[2];
@@ -75,7 +74,12 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	double	c;
 	double	t;
 	double	dist;
+	double	v[3];
 
+	v[0] = 0;
+	v[1] = 1;
+	v[2] = 1;
+	calc_rotation_figure(ray, v);
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
 	a = ray[0] * ray[0] + ray[1] * ray[1];
 	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1];
