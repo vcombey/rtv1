@@ -10,6 +10,12 @@ t_env	*singleton_env()
 	return (&env);
 }
 
+void	init_scene(t_scene *scene)
+{
+	scene->objs = NULL;
+	scene->lights = NULL;
+}
+
 int		main(int ac, char **av)
 {
 	t_env	*env;
@@ -21,6 +27,7 @@ int		main(int ac, char **av)
 		fatal ("usage: rt_v1 <filename>");
 	(void)ac;
 	(void)av;
+	init_scene(&scene);
 	parse_file(av[1], &scene);
 	env = singleton_env();
 	env->width = scene.width;

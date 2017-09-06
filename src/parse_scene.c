@@ -11,6 +11,7 @@ static	t_func	g_scene_func[] =
 	{"camera", &get_camera},
 	{"windows_size", &get_windows_size},
 	{"object", &get_all_objects},
+	{"light", &get_light},
 	{NULL, NULL},
 };
 
@@ -40,6 +41,7 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t	tab;
 
+	(void)len;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("bad camera");

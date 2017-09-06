@@ -143,12 +143,14 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t		k;
+	size_t	tab;
 
+	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("invalid objects value");
 	scene->objs = NULL;
 	i++;
-	while (i < len)
+	while (i < len && lines[i].tab == tab + 1)
 	{
 		k = 0;
 		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))

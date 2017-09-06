@@ -37,11 +37,25 @@ void	valid_yaml(t_yaml *lines, size_t len)
 	i = 0;
 	while (i < len && i + 1 < len)
 	{
-		if (lines[i].value[0] && (lines[i].tab != lines[i + 1].tab) && (lines[i].tab - 1 != lines[i + 1].tab))
+		printf("lines value%s\n", lines[i].value);
+		if (lines[i].value[0] && (lines[i].tab < lines[i + 1].tab))
 			fatal("bad yaml");
 		if (!lines[i].value[0] && lines[i].tab + 1 != lines[i + 1].tab)
 			fatal("bad yaml");
 		i++;
+	}
+}
+
+void	debug_light(t_light *light)
+{
+	t_light	*tmp;
+
+	tmp = light;
+//	printf("tmp %zu\n", (size_t)tmp);
+	while (tmp)
+	{
+		printf("pos %f, %f, %f\n", tmp->pos[0], tmp->pos[1], tmp->pos[2]);
+		tmp = tmp->next;
 	}
 }
 
@@ -72,6 +86,7 @@ void	debug_scene(t_scene *scene)
 	printf("campos %f, %f, %f\n", scene->cam.pos[0], scene->cam.pos[1], scene->cam.pos[2]);
 	printf("camdir %f, %f, %f\n", scene->cam.dir[0], scene->cam.dir[1], scene->cam.dir[2]);
 	debug_obj(scene->objs);
+	debug_light(scene->lights);
 }
 
 void	debug(t_yaml *lines, size_t len)

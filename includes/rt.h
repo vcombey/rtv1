@@ -45,6 +45,12 @@ typedef struct		s_obj
 	size_t			(*f)(struct s_obj *, t_cam, double[3]);
 }					t_obj;
 
+typedef struct		s_light
+{
+	double			*pos;
+	struct s_light	*next;
+}					t_light;
+
 typedef struct		s_yaml
 {
 	size_t			tab;
@@ -60,6 +66,7 @@ typedef struct		s_scene
 	size_t			height;
 	t_cam			cam;
 	t_obj			*objs;
+	t_light			*lights;
 }					t_scene;
 
 typedef struct	s_func
@@ -107,6 +114,7 @@ void	ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj	*ft_new_obj(void);
 void	assign_obj_func(t_scene *scene);
 size_t	calc_lum(t_obj *obj);
+size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	calc_rotation_figure(double ray[3], double v[3]);
 
 #endif
