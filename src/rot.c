@@ -66,7 +66,7 @@ void	mat_mult_vect(double res[3], double a[3][3], double x[3])
 
 void	calc_rotation_figure(double ray[3], double v[3])
 {
-	normalize(v);
+//	normalize(v);
 	double	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v[2], -v[1]},
@@ -77,8 +77,14 @@ void	calc_rotation_figure(double ray[3], double v[3])
 		{0, 1, 0},
 		{v[0], 0, v[2]},
 	};
+	double	mat_z[3][3] = {
+		{v[2], -v[0], 0},
+		{v[0], v[2], 0},
+		{0, 0, 1},
+	};
 	double	res[3][3];
-	mat_mult(res, mat_x, mat_y);
+	mat_mult(res, mat_y, mat_x);
 	mat_mult_vect(ray, res, ray);
 	(void)mat_y;
+	(void)mat_z;
 }

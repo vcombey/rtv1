@@ -13,8 +13,7 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 
 	norm_plan[0] = 1;
 	norm_plan[1] = 1;
-	norm_plan[2] = 0;
-
+	norm_plan[2] = 1;
 	diviseur = norm_plan[0] * ray[0] + norm_plan[1] * ray[1] + norm_plan[2] * ray[2];
 	if (ft_abs_double(diviseur) < 0.000001)
 		return (0);
@@ -74,12 +73,14 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	double	c;
 	double	t;
 	double	dist;
+
 	double	v[3];
 
-	v[0] = 0;
-	v[1] = 1;
+	v[0] = -5;
+	v[1] = 0;
 	v[2] = 1;
 	calc_rotation_figure(ray, v);
+
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
 	a = ray[0] * ray[0] + ray[1] * ray[1];
 	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1];
