@@ -10,7 +10,7 @@ t_obj	*ft_new_obj(void)
 	t_obj	*new;
 	new = ft_memalloc(sizeof(t_obj));
 	new->pos = ft_memalloc(sizeof(double) * 3);
-	new->rot = ft_memalloc(sizeof(double) * 3);
+	new->dir = ft_memalloc(sizeof(double) * 3);
 	new->intersect = ft_memalloc(sizeof(double) * 3);
 	new->norm = ft_memalloc(sizeof(double) * 3);
 	return (new);

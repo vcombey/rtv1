@@ -35,7 +35,7 @@ typedef struct		s_obj
 {
 	char			*name;
 	double			*pos;
-	double			*rot;
+	double			*dir;
 	size_t			color;
 	double			alpha;
 	double			rayon;
@@ -115,6 +115,6 @@ t_obj	*ft_new_obj(void);
 void	assign_obj_func(t_scene *scene);
 size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	calc_rotation_figure(double ray[3], double v[3]);
-size_t	calc_all_lum(t_scene *scene, t_obj *obj);
+size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3]);
 
 #endif

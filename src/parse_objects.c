@@ -32,8 +32,8 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			get_coordinates(new->pos, lines[i].value);
-		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates(new->rot, lines[i].value);
+		else if (ft_strequ(lines[i].key, "vecteur"))
+			get_coordinates(new->dir, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -64,8 +64,8 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			get_coordinates(new->pos, lines[i].value);
-		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates(new->rot, lines[i].value);
+		else if (ft_strequ(lines[i].key, "vecteur"))
+			get_coordinates(new->dir, lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
 			new->color = get_hexa(lines[i].value);
 		else
@@ -94,8 +94,8 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			get_coordinates(new->pos, lines[i].value);
-		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates(new->rot, lines[i].value);
+		else if (ft_strequ(lines[i].key, "vecteur"))
+			get_coordinates(new->dir, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -126,8 +126,8 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			get_coordinates(new->pos, lines[i].value);
-		else if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates(new->rot, lines[i].value);
+		else if (ft_strequ(lines[i].key, "vecteur"))
+			get_coordinates(new->dir, lines[i].value);
 		else if (ft_strequ(lines[i].key, "alpha"))
 			new->alpha = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))

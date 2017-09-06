@@ -8,16 +8,18 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 {
 	double	t;
 	double	dist;
-	double	norm_plan[3];
 	double	diviseur;
-
-	norm_plan[0] = 1;
-	norm_plan[1] = 1;
-	norm_plan[2] = 1;
-	diviseur = norm_plan[0] * ray[0] + norm_plan[1] * ray[1] + norm_plan[2] * ray[2];
+	/*
+**		double	obj->dir[3];
+**	
+**		obj->dir[0] = 1;
+**		obj->dir[1] = 1;
+**		obj->dir[2] = 1;
+*/
+	diviseur = obj->dir[0] * ray[0] + obj->dir[1] * ray[1] + obj->dir[2] * ray[2];
 	if (ft_abs_double(diviseur) < 0.000001)
 		return (0);
-	t = cam.pos[0] * norm_plan[0] + cam.pos[1] * norm_plan[1] + cam.pos[2] * norm_plan[2];
+	t = cam.pos[0] * obj->dir[0] + cam.pos[1] * obj->dir[1] + cam.pos[2] * obj->dir[2];
 	t = -t / diviseur;
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
@@ -26,7 +28,7 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 	if (obj->intersect[2] < 0)
 		obj->intersect[2] = -obj->intersect[2];
 //  return (0xFF0000);
-	cpy_vect(obj->norm, norm_plan); // cpy dans obj norm
+	cpy_vect(obj->norm, obj->dir); // cpy dans obj norm
 	return (dist);
 }
 

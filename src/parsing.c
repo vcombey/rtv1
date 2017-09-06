@@ -69,7 +69,7 @@ void	debug_obj(t_obj *obj)
 	{
 		printf("name %s\n", tmp->name);
 		printf("color %zu\n", tmp->color);
-		printf("rot %f, %f, %f\n", tmp->rot[0], tmp->rot[1], tmp->rot[2]);
+		printf("dir %f, %f, %f\n", tmp->dir[0], tmp->dir[1], tmp->dir[2]);
 		printf("pos %f, %f, %f\n", tmp->pos[0], tmp->pos[1], tmp->pos[2]);
 		printf("alpha %f\n", tmp->alpha);
 		printf("rayon %f\n\n", tmp->rayon);
