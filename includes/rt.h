@@ -113,8 +113,8 @@ double	get_hexa(char *value);
 void	ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj	*ft_new_obj(void);
 void	assign_obj_func(t_scene *scene);
-size_t	calc_lum(t_obj *obj);
 size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	calc_rotation_figure(double ray[3], double v[3]);
+size_t	calc_all_lum(t_scene *scene, t_obj *obj);
 
 #endif

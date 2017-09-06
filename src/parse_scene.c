@@ -50,11 +50,11 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	{
 		if (ft_strequ(lines[i].key, "rotatexyz"))
 			get_coordinates(scene->rot, lines[i].value);
-		printf("rotate\n");
-		printf("origin\n");
+		//printf("rotate\n");
+		//printf("origin\n");
 		if (ft_strequ(lines[i].key, "origin"))
 			get_coordinates(scene->cam.pos, lines[i].value);
-		printf("origin\n");
+		//printf("origin\n");
 		i++;
 	}
 	return (i);
@@ -73,11 +73,11 @@ void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
 	i++;
 	while (i < len)
 	{
-		printf("tab: %zu, key: %s, value: %s\n", lines[i].tab, lines[i].key, lines[i].value);
+		//printf("tab: %zu, key: %s, value: %s\n", lines[i].tab, lines[i].key, lines[i].value);
 		k = 0;
 		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))
 		{
-			printf("key: %s\n", g_scene_func[k].key);
+		//	printf("key: %s\n", g_scene_func[k].key);
 			k++;
 		}
 		if (g_scene_func[k].f == NULL)

@@ -37,7 +37,7 @@ void	valid_yaml(t_yaml *lines, size_t len)
 	i = 0;
 	while (i < len && i + 1 < len)
 	{
-		printf("lines value%s\n", lines[i].value);
+//		printf("lines value%s\n", lines[i].value);
 		if (lines[i].value[0] && (lines[i].tab < lines[i + 1].tab))
 			fatal("bad yaml");
 		if (!lines[i].value[0] && lines[i].tab + 1 != lines[i + 1].tab)
@@ -134,7 +134,7 @@ void	parse_file(char *filename, t_scene *scene)
 		parse_line(line, lines + i);
 		free(line);
 		if (i > 998)
-			fatal("file too long, fuck you" );
+			fatal("file too large, fuck you" );
 		i++;
 	}
 	close(fd);
