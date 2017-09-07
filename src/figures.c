@@ -144,6 +144,7 @@ size_t	calc_sphere(t_obj *obj, t_cam cam, double ray[3])
 	if (dist < 0.1)
 		return (0);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
+	add_vect(obj->intersect, obj->intersect, obj->pos);
 	cpy_vect(obj->norm, obj->intersect); // cpy dans obj norm
 	return (dist);
 }
