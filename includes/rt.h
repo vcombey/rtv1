@@ -116,5 +116,6 @@ void	assign_obj_func(t_scene *scene);
 size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void	calc_rotation_figure(double ray[3], double v[3]);
 size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3]);
+t_obj	*hit(t_scene *scene, double *scene_cam_pos, double ray[3]);
 
 #endif

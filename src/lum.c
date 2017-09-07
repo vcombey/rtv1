@@ -98,31 +98,58 @@ double	calc_lum_diffuse(t_obj *obj, t_light *lum, double ray[3])
 	//		printf("intensite_obj->color %zu\n", intensite_obj->color);
 }
 
+size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum)
+{
+	double	lum_vect[3];
+	double	lum_pos[3];
+	t_obj	*hit_obj;
+	double	obj_obj[3];
+	double	obj_light[3];
+
+	ft_memset(lum_vect, 0, sizeof(double) * 3);
+	sub_vect(lum_pos, lum->pos, obj->pos);
+	sub_vect(lum_vect, obj->intersect, lum_pos);
+	mult_vect(lum_vect, lum_vect, -1);
+	normalize(lum_vect);
+	hit_obj = hit(scene, obj->intersect, lum_vect);
+	if (!hit_obj)
+		return (0);
+	sub_vect(obj_obj, obj->intersect, hit_obj->intersect);
+	sub_vect(obj_light, obj->intersect, lum->pos);
+	if (norme_carre(obj_obj) < norme_carre(obj_light))
+		return (1);
+	return (0);
+}
+
 size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3])
 {
 	t_light	*tmp;
-	double	coef_lum;
+	double	intensite_diffuse;
 	size_t	color;
 	double	intensite_specular;
 
-	(void)ray;
 	intensite_specular = 0;
-	coef_lum = 0.1;
+	intensite_diffuse = 0.1;
 	tmp = scene->lights;
 	while (tmp)
 	{
-//		translate_base(tmp, cam.pos, scene->cam.pos);
-		coef_lum += calc_lum_diffuse(obj, tmp, ray);
-		intensite_specular += calc_lum_specular(obj, tmp, ray);
+		//		translate_base(tmp, cam.pos, scene->cam.pos);
+		
+		if (!obj_between_light(scene, obj, tmp))
+		{
+
+			intensite_diffuse += calc_lum_diffuse(obj, tmp, ray);
+			intensite_specular += calc_lum_specular(obj, tmp, ray);
+		}
 		tmp = tmp->next;
 	}
-	
-/*
-**			if (coef_lum > 1)
-**				coef_lum = 1;
-**	
-*/
-	color = calc_color(coef_lum, obj->color);
+
+	/*
+	**			if (intensite_diffuse > 1)
+	**				intensite_diffuse = 1;
+	**	
+	*/
+	color = calc_color(intensite_diffuse, obj->color);
 	color = calc_color_specular(intensite_specular, color);
 	return (color);
 }

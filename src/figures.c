@@ -38,7 +38,6 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 
 size_t	calc_cone(t_obj *obj, t_cam cam, double ray[3])
 {
-	double	rayon;
 	double	delta;
 	double	a;
 	double	b;
@@ -48,8 +47,8 @@ size_t	calc_cone(t_obj *obj, t_cam cam, double ray[3])
 	double	alpha = 0.7;
 	double	tan_alpha_carre = tan(alpha) * tan(alpha);
 
+//	calc_rotation_figure(ray, obj->dir);
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
-	rayon = 1;
 	a = ray[0] * ray[0] + ray[1] * ray[1] - ray[2] * ray[2] * tan_alpha_carre;
 	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1] - 2 * cam.pos[2] * ray[2] * tan_alpha_carre;
 	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - cam.pos[2] * cam.pos[2] * tan_alpha_carre;
@@ -68,7 +67,6 @@ size_t	calc_cone(t_obj *obj, t_cam cam, double ray[3])
 //  return (0xFF0000);
 	cpy_vect(obj->norm, obj->intersect); // cpy dans obj norm
 	return (dist);
-	//return (calc_lum(obj->intersect, obj->intersect));
 }
 
 size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
@@ -79,13 +77,21 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	double	c;
 	double	t;
 	double	dist;
+	double	coef_1;
+	double	coef_2;
+	double	coef_div;
 
 //	calc_rotation_figure(ray, obj->dir);
 
+	coef_div = obj->dir[0] * obj->dir[0] + obj->dir[1] * obj->dir[1] + obj->dir[2] * obj->dir[2];
+	if (coef_div == 0)
+		return (0);
+	coef_1 = obj->dir[0] * ray[0] + obj->dir[1] * ray[1] + obj->dir[2] * ray[2];
+	coef_2 = obj->dir[0] * cam.pos[0] + obj->dir[1] * cam.pos[1] + obj->dir[2] * cam.pos[2];
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
-	a = ray[0] * ray[0] + ray[1] * ray[1];
-	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1];
-	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - obj->rayon * obj->rayon;
+	a = ray[0] * ray[0] + ray[1] * ray[1] - coef_1 * coef_1 / coef_div;
+	b = 2 * cam.pos[0] * ray[0] + 2 * cam.pos[1] * ray[1] - 2 * coef_1 * coef_2 / coef_div;
+	c = cam.pos[0] * cam.pos[0] + cam.pos[1] * cam.pos[1] - obj->rayon * obj->rayon - coef_2 * coef_2 / coef_div;
 
 	delta = calc_delta(a, b, c);
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
