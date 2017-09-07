@@ -20,8 +20,10 @@ double	calc_plan(t_obj *obj, double pos[3], double ray[3])
 		return (0);
 	t = pos[0] * obj->dir[0] + pos[1] * obj->dir[1] + pos[2] * obj->dir[2];
 	t = -t / diviseur;
+
 	if (t < 0.001)
 		return (0);
+
 	return (t);
 }
 
@@ -99,7 +101,6 @@ double	calc_sphere(t_obj *obj, double pos[3], double ray[3])
 	double	c;
 	double	t;
 
-	ft_memset(obj->intersect, 0, sizeof(double) * 3);
 	a = norme_carre(ray);
 	b = 2 * scalar_product(ray, pos);
 	c = norme_carre(pos) - obj->rayon * obj->rayon;

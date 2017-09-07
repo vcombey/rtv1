@@ -79,6 +79,7 @@ double	calc_lum_diffuse(t_obj *obj, double ray[3], double *lum_vect)
 void	calc_lum_vect(double *lum_vect, t_obj *obj, t_light *lum)
 {
 	ft_memset(lum_vect, 0, sizeof(double) * 3);
+//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect[0], obj->intersect[1], obj->intersect[2]);
 //	sub_vect(lum_pos, lum->pos, obj->pos);
 	sub_vect(lum_vect, obj->intersect, lum->pos);
 	normalize(lum_vect);
@@ -98,10 +99,15 @@ size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3])
 	while (tmp)
 	{
 		calc_lum_vect(lum_vect, obj, tmp);
-		//if (obj_between_light(scene, obj, tmp, lum_vect))
-		//	return (0xFF0000);
-		if (!obj_between_light(scene, obj, tmp, lum_vect))
-		{
+		/*
+**				if (obj_between_light(scene, obj, tmp, lum_vect))
+**					return (0xFF0000);
+*/
+
+	
+			if (!obj_between_light(scene, obj, tmp, lum_vect))
+			{
+
 			intensite_diffuse += calc_lum_diffuse(obj, ray, lum_vect);
 			intensite_specular += calc_lum_specular(obj, ray, lum_vect);
 		}

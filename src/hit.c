@@ -26,8 +26,17 @@ void	assign_intersect_norm_vect(t_obj *obj, double t, double pos[3], double ray[
 {
 	mult_vect(obj->intersect, ray, t);
 	add_vect(obj->intersect, obj->intersect, pos);
-	add_vect(obj->intersect, obj->intersect, obj->pos);
 	cpy_vect(obj->norm, obj->intersect); // cpy dans obj norm
+	add_vect(obj->intersect, obj->intersect, obj->pos);
+}
+
+void	assign_norm_vect(t_obj *obj, double t, double pos[3], double ray[3])
+{
+	(void)pos;
+	(void)ray;
+	(void)t;
+	if (ft_strequ(obj->name, "plan"))
+		cpy_vect(obj->norm, obj->dir); // cpy dans obj norm
 }
 
 t_obj	*hit(t_scene *scene, double *scene_cam_pos, double ray[3])
@@ -48,6 +57,7 @@ t_obj	*hit(t_scene *scene, double *scene_cam_pos, double ray[3])
 		t = tmp->f(tmp, pos, ray);
 		dist = calc_dist(t, ray);
 		assign_intersect_norm_vect(tmp, t, pos, ray);
+		assign_norm_vect(tmp, t, pos, ray);
 		if (dist != 0 && dist < min_dist)
 		{
 			shortest_obj = tmp;

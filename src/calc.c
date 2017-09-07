@@ -26,10 +26,6 @@ void	calc(t_env *env, t_scene *scene)
 	assign_obj_func(scene);
 	(void)scene;
 
-	ray[0] = -1;
-	ray[1] = 0;
-	ray[2] = 0;
-
 	norm_vert[0] = 0;
 	norm_vert[1] = 0;
 	norm_vert[2] = -1;
