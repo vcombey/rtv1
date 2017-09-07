@@ -17,16 +17,20 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 **		obj->dir[2] = 1;
 */
 	diviseur = obj->dir[0] * ray[0] + obj->dir[1] * ray[1] + obj->dir[2] * ray[2];
-	if (ft_abs_double(diviseur) < 0.000001)
+	if (ft_abs_double(diviseur) < 0.01)
 		return (0);
 	t = cam.pos[0] * obj->dir[0] + cam.pos[1] * obj->dir[1] + cam.pos[2] * obj->dir[2];
 	t = -t / diviseur;
+	if (t < 0)
+		return (0);
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
 	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect[0], obj->intersect[1], obj->intersect[2]);
-	if (obj->intersect[2] < 0)
-		obj->intersect[2] = -obj->intersect[2];
+	/*
+**		if (obj->intersect[2] < 0)
+**			obj->intersect[2] = -obj->intersect[2];
+*/
 //  return (0xFF0000);
 	cpy_vect(obj->norm, obj->dir); // cpy dans obj norm
 	return (dist);
@@ -76,12 +80,7 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	double	t;
 	double	dist;
 
-	double	v[3];
-
-	v[0] = -5;
-	v[1] = 0;
-	v[2] = 1;
-	calc_rotation_figure(ray, v);
+//	calc_rotation_figure(ray, obj->dir);
 
 	ft_memset(obj->intersect, 0, sizeof(double) * 3);
 	a = ray[0] * ray[0] + ray[1] * ray[1];
@@ -96,8 +95,8 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
-	obj->intersect[2] = 0;
 	cpy_vect(obj->norm, obj->intersect); // cpy dans obj norm
+	obj->norm[2] = 0;
 	return (dist);
 	//return (calc_lum(intersect_cylindre, intersect_cylindre));
 }
