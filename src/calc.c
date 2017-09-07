@@ -4,37 +4,6 @@
 #include <math.h>
 #include <stdio.h>
 
-void	translate_base(t_obj *obj, double cam_pos[3], double scene_cam_pos[3])
-{
-	ft_memset(cam_pos, 0, sizeof(double) * 3);
-	sub_vect(cam_pos, scene_cam_pos, obj->pos);
-}
-
-t_obj	*hit(t_scene *scene, double *scene_cam_pos, double ray[3])
-{
-	t_obj	*tmp;
-	t_obj	*shortest_obj;
-	size_t	min_dist;
-	size_t	dist;
-	t_cam	cam;
-
-	shortest_obj = NULL;
-	min_dist = (size_t)-1;
-	tmp = scene->objs;
-	while (tmp)
-	{
-		translate_base(tmp, cam.pos, scene_cam_pos);
-		dist = tmp->f(tmp, cam, ray);
-		if (dist != 0 && dist < min_dist)
-		{
-			shortest_obj = tmp;
-			min_dist = dist;
-		}
-		tmp = tmp->next;
-	}
-	return (shortest_obj);
-}
-
 size_t	calc_rayon(t_scene *scene, double ray[3])
 {
 	t_obj	*shortest_obj;

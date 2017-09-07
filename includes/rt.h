@@ -42,7 +42,7 @@ typedef struct		s_obj
 	struct s_obj	*next;
 	double			*intersect;
 	double			*norm;
-	size_t			(*f)(struct s_obj *, t_cam, double[3]);
+	double			(*f)(struct s_obj *, double[3], double[3]);
 }					t_obj;
 
 typedef struct		s_light
@@ -118,5 +118,8 @@ void	calc_rotation_figure(double ray[3], double v[3]);
 size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3]);
 size_t	calc_rayon(t_scene *scene, double ray[3]);
 t_obj	*hit(t_scene *scene, double *scene_cam_pos, double ray[3]);
+size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, double *lum_vect);
+void	translate_base(double res[3], double scene_cam_pos[3], double obj_pos[3]);
+size_t	calc_dist(double t, double ray[3]);
 
 #endif

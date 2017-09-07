@@ -74,40 +74,6 @@ double	calc_lum_diffuse(t_obj *obj, double ray[3], double *lum_vect)
 	if (intensite_diffuse > 0)
 		return (0);
 	return (ft_abs_double(intensite_diffuse));
-
-/*
-**		if (lum > 0)
-**			return (0x001000);
-*/
-//	intensite = intensite_diffuse + intensite_specular;
-	//		printf("intensite %f\n", intensite);
-//	return (((size_t)(lum * (obj->color >> 16)) << 16) & (((size_t)(lum * (obj->color & 0xFF00 >> 8)) << 8) & ((size_t)(lum * (obj->color & 0xFF))));
-	//		printf("intensite_obj->color %zu\n", intensite_obj->color);
-}
-
-size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, double *lum_vect)
-{
-	t_obj	*hit_obj;
-	double	obj_obj[3];
-	double	obj_light[3];
-	double	lum_vect_cpy[3];
-
-	mult_vect(lum_vect_cpy, lum_vect, -1);
-//	printf("lum_vect:  %f , %f , %f\n", lum_vect[0], lum_vect[1],lum_vect[2]);
-
-	hit_obj = hit(scene, obj->intersect, lum_vect_cpy);
-	if (!hit_obj)
-		return (0);
-	if (!ft_strcmp(obj->name, "sphere"))
-			{
-	printf("obj name: %s, obj pos: %f , %f , %f\n", obj->name, obj->intersect[0], obj->intersect[1],obj->intersect[2]);
-	printf("hit_obj name: %s, hit_obj pos: %f , %f , %f\n", hit_obj->name, hit_obj->intersect[0], hit_obj->intersect[1],hit_obj->intersect[2]);
-	}
-	sub_vect(obj_obj, obj->intersect, hit_obj->intersect);
-	sub_vect(obj_light, obj->intersect, lum->pos);
-	if (norme_carre(obj_obj) < norme_carre(obj_light))
-		return (1);
-	return (0);
 }
 
 void	calc_lum_vect(double *lum_vect, t_obj *obj, t_light *lum)
@@ -132,8 +98,8 @@ size_t	calc_all_lum(t_scene *scene, t_obj *obj, double ray[3])
 	while (tmp)
 	{
 		calc_lum_vect(lum_vect, obj, tmp);
-		if (obj_between_light(scene, obj, tmp, lum_vect))
-			return (0xFF0000);
+		//if (obj_between_light(scene, obj, tmp, lum_vect))
+		//	return (0xFF0000);
 		if (!obj_between_light(scene, obj, tmp, lum_vect))
 		{
 			intensite_diffuse += calc_lum_diffuse(obj, ray, lum_vect);
