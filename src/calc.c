@@ -47,7 +47,6 @@ size_t	calc_rayon(t_scene *scene, double ray[3])
 
 void	calc(t_env *env, t_scene *scene)
 {
-	t_cam	cam;
 	double	ray[3];
 	double	coef;
 	double	norm_vert[3];
@@ -57,13 +56,6 @@ void	calc(t_env *env, t_scene *scene)
 
 	assign_obj_func(scene);
 	(void)scene;
-	cam.pos[0] = 3;
-	cam.pos[1] = 0;
-	cam.pos[2] = 0;
-
-	cam.dir[0] = -1;
-	cam.dir[1] = 0;
-	cam.dir[2] = 0;
 
 	ray[0] = -1;
 	ray[1] = 0;
@@ -86,7 +78,6 @@ void	calc(t_env *env, t_scene *scene)
 		pix_hor = 0;
 		while (pix_hor < SCREEN_WIDTH)
 		{
-		
 			ray[0] = -1;
 			ray[1] = 0;
 			ray[2] = 0;

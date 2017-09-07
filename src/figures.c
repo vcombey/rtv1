@@ -21,7 +21,7 @@ size_t	calc_plan(t_obj *obj, t_cam cam, double ray[3])
 		return (0);
 	t = cam.pos[0] * obj->dir[0] + cam.pos[1] * obj->dir[1] + cam.pos[2] * obj->dir[2];
 	t = -t / diviseur;
-	if (t < 0)
+	if (t < 0.001)
 		return (0);
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
@@ -98,6 +98,8 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	if (delta < 0)
 		return (0x0);
 	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	if (t < 0.1)
+		return (0);
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
@@ -105,6 +107,15 @@ size_t	calc_cylindre(t_obj *obj, t_cam cam, double ray[3])
 	obj->norm[2] = 0;
 	return (dist);
 	//return (calc_lum(intersect_cylindre, intersect_cylindre));
+}
+
+double	ft_min_positiv(double a, double b)
+{
+	if (a < 0 && b > 0)
+		return (b);
+	if (a > 0 && b < 0)
+		return (a);
+	return (ft_min(a, b));
 }
 
 size_t	calc_sphere(t_obj *obj, t_cam cam, double ray[3])
@@ -125,9 +136,13 @@ size_t	calc_sphere(t_obj *obj, t_cam cam, double ray[3])
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0);
-	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	if (t < 0)
+		return (0);
 	mult_vect(obj->intersect, ray, t);
 	dist = norme_carre(obj->intersect);
+	if (dist < 0.1)
+		return (0);
 	add_vect(obj->intersect, obj->intersect, cam.pos);
 	cpy_vect(obj->norm, obj->intersect); // cpy dans obj norm
 	return (dist);

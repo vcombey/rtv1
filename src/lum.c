@@ -114,6 +114,8 @@ size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum)
 	hit_obj = hit(scene, obj->intersect, lum_vect);
 	if (!hit_obj)
 		return (0);
+	//printf("obj name: %s, obj pos: %f , %f , %f\n", obj->name, obj->intersect[0], obj->intersect[1],obj->intersect[2]);
+	//printf("hit_obj name: %s, hit_obj pos: %f , %f , %f\n", hit_obj->name, hit_obj->intersect[0], hit_obj->intersect[1],hit_obj->intersect[2]);
 	sub_vect(obj_obj, obj->intersect, hit_obj->intersect);
 	sub_vect(obj_light, obj->intersect, lum->pos);
 	if (norme_carre(obj_obj) < norme_carre(obj_light))
