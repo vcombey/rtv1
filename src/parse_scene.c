@@ -48,8 +48,8 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
-		if (ft_strequ(lines[i].key, "rotatexyz"))
-			get_coordinates(scene->rot, lines[i].value);
+		if (ft_strequ(lines[i].key, "vecteur"))
+			get_coordinates(scene->cam.dir, lines[i].value);
 		//printf("rotate\n");
 		//printf("origin\n");
 		if (ft_strequ(lines[i].key, "origin"))

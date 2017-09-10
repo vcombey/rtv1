@@ -14,6 +14,30 @@ size_t	calc_rayon(t_scene *scene, double ray[3])
 	return (0);
 }
 
+void	init_norm_cam_dir(double norm_vert[3], double norm_hor[3], double dir[3])
+{
+	if (dir[1] != 0)
+	{
+		norm_hor[2] = 0;
+		norm_hor[0] = sqrt(dir[1] * dir[1] / (dir[0] * dir[0] + dir[1] * dir[1]));
+		norm_hor[1] = -dir[0] / dir[1] * norm_hor[0];
+		if (norm_hor[1] < 0)
+			norm_hor[1] *= -1;
+	}
+	else if (dir[0] != 0)
+	{
+		norm_hor[2] = 0;
+		norm_hor[1] = sqrt(dir[0] * dir[0] / (dir[0] * dir[0] + dir[1] * dir[1]));
+		if (norm_hor[1] < 0)
+			norm_hor[1] *= -1;
+		norm_hor[0] = -dir[1] / dir[0] * norm_hor[1];
+	}
+	normalize(norm_hor);
+	normalize(dir);
+	vectorial_product(norm_vert, norm_hor, dir);
+	normalize(norm_vert);
+}
+
 void	calc(t_env *env, t_scene *scene)
 {
 	double	ray[3];
@@ -26,14 +50,17 @@ void	calc(t_env *env, t_scene *scene)
 	assign_obj_func(scene);
 	(void)scene;
 
-	norm_vert[0] = 0;
-	norm_vert[1] = 0;
-	norm_vert[2] = -1;
-
-	norm_hor[0] = 0;
-	norm_hor[1] = 1;
-	norm_hor[2] = 0;
-
+	init_norm_cam_dir(norm_vert, norm_hor, scene->cam.dir);
+	/*
+**		norm_vert[0] = 0;
+**		norm_vert[1] = 0;
+**		norm_vert[2] = -1;
+**	
+**		norm_hor[0] = 0;
+**		norm_hor[1] = 1;
+**		norm_hor[2] = 0;
+**	
+*/
 	pix_vert = 0;
 	pix_hor = 0;
 
@@ -43,13 +70,13 @@ void	calc(t_env *env, t_scene *scene)
 		pix_hor = 0;
 		while (pix_hor < SCREEN_WIDTH)
 		{
-			ray[0] = -1;
-			ray[1] = 0;
-			ray[2] = 0;
+			ray[0] = scene->cam.dir[0];
+			ray[1] = scene->cam.dir[1];
+			ray[2] = scene->cam.dir[2];
 
 			coef = (((double)pix_vert - ((double)env->height / 2)) / ((double)env->height / 2)) * 0.3; //varie entre -0.66 et +0.66
 			//printf("coef %f\n", coef);
-			ray[2] += coef * norm_vert[2];
+			ray[2] += -coef * norm_vert[2];
 			coef = (((double)pix_hor - ((double)env->width / 2)) / ((double)env->width / 2)) * 0.3 * env->width_per_height; //varie entre -0.66 et +0.66
 			//printf("coef %f\n", coef);
 			ray[1] += coef * norm_hor[1];
