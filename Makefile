@@ -25,6 +25,8 @@ NAME =	rtv1
 SRC =	main.c			\
 		ft_pixelput.c	\
 		lum.c	\
+		key_pressed.c	\
+		key_event.c	\
 		ombre.c	\
 		hit.c	\
 		parse_lights.c	\
@@ -41,7 +43,7 @@ SRC =	main.c			\
 		get_coordinates.c	\
 		obj.c	\
 
-INCLUDE = -I ./libft/ -I ./includes -g
+INCLUDE = -I ./libft -I ./includes -I ./minilibx_macos/
 
 OBJS = $(addprefix objs/, $(SRC:.c=.o))
 
@@ -51,7 +53,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C ./libft/
-	@gcc -g $(OBJS) $(SANITIZER) -L libft -lft -lmlx -framework OpenGL -framework AppKit -o2 -flto -o $(NAME)
+	@gcc -g $(OBJS) -L libft -lft -lmlx -framework OpenGL -framework AppKit -o2 -flto -L minilibx_macos -lmlx -o $(NAME)
 
 clean:
 	make clean -C ./libft/

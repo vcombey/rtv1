@@ -1,4 +1,5 @@
 #include <mlx.h>
+#include "mlx.h"
 #include "rt.h"
 #include "libft.h"
 #include <stdio.h>
@@ -16,6 +17,13 @@ void	init_scene(t_scene *scene)
 	scene->lights = NULL;
 }
 
+
+int	quit(void *param)
+{
+	(void)param;
+	exit(0);
+}
+
 int		main(int ac, char **av)
 {
 	t_env	*env;
@@ -28,8 +36,8 @@ int		main(int ac, char **av)
 	(void)ac;
 	(void)av;
 	init_scene(&scene);
-	parse_file(av[1], &scene);
 	env = singleton_env();
+	parse_file(av[1], &scene);
 	env->width = scene.width;
 	env->height = scene.height;
 	env->name = "rt";
@@ -37,7 +45,11 @@ int		main(int ac, char **av)
 	env->width_per_height = (double)env->width / (double)env->height;
 	init_env(env);
 	calc(env, &scene);
+	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
+	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
+	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	mlx_loop_hook(env->mlx, recalc_img, &scene);
 	mlx_loop(env->mlx);
 	return (0);
 }
