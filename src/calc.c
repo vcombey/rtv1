@@ -49,18 +49,22 @@ void	calc(t_env *env, t_scene *scene)
 
 	assign_obj_func(scene);
 	(void)scene;
+	normalize(scene->cam.dir);
 
 	init_norm_cam_dir(norm_vert, norm_hor, scene->cam.dir);
+
 	/*
-**		norm_vert[0] = 0;
-**		norm_vert[1] = 0;
-**		norm_vert[2] = -1;
+**	 	norm_vert[0] = 0;
+**	 	norm_vert[1] = 0;
+**	 	norm_vert[2] = 1;
 **	
-**		norm_hor[0] = 0;
-**		norm_hor[1] = 1;
-**		norm_hor[2] = 0;
+**	 	norm_hor[0] = -1;
+**	 	norm_hor[1] = 0;
+**	 	norm_hor[2] = 0;
 **	
 */
+
+
 	pix_vert = 0;
 	pix_hor = 0;
 

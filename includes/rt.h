@@ -2,7 +2,7 @@
 # define RT_H
 
 #include <string.h>
-#include "mlx.h"
+#include <mlx.h>
 
 typedef struct		s_point
 {
@@ -28,6 +28,10 @@ typedef struct		s_env
 	size_t			down;
 	size_t			right;
 	size_t			left;
+	size_t			key_shift_left;
+	size_t			key_shift_right;
+	size_t			key_r;
+	size_t			key_t;
 	size_t			rot_right;
 	size_t			rot_left;
 	double			width_per_height;
@@ -94,6 +98,10 @@ typedef struct	s_func
 # define KEY_Z 6
 # define KEY_H 4
 # define KEY_S 1
+# define KEY_SHIFT_LEFT 257
+# define KEY_SHIFT_RIGHT 258
+# define KEY_R 15
+# define KEY_T 17
 # define KEYPRESSMASK (1l << 0)
 # define KEYRELEAMASK (1l << 1)
 # define KEYPRESS 2

@@ -24,6 +24,18 @@ int	quit(void *param)
 	exit(0);
 }
 
+void	init_cam(t_scene *scene)
+{
+	scene->cam.dir[0] = 0;
+	scene->cam.dir[1] = -1;
+	scene->cam.dir[2] = 0;
+
+	scene->cam.pos[0] = 0;
+	scene->cam.pos[1] = 12;
+	scene->cam.pos[2] = 0;
+	
+}
+
 int		main(int ac, char **av)
 {
 	t_env	*env;
@@ -44,6 +56,7 @@ int		main(int ac, char **av)
 //	printf("env width %zu, env height %zu env name %s\n", env->width, env->height, env->name);
 	env->width_per_height = (double)env->width / (double)env->height;
 	init_env(env);
+//	init_cam(&scene);
 	calc(env, &scene);
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
