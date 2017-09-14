@@ -16,6 +16,8 @@ size_t	calc_rayon(t_scene *scene, double ray[3])
 
 void	init_norm_cam_dir(double norm_vert[3], double norm_hor[3], double dir[3])
 {
+	normalize(dir);
+	printf("dir %f, %f, %f\n", dir[0], dir[1],dir[2]); 
 	if (dir[1] != 0)
 	{
 		norm_hor[2] = 0;
@@ -33,9 +35,10 @@ void	init_norm_cam_dir(double norm_vert[3], double norm_hor[3], double dir[3])
 		norm_hor[0] = -dir[1] / dir[0] * norm_hor[1];
 	}
 	normalize(norm_hor);
-	normalize(dir);
 	vectorial_product(norm_vert, norm_hor, dir);
 	normalize(norm_vert);
+	printf("hor %f, %f, %f\n", norm_hor[0], norm_hor[1],norm_hor[2]); 
+	printf("vert %f, %f, %f\n", norm_vert[0], norm_vert[1],norm_vert[2]); 
 }
 
 void	calc(t_env *env, t_scene *scene)
@@ -63,7 +66,6 @@ void	calc(t_env *env, t_scene *scene)
 **	 	norm_hor[2] = 0;
 **	
 */
-
 
 	pix_vert = 0;
 	pix_hor = 0;

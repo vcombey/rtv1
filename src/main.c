@@ -33,7 +33,6 @@ void	init_cam(t_scene *scene)
 	scene->cam.pos[0] = 0;
 	scene->cam.pos[1] = 12;
 	scene->cam.pos[2] = 0;
-	
 }
 
 int		main(int ac, char **av)

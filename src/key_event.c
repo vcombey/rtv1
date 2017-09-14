@@ -4,7 +4,7 @@
 #include <mlx.h>
 #include <stdio.h>
 #include "libft.h"
-#define TETA 0.08
+#define TETA 0.20
 
 static void	ft_turn(t_env *env, t_cam *cam)
 {
@@ -50,6 +50,7 @@ static void	rot_right(t_env *env, t_cam *cam)
 		old_posx = cam->dir[0];
 		cam->dir[0] = cam->dir[0] * cos(TETA) - cam->dir[1] * sin(TETA);
 		cam->dir[1] = old_posx * sin(TETA) + cam->dir[1] * cos(TETA);
+		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]); 
 	}
 }
 
@@ -61,6 +62,7 @@ static void	rot_left(t_env *env, t_cam *cam)
 		old_posx = cam->dir[0];
 		cam->dir[0] = cam->dir[0] * cos(-TETA) - cam->dir[1] * sin(-TETA);
 		cam->dir[1] = old_posx * sin(-TETA) + cam->dir[1] * cos(-TETA);
+		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]); 
 	}
 }
 
@@ -69,10 +71,13 @@ static void	rot_arround_left(t_env *env, t_cam *cam)
 	double old_posx;
 	if (env->key_r)
 	{
-		rot_right(env, cam);
+		old_posx = cam->dir[0];
+		cam->dir[0] = cam->dir[0] * cos(-TETA) - cam->dir[1] * sin(-TETA);
+		cam->dir[1] = old_posx * sin(-TETA) + cam->dir[1] * cos(-TETA);
 		old_posx = cam->pos[0];
 		cam->pos[0] = cam->pos[0] * cos(-TETA) - cam->pos[1] * sin(-TETA);
 		cam->pos[1] = old_posx * sin(-TETA) + cam->pos[1] * cos(-TETA);
+		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]); 
 	}
 }
 
@@ -81,10 +86,13 @@ static void	rot_arround_right(t_env *env, t_cam *cam)
 	double old_posx;
 	if (env->key_t)
 	{
-		rot_left(env, cam);
+		old_posx = cam->dir[0];
+		cam->dir[0] = cam->dir[0] * cos(TETA) - cam->dir[1] * sin(TETA);
+		cam->dir[1] = old_posx * sin(TETA) + cam->dir[1] * cos(TETA);
 		old_posx = cam->pos[0];
 		cam->pos[0] = cam->pos[0] * cos(TETA) - cam->pos[1] * sin(TETA);
 		cam->pos[1] = old_posx * sin(TETA) + cam->pos[1] * cos(TETA);
+		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]); 
 	}
 }
 
