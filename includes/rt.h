@@ -158,4 +158,8 @@ int		ft_key_pressed(int keycode, void *env);
 int		ft_key_release(int keycode, void *env);
 t_env	*singleton_env();
 int			recalc_img(void *scene);
+
+void	init_scene(t_scene *scene);
+int	quit(void *param);
+
 #endif
