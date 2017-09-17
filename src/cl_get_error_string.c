@@ -1,6 +1,6 @@
 #include <OpenCL/opencl.h>
 
-const char *getErrorString(cl_int error)
+const char *getErrorString(int error)
 {
 switch(error){
     // run-time and JIT compiler errors

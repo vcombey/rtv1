@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <mlx.h>
+#include <OpenCL/opencl.h>
 
 typedef struct		s_point
 {

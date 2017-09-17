@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/17 05:22:29 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/17 06:59:33 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,8 @@ SRC =	main.c			\
 		parse_objects.c	\
 		get_coordinates.c	\
 		obj.c	\
-		cl_get_error_string.c
+		cl_get_error_string.c \
+		cl_methods.c \
 
 INCLUDE = -I ./libft -I ./includes -I ./minilibx_macos/
 
@@ -54,7 +55,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C ./libft/
-	@gcc -g $(OBJS) -L libft -lft -L minilibx_macos  -lmlx -framework OpenGL -framework OpenCl -framework AppKit -o2 -flto -o $(NAME)
+	@gcc -g $(OBJS) $(SANITIZER) -L libft -lft -L minilibx_macos  -lmlx -framework OpenGL -framework OpenCl -framework AppKit -o2 -flto -o $(NAME)
 
 clean:
 	make clean -C ./libft/
@@ -68,6 +69,6 @@ re: fclean all
 
 objs/%.o : src/%.c
 	@/bin/mkdir -p objs
-	gcc $(INCLUDE) $(CFLAGS) -c -o $@ $<
+	gcc $(INCLUDE) $(SANITIZER) $(CFLAGS) -c -o $@ $<
 
 .PHONY: all clean fclean re

@@ -7,17 +7,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <OpenCL/opencl.h>
-
-struct 		s_cl
-{
-	size_t global;                      // global domain size for our calculation
-	size_t local;                       // local domain size for our calculation
-
-	cl_device_id device_id;             // compute device id
-	cl_context context;                 // compute context
-	cl_command_queue commands;          // compute command queue
-}				t_cl;
-
+#include "libft.h"
+#include "private_cl.h"
+#include "rt.h"
 
 int		cl_init(struct s_cl *cl)
 {
@@ -50,6 +42,7 @@ err = 0;
 		printf("Error: Failed to create a command commands!\n");
 		return EXIT_FAILURE;
 	}
+	printf("Init ok\n");
 	return EXIT_SUCCESS;
 }
 
@@ -65,23 +58,29 @@ int		file_to_str(char *filename, char **source_str)
 		exit(1);
 	}
 	*source_str = ft_strnew(MAX_SOURCE_SIZE);
-	source_size = fread(source_str, 1, MAX_SOURCE_SIZE, fp);
+	source_size = fread(*source_str, 1, MAX_SOURCE_SIZE, fp);
+	if (source_size == 0) {
+		fprintf(stderr, "fread failed.\n");
+		exit(1);
+	}
 	fclose(fp);
+	printf("File_to_str ok\n");
 	return (EXIT_SUCCESS);
 }
 
-int		cl_load_program_from_source(struct s_cl *cl, char *source_str, cl_program *program)
+int		cl_load_program_from_source(struct s_cl *cl, char **source_str, cl_program *program)
 {
 	int		err;
 
 	err = 0;
-		*program = clCreateProgramWithSource(cl->context, 1, (const char **) & source_str, NULL, &err);
-		if (!*program)
+		printf("cl_load_program_from_source enter\n");
+		*program = clCreateProgramWithSource(cl->context, 1, (const char **) source_str, NULL, &err);
+		if (err || !*program)
 		{
 			printf("Error: Failed to create compute program!\n");
 			return EXIT_FAILURE;
 		}
-
+		printf("cl_load_program_from_source middle\n");
 		// Build the program executable
 		//
 		err = clBuildProgram(*program, 0, NULL, NULL, NULL, NULL);
@@ -95,10 +94,11 @@ int		cl_load_program_from_source(struct s_cl *cl, char *source_str, cl_program *
 			printf("%s\n", buffer);
 			exit(1);
 		}
+		printf("cl_load_program_from_source ok\n");
 		return (EXIT_SUCCESS);
 }
 
-int		cl_create_kernel_from_program(struct s_cl *cl, cl_program program, char *func_name,cl_kernel *kernel)
+int		cl_create_kernel_from_program(cl_program program, char *func_name,cl_kernel *kernel)
 {
 	int	err;
 	// Create the compute kernel in the program we wish to run
@@ -110,18 +110,36 @@ int		cl_create_kernel_from_program(struct s_cl *cl, cl_program program, char *fu
 
 		exit(1);
 	}
+	printf("cl_create_kernel_from_program ok\n");
 	return EXIT_SUCCESS;
 }
 
 int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size, cl_mem *output)
 {
-	*output = clCreateBuffer(cl->context, CL_MEM_WRITE_ONLY, data_size, NULL, NULL);
+	*output = clCreateBuffer(cl->context, rights, data_size, NULL, NULL);
 	if (!output)
 	{
 		printf("Error: Failed to allocate device memory!\n");
 		exit(1);
 	}
+		printf("cl_create_buffer ok\n");
 	return EXIT_SUCCESS;
+}
+
+int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)
+{
+	int	err;
+
+	err = 0;
+	err = clSetKernelArg(kernel, *i, size, ptr);
+	(*i)++;
+	if (err != CL_SUCCESS)
+	{
+		printf("Error: Failed to set kernel arguments! %d\n", err);
+		exit(1);
+	}
+		printf("cl_set_arg ok\n");
+	return (EXIT_SUCCESS);
 }
 
 int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
@@ -146,6 +164,7 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 		return EXIT_FAILURE;
 	}
 	clFinish(cl->commands);
+			printf("cl_exec ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -154,11 +173,12 @@ int		cl_read_results(struct s_cl *cl, cl_mem output, size_t output_size, int *re
 	int	err;
 
 	err = 0;
-	err = clEnqueueReadBuffer( cl->commands, output, CL_TRUE, 0, output_size, &result, 0, NULL, NULL );
+	err = clEnqueueReadBuffer( cl->commands, output, CL_TRUE, 0, output_size, result, 0, NULL, NULL );
 	if (err != CL_SUCCESS)
 	{
 		printf("Error: Failed to read output array! %d\n", err);
 		exit(1);
 	}
+		printf("cl_read_results ok\n");
 	return (EXIT_SUCCESS);
 }

@@ -13,6 +13,40 @@
 #include "rt.h"
 #include "libft.h"
 #include <stdio.h>
+#include "cl.h"
+
+
+int		calc_scene(struct s_cl *cl, t_env *env)
+{
+	size_t	data_size = env->width * env->height * sizeof(int);
+	cl_program program;                 // compute program
+	cl_kernel kernel;                   // compute kernel
+
+	cl_mem output;                      // device memory used for the output array
+	char	*source_str;
+
+	if (cl_init(cl))
+		exit(1);
+	if (file_to_str("./cl/calc.cl", &source_str))
+		exit(1);
+	if (cl_load_program_from_source(cl, &source_str, &program))
+		exit(1);
+	if (cl_create_kernel_from_program(program, "calc", &kernel))
+		exit(1);
+	if (cl_create_buffer(cl, CL_MEM_WRITE_ONLY, data_size, &output))
+		exit(1);
+	int		i = 0;
+	cl_set_arg(kernel, sizeof(cl_mem), &i, &output);
+	cl_set_arg(kernel, sizeof(unsigned int), &i, &env->height);
+	cl_set_arg(kernel, sizeof(unsigned int), &i, &env->width);
+	if (cl_exec(cl, data_size / 4, kernel))
+		exit(1);
+	if (cl_read_results(cl, output, data_size, (int *)env->ptr))
+		exit(1);
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	mlx_loop(env->mlx);
+	return (EXIT_SUCCESS);
+}
 
 int		main(int ac, char **av)
 {
@@ -35,6 +69,12 @@ int		main(int ac, char **av)
 	env->width_per_height = (double)env->width / (double)env->height;
 	init_env(env);
 	//	init_cam(&scene);
+
+	struct s_cl cl;
+
+	ft_bzero(&cl, sizeof(struct s_cl));
+	calc_scene(&cl, env);
+
 	int err;                            // error code returned from api calls
 
 	// original data set given to device
