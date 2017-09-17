@@ -20,7 +20,7 @@ static void		ft_pixelput(__global char *output, int x, int y, int color, size_t 
 
 
 __kernel void	calc(
-__global char *output,
+__global int *output,
 size_t height,
 size_t width)
 {

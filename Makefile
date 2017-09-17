@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vcombey <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/17 01:31:42 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/17 05:22:29 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRC =	main.c			\
 		parse_objects.c	\
 		get_coordinates.c	\
 		obj.c	\
+		cl_get_error_string.c
 
 INCLUDE = -I ./libft -I ./includes -I ./minilibx_macos/
 

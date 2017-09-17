@@ -162,4 +162,6 @@ int			recalc_img(void *scene);
 void	init_scene(t_scene *scene);
 int	quit(void *param);
 
+const char *getErrorString(cl_int error);
+
 #endif
