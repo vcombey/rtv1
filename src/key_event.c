@@ -24,45 +24,51 @@ static void	ft_turn(t_env *env, t_cam *cam)
 	}
 }
 
-static void	mv_up(t_env *env, t_cam *cam)
+void	mv_up(t_env *env, t_cam *cam)
 {
 	if (env->up)
 	{
+			env->starty--;
 		cam->pos[0] += cam->dir[0] * 0.4;
 		cam->pos[1] += cam->dir[1] * 0.4;
 	}
 }
 
-static void	mv_down(t_env *env, t_cam *cam)
+void	mv_down(t_env *env, t_cam *cam)
 {
 	if (env->down)
 	{
+		env->starty++;
 		cam->pos[0] -= cam->dir[0] * 0.4;
 		cam->pos[1] -= cam->dir[1] * 0.4;
 	}
 }
 
-static void	rot_right(t_env *env, t_cam *cam)
+void	rot_right(t_env *env, t_cam *cam)
 {
 	double old_posx;
-	if (env->rot_right)
+	if (env->right)
 	{
+		env->startx++;
 		old_posx = cam->dir[0];
 		cam->dir[0] = cam->dir[0] * cos(TETA) - cam->dir[1] * sin(TETA);
 		cam->dir[1] = old_posx * sin(TETA) + cam->dir[1] * cos(TETA);
-		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]); 
+		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]);
 	}
 }
 
-static void	rot_left(t_env *env, t_cam *cam)
+ void	rot_left(t_env *env, t_cam *cam)
 {
+
 	double old_posx;
-	if (env->rot_left)
+	if (env->left)
 	{
+
+		env->startx--;
 		old_posx = cam->dir[0];
 		cam->dir[0] = cam->dir[0] * cos(-TETA) - cam->dir[1] * sin(-TETA);
 		cam->dir[1] = old_posx * sin(-TETA) + cam->dir[1] * cos(-TETA);
-		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]); 
+		printf("camdir %f, %f, %f\n", cam->dir[0], cam->dir[1],cam->dir[2]);
 	}
 }
 
@@ -77,7 +83,7 @@ static void	rot_arround_left(t_env *env, t_cam *cam)
 		old_posx = cam->pos[0];
 		cam->pos[0] = cam->pos[0] * cos(-TETA) - cam->pos[1] * sin(-TETA);
 		cam->pos[1] = old_posx * sin(-TETA) + cam->pos[1] * cos(-TETA);
-		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]); 
+		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]);
 	}
 }
 
@@ -92,7 +98,7 @@ static void	rot_arround_right(t_env *env, t_cam *cam)
 		old_posx = cam->pos[0];
 		cam->pos[0] = cam->pos[0] * cos(TETA) - cam->pos[1] * sin(TETA);
 		cam->pos[1] = old_posx * sin(TETA) + cam->pos[1] * cos(TETA);
-		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]); 
+		printf("campos %f, %f, %f\n", cam->pos[0], cam->pos[1],cam->pos[2]);
 	}
 }
 

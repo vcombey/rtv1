@@ -41,12 +41,15 @@ typedef struct		s_env
 	int				size_line;
 	int				endian;
 	char			*name;
+	struct s_cl		*cl;
+	size_t			startx;
+	size_t			starty;
 }					t_env;
 
 typedef struct		s_obj
 {
 	char			*name;
-	double			*pos;
+	double			pos[3];
 	double			*dir;
 	size_t			color;
 	double			alpha;
@@ -164,5 +167,9 @@ void	init_scene(t_scene *scene);
 int	quit(void *param);
 
 const char *getErrorString(cl_int error);
+void	mv_up(t_env *env, t_cam *cam);
+void	mv_down(t_env *env, t_cam *cam);
+void	rot_right(t_env *env, t_cam *cam);
+void	rot_left(t_env *env, t_cam *cam);
 
 #endif

@@ -15,7 +15,10 @@ struct 		s_cl
 
 	cl_device_id device_id;             // compute device id
 	cl_context context;                 // compute context
-	cl_command_queue commands;          // compute command queue
+	cl_command_queue commands;
+	cl_kernel kernel;                   // compute kernel
+	cl_mem output;                      // device memory used for the output array
+	size_t			data_size;          // compute command queue
 }				t_cl;
 
 int		cl_init(struct s_cl *cl);

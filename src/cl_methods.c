@@ -42,7 +42,7 @@ err = 0;
 		printf("Error: Failed to create a command commands!\n");
 		return EXIT_FAILURE;
 	}
-	printf("Init ok\n");
+	//printf("Init ok\n");
 	return EXIT_SUCCESS;
 }
 
@@ -64,7 +64,7 @@ int		file_to_str(char *filename, char **source_str)
 		exit(1);
 	}
 	fclose(fp);
-	printf("File_to_str ok\n");
+	//printf("File_to_str ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -94,7 +94,7 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str, cl_program 
 			printf("%s\n", buffer);
 			exit(1);
 		}
-		printf("cl_load_program_from_source ok\n");
+		//printf("cl_load_program_from_source ok\n");
 		return (EXIT_SUCCESS);
 }
 
@@ -110,7 +110,7 @@ int		cl_create_kernel_from_program(cl_program program, char *func_name,cl_kernel
 
 		exit(1);
 	}
-	printf("cl_create_kernel_from_program ok\n");
+	//printf("cl_create_kernel_from_program ok\n");
 	return EXIT_SUCCESS;
 }
 
@@ -122,7 +122,7 @@ int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size, cl_mem *out
 		printf("Error: Failed to allocate device memory!\n");
 		exit(1);
 	}
-		printf("cl_create_buffer ok\n");
+	//printf("cl_create_buffer ok\n");
 	return EXIT_SUCCESS;
 }
 
@@ -138,7 +138,7 @@ int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)
 		printf("Error: Failed to set kernel arguments! %d\n", err);
 		exit(1);
 	}
-		printf("cl_set_arg ok\n");
+	//printf("cl_set_arg ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -164,7 +164,7 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 		return EXIT_FAILURE;
 	}
 	clFinish(cl->commands);
-			printf("cl_exec ok\n");
+		//	printf("cl_exec ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -179,6 +179,6 @@ int		cl_read_results(struct s_cl *cl, cl_mem output, size_t output_size, int *re
 		printf("Error: Failed to read output array! %d\n", err);
 		exit(1);
 	}
-		printf("cl_read_results ok\n");
+	//	printf("cl_read_results ok\n");
 	return (EXIT_SUCCESS);
 }
