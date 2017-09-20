@@ -41,7 +41,10 @@ void	init_norm_cam_dir(double norm_vert[3], double norm_hor[3], double dir[3])
 	printf("vert %f, %f, %f\n", norm_vert[0], norm_vert[1],norm_vert[2]); 
 }
 
-void	calc(t_env *env, t_scene *scene)
+void	calc(
+		__global t_scene scene
+		__global t_obj *objs
+		__global t_light *lights)
 {
 	double	ray[3];
 	double	coef;

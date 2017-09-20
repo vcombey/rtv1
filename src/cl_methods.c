@@ -126,6 +126,11 @@ int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size, cl_mem *out
 	return EXIT_SUCCESS;
 }
 
+int		cl_write_buffer(struct s_cl *cl, void *buffer, void *data, size_t data_size)
+{
+	clEnqueueWriteBuffer(cl->commands, buffer, CL_TRUE, 0, data_size, data, 0, NULL, NULL);
+}
+
 int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)
 {
 	int	err;
@@ -164,7 +169,7 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 		return EXIT_FAILURE;
 	}
 	clFinish(cl->commands);
-		//	printf("cl_exec ok\n");
+	//	printf("cl_exec ok\n");
 	return (EXIT_SUCCESS);
 }
 

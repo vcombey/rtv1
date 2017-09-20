@@ -46,34 +46,33 @@ void	valid_yaml(t_yaml *lines, size_t len)
 	}
 }
 
-void	debug_light(t_light *light)
+void	debug_light(t_scene *scene)
 {
-	t_light	*tmp;
+	size_t		i;
 
-	tmp = light;
+	i = 0;
 //	printf("tmp %zu\n", (size_t)tmp);
-	while (tmp)
+	while (i < scene->lights_number)
 	{
-		printf("pos %f, %f, %f\n", tmp->pos[0], tmp->pos[1], tmp->pos[2]);
-		tmp = tmp->next;
+		printf("pos %f, %f, %f\n", scene->lights[i].pos.x, scene->lights[i].pos.y, scene->lights[i].pos.z);
 	}
 }
 
-void	debug_obj(t_obj *obj)
+void	debug_obj(t_scene *scene)
 {
-	t_obj	*tmp;
+	size_t		i;
 
-	tmp = obj;
+	i = 0;
 //	printf("tmp %zu\n", (size_t)tmp);
-	while (tmp)
+	while (i < scene->objs_number)
 	{
-		printf("name %s\n", tmp->name);
-		printf("color %zu\n", tmp->color);
-		printf("dir %f, %f, %f\n", tmp->dir[0], tmp->dir[1], tmp->dir[2]);
-		printf("pos %f, %f, %f\n", tmp->pos[0], tmp->pos[1], tmp->pos[2]);
-		printf("alpha %f\n", tmp->alpha);
-		printf("rayon %f\n\n", tmp->rayon);
-		tmp = tmp->next;
+		printf("name %d\n", scene->objs[i].type);
+		printf("color %zu\n", scene->objs[i].color);
+		printf("dir %f, %f, %f\n", scene->objs[i].dir.x, scene->objs[i].dir.y, scene->objs[i].dir.z);
+		printf("pos %f, %f, %f\n", scene->objs[i].pos.x, scene->objs[i].pos.y, scene->objs[i].pos.z);
+		printf("alpha %f\n", scene->objs[i].alpha);
+		printf("rayon %f\n\n", scene->objs[i].rayon);
+		i++;
 	}
 }
 
@@ -82,11 +81,11 @@ void	debug_scene(t_scene *scene)
 	printf("name %s\n", scene->name);
 	printf("width %zu\n", scene->width);
 	printf("height %zu\n", scene->height);
-	printf("rot %f, %f, %f\n", scene->rot[0], scene->rot[1], scene->rot[2]);
-	printf("campos %f, %f, %f\n", scene->cam.pos[0], scene->cam.pos[1], scene->cam.pos[2]);
-	printf("camdir %f, %f, %f\n", scene->cam.dir[0], scene->cam.dir[1], scene->cam.dir[2]);
-	debug_obj(scene->objs);
-	debug_light(scene->lights);
+	printf("rot %f, %f, %f\n", scene->rot.x, scene->rot.y, scene->rot.z);
+	printf("campos %f, %f, %f\n", scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
+	printf("camdir %f, %f, %f\n", scene->cam.dir.x, scene->cam.dir.y, scene->cam.dir.z);
+	debug_obj(scene);
+	debug_light(scene);
 }
 
 void	debug(t_yaml *lines, size_t len)

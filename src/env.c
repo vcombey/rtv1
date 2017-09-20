@@ -25,13 +25,13 @@ int	quit(void *param)
 
 void	init_cam(t_scene *scene)
 {
-	scene->cam.dir[0] = 0;
-	scene->cam.dir[1] = -1;
-	scene->cam.dir[2] = 0;
+	scene->cam.dir.x = 0;
+	scene->cam.dir.y = -1;
+	scene->cam.dir.z = 0;
 
-	scene->cam.pos[0] = 0;
-	scene->cam.pos[1] = 12;
-	scene->cam.pos[2] = 0;
+	scene->cam.pos.x = 0;
+	scene->cam.pos.y = 12;
+	scene->cam.pos.z = 0;
 }
 
 int		init_env(t_env *env)

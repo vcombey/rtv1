@@ -9,7 +9,6 @@ t_light	*ft_new_light(void)
 {
 	t_light	*new;
 	new = ft_memalloc(sizeof(t_light));
-	new->pos = ft_memalloc(sizeof(double) * 3);
 	return (new);
 }
 
@@ -25,7 +24,7 @@ size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_light	*new_light;
 
 	(void)len;
-	new_light = ft_new_light();
+	new_light = &scene->lights[scene->lights_number];
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("bad light");
@@ -35,7 +34,7 @@ size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		get_coordinates(new_light->pos, lines[i].value);
 	else
 		fatal("bad light propriety");
-	ft_light_add(new_light, &scene->lights);
 	i++;
+	scene->lights_number++;
 	return (i);
 }

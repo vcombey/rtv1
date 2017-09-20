@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/17 06:59:33 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/20 22:17:17 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,20 +24,11 @@ NAME =	rtv1
 
 SRC =	main.c			\
 		ft_pixelput.c	\
-		lum.c	\
 		key_pressed.c	\
 		key_event.c	\
-		ombre.c	\
-		hit.c	\
 		parse_lights.c	\
-		rot.c	\
 		parsing.c	\
-		figures.c	\
-		calc.c	\
 		env.c			\
-		opp_double.c	\
-		opp_double_vect.c	\
-		opp_vect.c	\
 		parse_scene.c	\
 		parse_objects.c	\
 		get_coordinates.c	\

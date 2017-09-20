@@ -7,6 +7,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <OpenCL/opencl.h>
+#include "rt.h"
+
+struct		s_cl_args
+{
+	t_obj		*objs;
+	cl_mem		objs_buffer;
+	size_t		objs_size;
+
+	t_light		*lights;
+	cl_mem		lights_buffer;
+	size_t		lights_size;
+};
 
 struct 		s_cl
 {

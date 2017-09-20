@@ -14,8 +14,8 @@ typedef struct		s_point
 
 typedef struct		s_cam
 {
-	cl_float3			dir;
-	cl_float3			pos;
+	cl_float3			dir[3];
+	cl_float3			pos[3];
 }					t_cam;
 
 typedef struct		s_env
@@ -48,12 +48,13 @@ typedef struct		s_env
 
 typedef struct		s_obj
 {
-	int				type;
+	char			*name;
 	cl_float3		pos;
 	cl_float3		dir;
 	size_t			color;
 	double			alpha;
 	double			rayon;
+	struct s_obj	*next;
 	cl_float3			intersect;
 	cl_float3			norm;
 }					t_obj;
@@ -79,9 +80,7 @@ typedef struct		s_scene
 	size_t			height;
 	t_cam			cam;
 	t_obj			*objs;
-	size_t			objs_number;
 	t_light			*lights;
-	size_t			lights_number;
 }					t_scene;
 
 typedef struct	s_func
@@ -89,11 +88,6 @@ typedef struct	s_func
 	char		*key;
 	size_t		(*f)(t_yaml *, size_t, t_scene *k, size_t);
 }				t_func;
-
-# define SPHERE 0
-# define CONE 1
-# define PLAN 2
-# define CYLINDRE 3
 
 # define KEY_ESCAPE 53
 # define KEY_LEFT 123
@@ -126,7 +120,7 @@ void	calc(t_env *env, t_scene *scene);
 void				ft_pixelput(t_env *env, int x, int y, int color);
 
 void	parse_file(char *filename, t_scene *scene);
-void	get_coordinates(cl_float3	res, char *value);
+void	get_coordinates(double	float3, char *value);
 void	parse_scene(t_yaml *lines, size_t len, t_scene *scene);
 size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t	get_windows_size(t_yaml *lines, size_t i, t_scene *scene, size_t len);

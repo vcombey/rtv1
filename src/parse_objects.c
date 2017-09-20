@@ -20,9 +20,9 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	new = &scene->objs[scene->objs_number];
 	printf("sphere\n");
-	new = ft_new_obj();
-	new->name = ft_strdup("sphere");
+	new->type = SPHERE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
@@ -42,7 +42,6 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	ft_obj_add(new, &scene->objs);
 	return (i);
 }
 
@@ -52,9 +51,9 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	new = &scene->objs[scene->objs_number];
 	printf("plan\n");
-	new = ft_new_obj();
-	new->name = ft_strdup("plan");
+	new->type = PLAN;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
@@ -72,7 +71,6 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	ft_obj_add(new, &scene->objs);
 	return (i);
 }
 
@@ -82,9 +80,9 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	new = &scene->objs[scene->objs_number];
 	printf("cylindre\n");
-	new = ft_new_obj();
-	new->name = ft_strdup("cylindre");
+	new->type = CYLINDRE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
@@ -104,7 +102,6 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	ft_obj_add(new, &scene->objs);
 	return (i);
 }
 
@@ -114,9 +111,9 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	t_obj	*new;
 
 	(void)len;
+	new = &scene->objs[scene->objs_number];
 	printf("cone\n");
-	new = ft_new_obj();
-	new->name = ft_strdup("cone");
+	new->type = CONE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("parse error");
@@ -136,7 +133,6 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 			fatal("invalid object propriety");
 		i++;
 	}
-	ft_obj_add(new, &scene->objs);
 	return (i);
 }
 
@@ -148,7 +144,8 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	tab = lines[i].tab;
 	if (lines[i].value[0])
 		fatal("invalid objects value");
-	scene->objs = NULL;
+	scene->objs = ft_memalloc(sizeof(t_obj) * 15);
+	scene->objs_number = 0;
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
@@ -160,6 +157,7 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (lines[i].value[0])
 			fatal("object has bad value");
 		i = g_scene_func[k].f(lines, i, scene, len);
+		scene->objs_number++;
 	}
 	return (i);
 }

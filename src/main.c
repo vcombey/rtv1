@@ -59,20 +59,20 @@ int		recalc_scene(t_env *env)
 	rot_left(env, &s.cam);
 
 
-int		i = 0;
-cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
-cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
-cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
-cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->startx);
-cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->starty);
-size_t size = 250;
-cl_set_arg(cl->kernel, sizeof(size_t), &i, &size);
-if (cl_exec(cl, cl->data_size / 4, cl->kernel))
-	exit(1);
-if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
-	exit(1);
-mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
-return (EXIT_SUCCESS);
+	int		i = 0;
+	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
+	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
+	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
+	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->startx);
+	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->starty);
+	size_t size = 250;
+	cl_set_arg(cl->kernel, sizeof(size_t), &i, &size);
+	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
+		exit(1);
+	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
+		exit(1);
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	return (EXIT_SUCCESS);
 }
 
 
@@ -112,11 +112,11 @@ int		main(int ac, char **av)
 	mlx_loop_hook(env->mlx, recalc_scene, env);
 	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_loop(env->mlx);
-/*	clReleaseMemObject(output);
-	clReleaseProgram(program);
-	clReleaseKernel(kernel);
-	clReleaseCommandQueue(commands);
-	clReleaseContext(context);
-*/
+	/*	clReleaseMemObject(output);
+		clReleaseProgram(program);
+		clReleaseKernel(kernel);
+		clReleaseCommandQueue(commands);
+		clReleaseContext(context);
+		*/
 	return 0;
 }

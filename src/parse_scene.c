@@ -71,6 +71,8 @@ void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
 	if (!ft_strequ(lines[0].key, "scene"))
 		fatal("need scene");
 	i++;
+	scene->lights = ft_memalloc(sizeof(t_light) * 15);
+	scene->lights_number = 0;
 	while (i < len)
 	{
 		//printf("tab: %zu, key: %s, value: %s\n", lines[i].tab, lines[i].key, lines[i].value);
