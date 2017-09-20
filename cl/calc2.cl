@@ -11,7 +11,6 @@ size_t size)
 	float4	lala;
 
 	lala[0] = 0.21545;
-	printf("%f\n", lala[0]);
 
 	int		i =  get_global_id(0);
 	pix_hor = i % width;

@@ -128,7 +128,16 @@ int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size, cl_mem *out
 
 int		cl_write_buffer(struct s_cl *cl, void *buffer, void *data, size_t data_size)
 {
+	int	err;
+
+	err = 0;
 	clEnqueueWriteBuffer(cl->commands, buffer, CL_TRUE, 0, data_size, data, 0, NULL, NULL);
+	if (err != CL_SUCCESS)
+	{
+		printf("Error: Failed to write to source array!\n");
+		exit(1);
+	}
+	return (1);
 }
 
 int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)

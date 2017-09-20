@@ -55,6 +55,7 @@ void	debug_light(t_scene *scene)
 	while (i < scene->lights_number)
 	{
 		printf("pos %f, %f, %f\n", scene->lights[i].pos.x, scene->lights[i].pos.y, scene->lights[i].pos.z);
+		i++;
 	}
 }
 
@@ -66,8 +67,8 @@ void	debug_obj(t_scene *scene)
 //	printf("tmp %zu\n", (size_t)tmp);
 	while (i < scene->objs_number)
 	{
-		printf("name %d\n", scene->objs[i].type);
-		printf("color %zu\n", scene->objs[i].color);
+		printf("\nname %d\n", scene->objs[i].type);
+		printf("color %zX\n", scene->objs[i].color);
 		printf("dir %f, %f, %f\n", scene->objs[i].dir.x, scene->objs[i].dir.y, scene->objs[i].dir.z);
 		printf("pos %f, %f, %f\n", scene->objs[i].pos.x, scene->objs[i].pos.y, scene->objs[i].pos.z);
 		printf("alpha %f\n", scene->objs[i].alpha);

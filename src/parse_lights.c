@@ -31,7 +31,7 @@ size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	printf("origin\n");
 	if (ft_strequ(lines[i].key, "origin"))
-		get_coordinates(new_light->pos, lines[i].value);
+		new_light->pos = get_coordinates(new_light->pos, lines[i].value);
 	else
 		fatal("bad light propriety");
 	i++;
