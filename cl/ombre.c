@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
-int		hit_ombre(double intersect[3], t_scene *scene, double *scene_cam_pos, double ray[3], t_obj *obj)
+int		hit_ombre(float3 intersect, t_scene *scene, double *scene_cam_pos, float3 ray, t_obj *obj)
 {
 	t_obj	*tmp;
 	t_obj	*shortest_obj;
@@ -55,7 +55,7 @@ size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, double *lum_v
 //		printf("ombre\n");
 		return (1);
 	}
-//	printf("\nobj_intersect x %f\ny %f\nz %f\n", obj->intersect[0], obj->intersect[1], obj->intersect[2]);
-//	printf("\nhit_obj_intersect x %f\ny %f\nz %f\n", hit_obj_intersect[0], hit_obj_intersect[1], hit_obj_intersect[2]);
+//	printf("\nobj_intersect x %f\ny %f\nz %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
+//	printf("\nhit_obj_intersect x %f\ny %f\nz %f\n", hit_obj_intersect.x, hit_obj_intersect.y, hit_obj_intersect.z);
 	return (0);
 }

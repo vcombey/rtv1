@@ -10,7 +10,7 @@ size_t size)
 	size_t	pix_hor;
 	float4	lala;
 
-	lala[0] = 0.21545;
+	lala.x = 0.21545;
 
 	int		i =  get_global_id(0);
 	pix_hor = i % width;

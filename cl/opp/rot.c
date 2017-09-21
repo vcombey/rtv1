@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
-static double	mat_mult_coef(double a[3][3], double b[3][3], size_t a_line, size_t b_col)
+static double	mat_mult_coef(float3 a[3], float3 b[3], size_t a_line, size_t b_col)
 {
 	size_t	i;
 	double	res;
@@ -19,7 +19,7 @@ static double	mat_mult_coef(double a[3][3], double b[3][3], size_t a_line, size_
 	return (res);
 }
 
-void	mat_mult(double res[3][3], double a[3][3], double b[3][3])
+void	mat_mult(float3 res[3], float3 a[3], float3 b[3])
 {
 	size_t	i;
 	size_t	j;
@@ -37,7 +37,7 @@ void	mat_mult(double res[3][3], double a[3][3], double b[3][3])
 	}
 }
 
-static double	mat_mult_vect_coef(double a[3][3], double b[3], size_t a_line)
+static double	mat_mult_vect_coef(float3 a[3], float3 b, size_t a_line)
 {
 	size_t	i;
 	double	res;
@@ -52,7 +52,7 @@ static double	mat_mult_vect_coef(double a[3][3], double b[3], size_t a_line)
 	return (res);
 }
 
-void	mat_mult_vect(double res[3], double a[3][3], double x[3])
+void	mat_mult_vect(float3 res, float3 a[3], float3 x)
 {
 	size_t	i;
 
@@ -64,22 +64,22 @@ void	mat_mult_vect(double res[3], double a[3][3], double x[3])
 	}
 }
 
-void	calc_rotation_figure(double ray[3], double v[3])
+void	calc_rotation_figure(float3 ray, float3 v)
 {
 //	normalize(v);
 	double	mat_x[3][3] = {
 		{1, 0, 0},
-		{0, v[2], -v[1]},
-		{0, v[1], v[2]},
+		{0, v.z, -v.y},
+		{0, v.y, v.z},
 	};
 	double	mat_y[3][3] = {
-		{v[2], 0, -v[0]},
+		{v.z, 0, -v.x},
 		{0, 1, 0},
-		{v[0], 0, v[2]},
+		{v.x, 0, v.z},
 	};
 	double	mat_z[3][3] = {
-		{v[2], -v[0], 0},
-		{v[0], v[2], 0},
+		{v.z, -v.x, 0},
+		{v.x, v.z, 0},
 		{0, 0, 1},
 	};
 	double	res[3][3];

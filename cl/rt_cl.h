@@ -54,14 +54,11 @@ typedef struct		s_obj
 	size_t			color;
 	double			alpha;
 	double			rayon;
-	float3			intersect;
-	float3			norm;
 }					t_obj;
 
 typedef struct		s_light
 {
 	float3			pos;
-	struct s_light	*next;
 }					t_light;
 
 typedef struct		s_scene
@@ -74,6 +71,15 @@ typedef struct		s_scene
 	t_obj			*objs;
 	t_light			*lights;
 }					t_scene;
+
+struct		s_result_hit
+{
+	double			dist;
+	double			t;
+	float3			norm_vect; //contient le vecteur normal a la surface
+	float3			intersect; //contient le point dans le plan non translate d'intersection
+	t_obj			*obj; //pointeur sur lobjet intersecter
+};
 
 # define KEY_ESCAPE 53
 # define KEY_LEFT 123
