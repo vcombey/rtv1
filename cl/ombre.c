@@ -1,9 +1,3 @@
-#include "rt.h"
-#include "libft.h"
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
-
 int		hit_ombre(float3 intersect, t_scene *scene, double *scene_cam_pos, float3 ray, t_obj *obj)
 {
 	t_obj	*tmp;

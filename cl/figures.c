@@ -1,9 +1,3 @@
-#include "rt.h"
-#include "libft.h"
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
-
 double	calc_plan(t_obj *obj, float3 pos, float3 ray)
 {
 	double	t;

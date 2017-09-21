@@ -1,9 +1,3 @@
-#include "rt.h"
-#include "libft.h"
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
-
 size_t	calc_dist(double t, float3 ray)
 {
 	float3	cam_to_obj;

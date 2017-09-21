@@ -18,34 +18,6 @@ typedef struct		s_cam
 	cl_float3			pos;
 }					t_cam;
 
-typedef struct		s_env
-{
-	void			*mlx;
-	void			*win;
-	void			*img;
-	size_t			width;
-	size_t			height;
-	size_t			up;
-	size_t			down;
-	size_t			right;
-	size_t			left;
-	size_t			key_shift_left;
-	size_t			key_shift_right;
-	size_t			key_r;
-	size_t			key_t;
-	size_t			rot_right;
-	size_t			rot_left;
-	double			width_per_height;
-	char			*ptr;
-	int				bpp;
-	int				size_line;
-	int				endian;
-	char			*name;
-	struct s_cl		*cl;
-	size_t			startx;
-	size_t			starty;
-}					t_env;
-
 typedef struct		s_obj
 {
 	int				type;
@@ -78,11 +50,42 @@ typedef struct		s_scene
 	size_t			width;
 	size_t			height;
 	t_cam			cam;
+	cl_float3		norm_hor;
+	cl_float3		norm_vert;
 	t_obj			*objs;
 	size_t			objs_number;
 	t_light			*lights;
 	size_t			lights_number;
 }					t_scene;
+
+typedef struct		s_env
+{
+	void			*mlx;
+	void			*win;
+	void			*img;
+	size_t			width;
+	size_t			height;
+	size_t			up;
+	size_t			down;
+	size_t			right;
+	size_t			left;
+	size_t			key_shift_left;
+	size_t			key_shift_right;
+	size_t			key_r;
+	size_t			key_t;
+	size_t			rot_right;
+	size_t			rot_left;
+	double			width_per_height;
+	char			*ptr;
+	int				bpp;
+	int				size_line;
+	int				endian;
+	char			*name;
+	struct s_cl		*cl;
+	t_scene			*scene;
+	size_t			startx;
+	size_t			starty;
+}					t_env;
 
 typedef struct	s_func
 {
@@ -153,9 +156,5 @@ void	init_scene(t_scene *scene);
 int		quit(void *param);
 
 const char *getErrorString(cl_int error);
-void	mv_up(t_env *env, t_cam *cam);
-void	mv_down(t_env *env, t_cam *cam);
-void	rot_right(t_env *env, t_cam *cam);
-void	rot_left(t_env *env, t_cam *cam);
 
 #endif

@@ -51,14 +51,9 @@ int		calc_scene(struct s_cl *cl, t_env *env)
 int		recalc_scene(t_env *env)
 {
 	struct	s_cl *cl;
-	t_scene		s;
+
 	cl = env->cl;
-	mv_up(env, &s.cam);
-	mv_down(env, &s.cam);
-	rot_right(env, &s.cam);
-	rot_left(env, &s.cam);
-
-
+	recalc_img(env->scene);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
@@ -69,6 +64,7 @@ int		recalc_scene(t_env *env)
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &size);
 	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
 		exit(1);
+	ft_memset(env->ptr, 0x00, env->width * env->height * 4);
 	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
 		exit(1);
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
@@ -106,6 +102,7 @@ int		main(int ac, char **av)
 
 	calc_scene(&cl, env);
 	env->cl = &cl;
+	env->scene = &scene;
 
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);

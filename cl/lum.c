@@ -1,9 +1,3 @@
-#include "rt.h"
-#include "libft.h"
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
-
 size_t	calc_color(double coef_lum, size_t color)
 {
 	size_t	r;

@@ -1,9 +1,3 @@
-#include "rt.h"
-#include "libft.h"
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
-
 static double	mat_mult_coef(float3 a[3], float3 b[3], size_t a_line, size_t b_col)
 {
 	size_t	i;
