@@ -33,7 +33,7 @@ void	assign_norm_vect(t_obj *obj, double t, float3 pos, float3 ray)
 		cpy_vect(obj->norm, obj->dir); // cpy dans obj norm
 }
 
-int		hit(t_scene *scene, float3 scene_cam_pos, float3 ray, t_obj *shortest_obj, struct result_hit *output)
+int		hit(t_scene scene, float3 ray, t_obj *shortest_obj, struct result_hit *output)
 {
 	size_t	min_dist;
 	size_t	dist;
@@ -47,8 +47,8 @@ int		hit(t_scene *scene, float3 scene_cam_pos, float3 ray, t_obj *shortest_obj, 
 	while (i < scene.objs_number)
 	{
 		obj = scene.objs + i;
-		pos_translated = sub_vect(scene_cam_pos, obj_pos);
-		t = (obj, pos_translated, ray);
+		pos_translated = sub_vect(scene.cam.pos, obj_pos);
+		t = calc_obj(obj, pos_translated, ray);
 		dist = calc_dist(t, ray);
 		if (dist != 0 && dist < output->dist)
 		{

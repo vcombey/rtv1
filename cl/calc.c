@@ -1,8 +1,9 @@
-size_t	calc_rayon(t_scene *scene, float3 ray)
+size_t	calc_rayon(t_scene scene, float3 ray)
 {
 	t_obj	*shortest_obj;
+	struct result_hit *output;
 
-	shortest_obj = hit(scene, scene.cam.pos, ray);
+	shortest_obj = hit(scene, ray, output);
 	if (shortest_obj)
 		return (calc_all_lum(scene, shortest_obj, ray));
 	return (0);

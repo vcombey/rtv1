@@ -114,7 +114,7 @@ double	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	return (t);
 }
 
-double	calc_obj_func(t_obj *obj, float3 pos, float3 ray)
+double	calc_obj(t_obj *obj, float3 pos, float3 ray)
 {
 
 	if (obj->type == SPHERE)
