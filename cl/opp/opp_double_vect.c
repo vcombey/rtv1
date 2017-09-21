@@ -13,5 +13,5 @@ double	scalar_product(float3 u, float3 v)
 
 float3	normalize(float3 v)
 {
-	return (div_vect(v, v, sqrt(norme_carre(v))));
+	return (div_vect(v, sqrt(norme_carre(v))));
 }
