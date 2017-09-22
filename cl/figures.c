@@ -1,16 +1,16 @@
-double	calc_plan(t_obj *obj, float3 pos, float3 ray)
+float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 {
-	double	t;
-	double	diviseur;
+	float	t;
+	float	diviseur;
 	/*
-**		double	obj->dir[3];
+**		float	obj->dir[3];
 **	
 **		obj->dir.x = 1;
 **		obj->dir.y = 1;
 **		obj->dir.z = 1;
 */
 	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
-	if (ft_abs_double(diviseur) < 0.01)
+	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
 	t = pos.x * obj->dir.x + pos.y * obj->dir.y + pos.z * obj->dir.z;
 	t = -t / diviseur;
@@ -21,18 +21,17 @@ double	calc_plan(t_obj *obj, float3 pos, float3 ray)
 	return (t);
 }
 
-double	calc_cone(t_obj *obj, float3 pos, float3 ray)
+float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 {
-	double	delta;
-	double	a;
-	double	b;
-	double	c;
-	double	t;
-	double	alpha = 0.7;
-	double	tan_alpha_carre = tan(alpha) * tan(alpha);
+	float	delta;
+	float	a;
+	float	b;
+	float	c;
+	float	t;
+	float	alpha = 0.7;
+	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
 //	calc_rotation_figure(ray, obj->dir);
-	ft_memset(obj->intersect, 0, sizeof(double) * 3);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -45,16 +44,16 @@ double	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	return (t);
 }
 
-double	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
+float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 {
-	double	delta;
-	double	a;
-	double	b;
-	double	c;
-	double	t;
-	double	coef_1;
-	double	coef_2;
-	double	coef_div;
+	float	delta;
+	float	a;
+	float	b;
+	float	c;
+	float	t;
+	float	coef_1;
+	float	coef_2;
+	float	coef_div;
 
 //	calc_rotation_figure(ray, obj->dir);
 
@@ -77,7 +76,7 @@ double	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	return (t);
 }
 
-double	ft_min_positiv(double a, double b)
+float	ft_min_positiv(float a, float b)
 {
 	if (a < 0 && b > 0)
 		return (b);
@@ -86,13 +85,13 @@ double	ft_min_positiv(double a, double b)
 	return (ft_min(a, b));
 }
 
-double	calc_sphere(t_obj *obj, float3 pos, float3 ray)
+float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 {
-	double	delta;
-	double	a;
-	double	b;
-	double	c;
-	double	t;
+	float	delta;
+	float	a;
+	float	b;
+	float	c;
+	float	t;
 
 	a = norme_carre(ray);
 	b = 2 * scalar_product(ray, pos);
@@ -108,7 +107,7 @@ double	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	return (t);
 }
 
-double	calc_obj(t_obj *obj, float3 pos, float3 ray)
+float	calc_obj(t_obj *obj, float3 pos, float3 ray)
 {
 
 	if (obj->type == SPHERE)
@@ -119,4 +118,5 @@ double	calc_obj(t_obj *obj, float3 pos, float3 ray)
 		return (calc_cone(obj, pos, ray));
 	if (obj->type == CYLINDRE)
 		return (calc_cylindre(obj, pos, ray));
+	return (0);
 }

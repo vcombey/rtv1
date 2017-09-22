@@ -16,7 +16,7 @@
 #include "cl.h"
 
 
-int		calc_scene(struct s_cl *cl, t_env *env)
+int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 {
 	cl_program program;                 // compute program
 	char	*source_str;
@@ -24,7 +24,7 @@ int		calc_scene(struct s_cl *cl, t_env *env)
 	cl->data_size = env->width * env->height * sizeof(int);
 	if (cl_init(cl))
 		exit(1);
-	if (file_to_str("./cl/calc2.cl", &source_str))
+	if (file_to_str("./built.cl", &source_str))
 		exit(1);
 	if (cl_load_program_from_source(cl, &source_str, &program))
 		exit(1);
@@ -32,14 +32,22 @@ int		calc_scene(struct s_cl *cl, t_env *env)
 		exit(1);
 	if (cl_create_buffer(cl, CL_MEM_WRITE_ONLY, cl->data_size, &cl->output))
 		exit(1);
+	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->objs_size, &cl_args->objs_buffer))
+		exit(1);
+	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->lights_size, &cl_args->lights_buffer))
+		exit(1);
+	if (cl_write_buffer(cl, cl_args->lights_buffer, cl_args->lights, cl_args->lights_size))
+		exit(1);
+	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
+		exit(1);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
+	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs);
+	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights);
+	cl_set_arg(cl->kernel, sizeof(t_scene), &i, env->scene);
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->startx);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->starty);
-	size_t size = 250;
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &size);
+	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
 	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
 		exit(1);
 	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
@@ -51,17 +59,19 @@ int		calc_scene(struct s_cl *cl, t_env *env)
 int		recalc_scene(t_env *env)
 {
 	struct	s_cl *cl;
+	struct s_cl_args *cl_args;
 
 	cl = env->cl;
+	cl_args = env->cl_args;
 	recalc_img(env->scene);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
+	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs);
+	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights);
+	cl_set_arg(cl->kernel, sizeof(t_scene), &i, env->scene);
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
 	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->startx);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->starty);
-	size_t size = 250;
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &size);
+	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
 	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
 		exit(1);
 	ft_memset(env->ptr, 0x00, env->width * env->height * 4);
@@ -71,11 +81,12 @@ int		recalc_scene(t_env *env)
 	return (EXIT_SUCCESS);
 }
 
-
 int		main(int ac, char **av)
 {
 	t_env	*env;
 	t_scene	scene;
+	struct s_cl cl;
+	struct s_cl_args cl_args;
 
 
 	printf("coucou\n");
@@ -89,21 +100,27 @@ int		main(int ac, char **av)
 	env->width = scene.width;
 	env->height = scene.height;
 	env->name = "rt";
-	env->startx = 250;
-	env->starty = 250;
 	//	printf("env width %zu, env height %zu env name %s\n", env->width, env->height, env->name);
-	env->width_per_height = (double)env->width / (double)env->height;
+	env->width_per_height = (float)env->width / (float)env->height;
 	init_env(env);
 	//	init_cam(&scene);
 
-	struct s_cl cl;
 
 	ft_bzero(&cl, sizeof(struct s_cl));
 
-	calc_scene(&cl, env);
 	env->cl = &cl;
 	env->scene = &scene;
+	env->cl_args = &cl_args;
 
+
+	cl_args.objs = scene.objs;
+	cl_args.lights = scene.lights;
+	cl_args.objs_size = scene.objs_number * sizeof(t_obj);
+	cl_args.lights_size = scene.lights_number * sizeof(t_obj);
+
+	env->cl_args = &cl_args;
+
+	calc_scene(&cl, &cl_args, env);
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
 	mlx_loop_hook(env->mlx, recalc_scene, env);

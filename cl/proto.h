@@ -1,5 +1,5 @@
-#ifndef RT_CL_H
-# define RT_CL_H
+#ifndef PROTO_H
+# define PROTO_H
 typedef struct		s_point
 {
 	double			x;
@@ -9,8 +9,8 @@ typedef struct		s_point
 
 typedef struct		s_cam
 {
-	float3			dir;
-	float3			pos;
+	float3			dir[3];
+	float3			pos[3];
 }					t_cam;
 
 typedef struct		s_env
@@ -43,7 +43,7 @@ typedef struct		s_env
 
 typedef struct		s_obj
 {
-	int				type;
+	int				*type;
 	float3		pos;
 	float3		dir;
 	size_t			color;
@@ -64,16 +64,14 @@ typedef struct		s_scene
 	size_t			height;
 	t_cam			cam;
 	t_obj			*objs;
-	int				objs_number;
 	t_light			*lights;
-	int				lights_number;
 }					t_scene;
 
 struct		s_result_hit
 {
 	double			dist;
 	double			t;
-	float3			norm; //contient le vecteur normal a la surface
+	float3			norm_vect; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			*obj; //pointeur sur lobjet intersecter
 };
@@ -102,11 +100,6 @@ struct		s_result_hit
 # define SCREEN_HEIGHT 800
 # define WIDTH_PER_HEIGHT SCREEN_WIDTH/SCREEN_HEIGHT
 
-# define SPHERE 0
-# define CONE 1
-# define PLAN 2
-# define CYLINDRE 3
-# define NULL ((void *)0)
 /*
 **	void	calc(t_env *env, t_scene *scene);
 **	
@@ -132,7 +125,7 @@ struct		s_result_hit
 */
 
 int	calc_rayon(t_scene scene, float3 ray);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
+void	init_norm_cam_dir(float3 *norm_vert, float3 *norm_hor, float3 dir);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
@@ -140,25 +133,31 @@ float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 int	calc_dist(float t, float3 ray);
-void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(t_scene scene, float3 ray, struct s_result_hit *output);
+void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct result_hit *output);
+void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray);
+int		hit(t_scene scene, float3 ray, t_obj *shortest_obj, struct result_hit *output);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
-float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float3	calc_lum_vect(float3 intersect, t_light *lum);
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray);
+float	calc_lum_specular(struct result_hit *result_hit, float3 ray, float *lum_vect);
+float	calc_lum_diffuse(struct result_hit *result_hit, float3 ray, float *lum_vect);
+float3	calc_lum_vect(t_obj *obj, t_light *lum);
+int	calc_all_lum(t_scene *scene, struct result_hit *result_hit, float3 ray);
+int		hit_ombre(float3 intersect, t_scene *scene, float *scene_cam_pos, float3 ray, t_obj *obj);
+int	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, float *lum_vect);
 float	calc_delta(float a, float b, float c);
 float	ft_min(float u, float v);
 float	ft_abs_float(float u);
 float	norme_carre(float3 v);
 float	scalar_product(float3 u, float3 v);
-float3	NORMALIZE(float3 v);
+float3	normalize(float3 v);
 float3	mult_vect( float3 v, float t);
 float3	div_vect(float3 v, float t);
 float3	add_vect(float3 u, float3 v);
 float3	cpy_vect(float3 u, float3 v);
 float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
+void	mat_mult(float3 res[3], float3 a[3], float3 b[3]);
+void	mat_mult_vect(float3 res, float3 a[3], float3 x);
+void	calc_rotation_figure(float3 ray, float3 v);
+
 #endif

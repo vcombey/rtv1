@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/21 00:07:55 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/22 00:17:54 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C ./libft/
+	./builter.sh
 	@gcc -g $(OBJS) $(SANITIZER) -L libft -lft -L minilibx_macos  -lmlx -framework OpenGL -framework OpenCl -framework AppKit -o2 -flto -o $(NAME)
 
 clean:

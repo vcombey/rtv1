@@ -1,5 +1,3 @@
-#ifndef RT_CL_H
-# define RT_CL_H
 typedef struct		s_point
 {
 	double			x;
@@ -130,35 +128,3 @@ struct		s_result_hit
 **	size_t	calc_dist(double t, float3 ray);
 **	void	vectorial_product(float3 res, float3 u, float3 v);
 */
-
-int	calc_rayon(t_scene scene, float3 ray);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
-float	calc_plan(t_obj *obj, float3 pos, float3 ray);
-float	calc_cone(t_obj *obj, float3 pos, float3 ray);
-float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
-float	ft_min_positiv(float a, float b);
-float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
-float	calc_obj(t_obj *obj, float3 pos, float3 ray);
-int	calc_dist(float t, float3 ray);
-void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(t_scene scene, float3 ray, struct s_result_hit *output);
-int	calc_color(float coef_lum, int color);
-int	calc_color_specular(float coef_lum, int color);
-float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float3	calc_lum_vect(float3 intersect, t_light *lum);
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray);
-float	calc_delta(float a, float b, float c);
-float	ft_min(float u, float v);
-float	ft_abs_float(float u);
-float	norme_carre(float3 v);
-float	scalar_product(float3 u, float3 v);
-float3	NORMALIZE(float3 v);
-float3	mult_vect( float3 v, float t);
-float3	div_vect(float3 v, float t);
-float3	add_vect(float3 u, float3 v);
-float3	cpy_vect(float3 u, float3 v);
-float3	sub_vect(float3 u, float3 v);
-float3	vectorial_product(float3 u, float3 v);
-#endif

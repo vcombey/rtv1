@@ -1,14 +1,14 @@
-double	calc_delta(double a, double b, double c)
+float	calc_delta(float a, float b, float c)
 {
 	return (b * b - 4 * a * c);
 }
 
-double	ft_min(double u, double v)
+float	ft_min(float u, float v)
 {
 	return (u < v ? u : v);
 }
 
-double	ft_abs_double(double u)
+float	ft_abs_float(float u)
 {
 	return (u > 0 ? u : -u);
 }

@@ -39,5 +39,6 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str, cl_program 
 int		cl_create_kernel_from_program(cl_program program, char *func_name,cl_kernel *kernel);
 int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size, cl_mem *output);
 int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr);
+int		cl_write_buffer(struct s_cl *cl, cl_mem buffer, void *data, size_t data_size);
 int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel);
 int		cl_read_results(struct s_cl *cl, cl_mem output, size_t output_size, int *result);

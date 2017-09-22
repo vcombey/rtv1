@@ -1,4 +1,4 @@
-float3	mult_vect( float3 v, double t)
+float3	mult_vect( float3 v, float t)
 {
 	float3	res;
 
@@ -8,12 +8,10 @@ float3	mult_vect( float3 v, double t)
 	return (res);
 }
 
-float3	div_vect(float3 v, double t)
+float3	div_vect(float3 v, float t)
 {
 	float3	res;
 
-	if (t == 0)
-		return ;
 	res.x = v.x / t;
 	res.y = v.y / t;
 	res.z = v.z / t;

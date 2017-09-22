@@ -1,7 +1,7 @@
-static double	mat_mult_coef(float3 a[3], float3 b[3], size_t a_line, size_t b_col)
+static float	mat_mult_coef(float3 a[3], float3 b[3], int a_line, int b_col)
 {
-	size_t	i;
-	double	res;
+	int	i;
+	float	res;
 
 	res = 0;
 	i = 0;
@@ -15,8 +15,8 @@ static double	mat_mult_coef(float3 a[3], float3 b[3], size_t a_line, size_t b_co
 
 void	mat_mult(float3 res[3], float3 a[3], float3 b[3])
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < 3)
@@ -31,10 +31,10 @@ void	mat_mult(float3 res[3], float3 a[3], float3 b[3])
 	}
 }
 
-static double	mat_mult_vect_coef(float3 a[3], float3 b, size_t a_line)
+static float	mat_mult_vect_coef(float3 a[3], float3 b, int a_line)
 {
-	size_t	i;
-	double	res;
+	int	i;
+	float	res;
 
 	res = 0;
 	i = 0;
@@ -48,7 +48,7 @@ static double	mat_mult_vect_coef(float3 a[3], float3 b, size_t a_line)
 
 void	mat_mult_vect(float3 res, float3 a[3], float3 x)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (i < 3)
@@ -60,23 +60,23 @@ void	mat_mult_vect(float3 res, float3 a[3], float3 x)
 
 void	calc_rotation_figure(float3 ray, float3 v)
 {
-//	normalize(v);
-	double	mat_x[3][3] = {
+//	NORMALIZE(v);
+	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},
 		{0, v.y, v.z},
 	};
-	double	mat_y[3][3] = {
+	float	mat_y[3][3] = {
 		{v.z, 0, -v.x},
 		{0, 1, 0},
 		{v.x, 0, v.z},
 	};
-	double	mat_z[3][3] = {
+	float	mat_z[3][3] = {
 		{v.z, -v.x, 0},
 		{v.x, v.z, 0},
 		{0, 0, 1},
 	};
-	double	res[3][3];
+	float	res[3][3];
 	mat_mult(res, mat_y, mat_x);
 	mat_mult_vect(ray, res, ray);
 	(void)mat_y;

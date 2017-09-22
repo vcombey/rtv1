@@ -1,15 +1,15 @@
-int		hit_ombre(float3 intersect, t_scene *scene, double *scene_cam_pos, float3 ray, t_obj *obj)
+int		hit_ombre(float3 intersect, t_scene *scene, float *scene_cam_pos, float3 ray, t_obj *obj)
 {
 	t_obj	*tmp;
 	t_obj	*shortest_obj;
-	size_t	min_dist;
-	size_t	dist;
-	double	pos[3];
-	double	t;
-	double	min_t;
+	int	min_dist;
+	int	dist;
+	float	pos[3];
+	float	t;
+	float	min_t;
 
 	shortest_obj = NULL;
-	min_dist = (size_t)-1;
+	min_dist = (int)-1;
 	tmp = scene->objs;
 	while (tmp)
 	{
@@ -32,12 +32,12 @@ int		hit_ombre(float3 intersect, t_scene *scene, double *scene_cam_pos, float3 r
 	return (1);
 }
 
-size_t	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, double *lum_vect)
+int	obj_between_light(t_scene *scene, t_obj *obj, t_light *lum, float *lum_vect)
 {
-	double	hit_obj_intersect[3];
-	double	obj_obj[3];
-	double	obj_light[3];
-	double	lum_vect_cpy[3];
+	float	hit_obj_intersect[3];
+	float	obj_obj[3];
+	float	obj_light[3];
+	float	lum_vect_cpy[3];
 
 	mult_vect(lum_vect_cpy, lum_vect, -1);
 	if (!hit_ombre(hit_obj_intersect, scene, obj->intersect, lum_vect_cpy, obj))

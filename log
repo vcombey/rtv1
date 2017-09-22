@@ -1,0 +1,20 @@
+Error: Failed to build program executable!-11
+<program source>:135:98: error: struct kernel parameters may not contain pointers
+__kernel void   calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
+                                                                                                 ^
+<program source>:59:17: note: within field of type 's_scene' declared here
+typedef struct          s_scene
+                ^
+<program source>:61:10: note: field of illegal pointer type 'char *' declared here
+        char                    *name;
+         ^
+<program source>:174:98: error: struct kernel parameters may not contain pointers
+__kernel void   calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height)
+                                                                                                 ^
+<program source>:59:17: note: within field of type 's_scene' declared here
+typedef struct          s_scene
+                ^
+<program source>:61:10: note: field of illegal pointer type 'char *' declared here
+        char                    *name;
+         ^
+
