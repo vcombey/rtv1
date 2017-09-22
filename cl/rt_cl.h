@@ -44,8 +44,8 @@ typedef struct		s_env
 typedef struct		s_obj
 {
 	int				type;
-	float3		pos;
-	float3		dir;
+	float3			pos;
+	float3			dir;
 	size_t			color;
 	double			alpha;
 	double			rayon;
@@ -69,8 +69,8 @@ typedef struct		s_scene
 
 struct		s_result_hit
 {
-	double			dist;
-	double			t;
+	float			dist;
+	float			t;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			*obj; //pointeur sur lobjet intersecter
@@ -140,7 +140,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
-int	calc_dist(float t, float3 ray);
+float	calc_dist(float t, float3 ray);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit);

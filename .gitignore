@@ -33,3 +33,5 @@ a.out
 # Debug files
 *.dSYM/
 *.su
+*.swp
+*.swo

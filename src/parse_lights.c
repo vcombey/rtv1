@@ -5,19 +5,6 @@
 #include <stdlib.h>
 #include "libft.h"
 
-t_light	*ft_new_light(void)
-{
-	t_light	*new;
-	new = ft_memalloc(sizeof(t_light));
-	return (new);
-}
-
-void	ft_light_add(t_light *new_node, t_light **first)
-{
-	new_node->next = *first;
-	*first = new_node;
-}
-
 size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t	tab;

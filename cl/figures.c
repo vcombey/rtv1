@@ -98,7 +98,7 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	c = norme_carre(pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
-	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
+//	printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));

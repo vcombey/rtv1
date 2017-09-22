@@ -26,14 +26,11 @@ typedef struct		s_obj
 	size_t			color;
 	double			alpha;
 	double			rayon;
-	cl_float3			intersect;
-	cl_float3			norm;
 }					t_obj;
 
 typedef struct		s_light
 {
 	cl_float3			pos;
-	struct s_light	*next;
 }					t_light;
 
 typedef struct		s_yaml

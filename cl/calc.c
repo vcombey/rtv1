@@ -70,8 +70,8 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	scene.cam_dir = cam_dir;
 	scene.cam_pos = cam_pos;
 	
-	printf("scene objs number %i\n", scene.objs_number);
-	printf("scenen light number %i\n", scene.lights_number);
+//	printf("scene objs number %i\n", scene.objs_number);
+//	printf("scenen light number %i\n", scene.lights_number);
 	 	norm_vert.x = 0;
 	 	norm_vert.y = 0;
 	 	norm_vert.z = 1;
@@ -84,6 +84,7 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	if (i == 1)
 	{
 		printf("lala");
+		printf("rayon 1", objs[1].rayon);
 		debug_scene(scene, objs, lights);
 	}
 	pix_hor = i % width;

@@ -44,8 +44,8 @@ typedef struct		s_env
 typedef struct		s_obj
 {
 	int				type;
-	float3		pos;
-	float3		dir;
+	float3			pos;
+	float3			dir;
 	size_t			color;
 	double			alpha;
 	double			rayon;
@@ -69,8 +69,8 @@ typedef struct		s_scene
 
 struct		s_result_hit
 {
-	double			dist;
-	double			t;
+	float			dist;
+	float			t;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			*obj; //pointeur sur lobjet intersecter
@@ -140,7 +140,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
-int	calc_dist(float t, float3 ray);
+float	calc_dist(float t, float3 ray);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit);
@@ -235,8 +235,8 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	scene.cam_dir = cam_dir;
 	scene.cam_pos = cam_pos;
 	
-	printf("scene objs number %i\n", scene.objs_number);
-	printf("scenen light number %i\n", scene.lights_number);
+//	printf("scene objs number %i\n", scene.objs_number);
+//	printf("scenen light number %i\n", scene.lights_number);
 	 	norm_vert.x = 0;
 	 	norm_vert.y = 0;
 	 	norm_vert.z = 1;
@@ -249,6 +249,7 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	if (i == 1)
 	{
 		printf("lala");
+		printf("rayon 1", objs[1].rayon);
 		debug_scene(scene, objs, lights);
 	}
 	pix_hor = i % width;
@@ -368,7 +369,7 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	c = norme_carre(pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
-	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
+//	printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
@@ -390,10 +391,10 @@ float	calc_obj(t_obj *obj, float3 pos, float3 ray)
 		return (calc_cylindre(obj, pos, ray));
 	return (0);
 }
-int	calc_dist(float t, float3 ray)
+float	calc_dist(float t, float3 ray)
 {
 	float3	cam_to_obj;
-	int	dist;
+	float	dist;
 
 	cam_to_obj = mult_vect(ray, t);
 	dist = norme_carre(cam_to_obj);
@@ -421,21 +422,20 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 
 int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit)
 {
-	unsigned int	dist;
+	float	dist;
 	float3	pos_translated;
 	float	t;
 	int	i = 0;
 	t_obj	obj;
 
 	result_hit->obj = NULL;
-	result_hit->dist = 10000;
+	result_hit->dist = 100000.0;
 //	printf ("scene objsnumber", scene.objs_number);
 	while (i < scene.objs_number)
 	{
-
 			obj = objs[i];
 			pos_translated = sub_vect(scene.cam_pos, obj.pos);
-			t = calc_obj(&obj, pos_translated, ray);
+			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			dist = calc_dist(t, ray);
 			if (dist != 0 && dist < result_hit->dist)
 			{
@@ -445,7 +445,6 @@ int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *r
 				assign_intersect_norm_vect(obj, t, pos_translated, ray, result_hit);
 				assign_norm_vect(obj, t, pos_translated, ray, result_hit);
 			}
-
 		i++;
 	}
 	if (result_hit->obj == NULL)
