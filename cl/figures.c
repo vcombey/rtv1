@@ -98,12 +98,20 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	c = norme_carre(pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
-//	printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
+//	printf("pos %f, %f, %f", pos.x, pos.y, pos.z);
+//	printf("rayon %f,", obj->rayon);
+//	printf("a %f, b %f, c %f, delta %f ,result %f, ", a, b, c, delta, ((-b - (sqrt(delta))) / (2 * a)));
 	if (delta < 0)
 		return (0);
-	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-	if (t < 0)
+//	return (1);
+//	printf("sqrt %f", sqrt(delta));
+	t = ft_min_positiv(((-b - (sqrt(delta))) / (2 * a)), ((-b + (sqrt(delta))) / (2 * a)));
+//	printf("t %f", t);
+	if (t <= 0)
+	{
+		printf("t < 0");
 		return (0);
+	}
 	return (t);
 }
 

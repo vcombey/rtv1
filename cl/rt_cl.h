@@ -133,7 +133,7 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 void	debug_light(t_scene scene, __global t_light *lights);
 void	debug_obj(t_scene scene,  __global t_obj *objs);
 void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos);
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos, float3 norm_hor, float3 norm_vert);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);

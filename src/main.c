@@ -44,16 +44,16 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
-
-
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->height);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->width);
 	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->objs_number);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->lights_number);
-	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.dir);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_hor);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_vert);
 
 	if (cl_exec(cl, env->width * env->height, cl->kernel))
 		exit(1);
@@ -81,8 +81,10 @@ int		recalc_scene(t_env *env)
 	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->objs_number);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->lights_number);
-	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.dir);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_hor);
+	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_vert);
 
 	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
 		exit(1);
@@ -101,12 +103,8 @@ int		main(int ac, char **av)
 	struct s_cl cl;
 	struct s_cl_args cl_args;
 
-
-	printf("coucou\n");
 	if (ac != 2)
 		fatal ("usage: rt_v1 <filename>");
-	(void)ac;
-	(void)av;
 	init_scene(&scene);
 	env = singleton_env();
 	parse_file(av[1], &scene);
@@ -129,7 +127,6 @@ int		main(int ac, char **av)
 	env->scene2 = scene2;
 	env->cl_args = &cl_args;
 
-
 	cl_args.objs = scene.objs;
 	cl_args.lights = scene.lights;
 	cl_args.objs_size = scene.objs_number * (sizeof(t_obj) + 1);
@@ -137,13 +134,14 @@ int		main(int ac, char **av)
 
 	env->cl_args = &cl_args;
 
+	recalc_img(env->scene);
 	calc_scene(&cl, &cl_args, env);
-	/*
-**		mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
-**		mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
-**		mlx_loop_hook(env->mlx, recalc_scene, env);
-**		mlx_hook(env->win, 17, 1, &quit, NULL);
-*/
+
+		mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
+		mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
+	//	mlx_loop_hook(env->mlx, recalc_scene, env);
+		mlx_hook(env->win, 17, 1, &quit, NULL);
+
 	mlx_loop(env->mlx);
 	/*	clReleaseMemObject(output);
 		clReleaseProgram(program);

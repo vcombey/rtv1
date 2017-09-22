@@ -53,12 +53,10 @@ void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights)
 	debug_light(scene, lights);
 }
 
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos)
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos, float3 norm_hor, float3 norm_vert)
 {
 	float3	ray;
 	float	coef;
-	float3	norm_vert;
-	float3	norm_hor;
 	t_scene	scene;
 	int	pix_vert;
 	int	pix_hor;
@@ -72,21 +70,9 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	
 //	printf("scene objs number %i\n", scene.objs_number);
 //	printf("scenen light number %i\n", scene.lights_number);
-	 	norm_vert.x = 0;
-	 	norm_vert.y = 0;
-	 	norm_vert.z = 1;
-	
-	 	norm_hor.x = 0;
-	 	norm_hor.y = 1;
-	 	norm_hor.z = 0;
-	
 
 	if (i == 1)
-	{
-		printf("lala");
-		printf("rayon 1", objs[1].rayon);
 		debug_scene(scene, objs, lights);
-	}
 	pix_hor = i % width;
 	pix_vert = i / width;
 
@@ -94,13 +80,14 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray.y = cam_dir.y;
 	ray.z = cam_dir.z;
 
+	ray = NORMALIZE(ray);
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
 	ray.z += -coef * norm_vert.z;
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
 	ray.y += coef * norm_hor.y;
+	ray = NORMALIZE(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
-	output[i] = 0xFF;
 	output[i] = calc_rayon(objs, lights, scene, ray);
 }

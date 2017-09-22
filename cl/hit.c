@@ -5,8 +5,10 @@ float	calc_dist(float t, float3 ray)
 
 	cam_to_obj = mult_vect(ray, t);
 	dist = norme_carre(cam_to_obj);
-	if (dist < 0.1)
-		return (0);
+	/*
+**		if (dist < 0.1)
+**			return (0);
+*/
 	return (dist);
 }
 
@@ -14,7 +16,7 @@ void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, stru
 {
 	output->intersect = mult_vect(ray, output->t);
 	output->intersect = add_vect(output->intersect, pos);
-	cpy_vect(output->norm, output->intersect); // cpy dans obj norm
+	output->norm = output->intersect;
 	output->intersect = add_vect(output->intersect, obj.pos);
 }
 
@@ -36,16 +38,20 @@ int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *r
 	t_obj	obj;
 
 	result_hit->obj = NULL;
-	result_hit->dist = 100000.0;
+	result_hit->dist = 1000.0;
 //	printf ("scene objsnumber", scene.objs_number);
 	while (i < scene.objs_number)
 	{
 			obj = objs[i];
 			pos_translated = sub_vect(scene.cam_pos, obj.pos);
+			printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
+			//printf("t %f", t );
 			dist = calc_dist(t, ray);
-			if (dist != 0 && dist < result_hit->dist)
+			//if (dist != 0 && dist < result_hit->dist)
+			if (t > 0)
 			{
+		//	printf("dist %f", dist);
 				result_hit->dist = dist;
 				result_hit->t = t;
 				result_hit->obj = &obj;
