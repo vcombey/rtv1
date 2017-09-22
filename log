@@ -1,20 +1,26 @@
 Error: Failed to build program executable!-11
-<program source>:135:98: error: struct kernel parameters may not contain pointers
-__kernel void   calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
-                                                                                                 ^
-<program source>:59:17: note: within field of type 's_scene' declared here
-typedef struct          s_scene
-                ^
-<program source>:61:10: note: field of illegal pointer type 'char *' declared here
-        char                    *name;
-         ^
-<program source>:174:98: error: struct kernel parameters may not contain pointers
-__kernel void   calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height)
-                                                                                                 ^
-<program source>:59:17: note: within field of type 's_scene' declared here
-typedef struct          s_scene
-                ^
-<program source>:61:10: note: field of illegal pointer type 'char *' declared here
-        char                    *name;
-         ^
+<program source>:182:36: error: no member named 'lights' in 'struct s_scene'
+                printf("pos %f, %f, %f\n", scene.lights[i].pos.x, scene.lights[i].pos.y, scene.lights[i].pos.z);
+                             ~~~~~ ^
+<program source>:180:11: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'int'
+        while (i < scene.lights_number)
+        ~ ^ ~~~~~~~~~~~~~~~~~~~
+<program source>:195:31: error: no member named 'objs' in 'struct s_scene'
+                printf("\nname %d\n", scene.objs[i].type);
+                        ~~~~~ ^
+<program source>:196:31: error: no member named 'objs' in 'struct s_scene'
+                printf("color %zX\n", scene.objs[i].color);
+                        ~~~~~ ^
+<program source>:198:36: error: no member named 'objs' in 'struct s_scene'
+                printf("pos %f, %f, %f\n", scene.objs[i].pos.x, scene.objs[i].pos.y, scene.objs[i].pos.z);
+                             ~~~~~ ^
+<program source>:199:30: error: no member named 'objs' in 'struct s_scene'
+                printf("alpha %f\n", scene.objs[i].alpha);
+                       ~~~~~ ^
+<program source>:200:32: error: no member named 'objs' in 'struct s_scene'
+                printf("rayon %f\n\n", scene.objs[i].rayon);
+                         ~~~~~ ^
+<program source>:193:11: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'int'
+        while (i < scene.objs_number)
+        ~ ^ ~~~~~~~~~~~~~~~~~
 

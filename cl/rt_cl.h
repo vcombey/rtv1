@@ -58,14 +58,11 @@ typedef struct		s_light
 
 typedef struct		s_scene
 {
-	char			*name;
-	float3		rot;
-	size_t			width;
-	size_t			height;
+	float3			rot;
+	int				width;
+	int				height;
 	t_cam			cam;
-	t_obj			*objs;
 	int				objs_number;
-	t_light			*lights;
 	int				lights_number;
 }					t_scene;
 
@@ -131,8 +128,11 @@ struct		s_result_hit
 **	void	vectorial_product(float3 res, float3 u, float3 v);
 */
 
-int	calc_rayon(t_scene scene, float3 ray);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
+int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray);
+void	debug_light(t_scene scene, __global t_light *lights);
+void	debug_obj(t_scene scene,  __global t_obj *objs);
+void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights);
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, t_cam cam);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
@@ -140,15 +140,15 @@ float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 int	calc_dist(float t, float3 ray);
-void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(t_scene scene, float3 ray, struct s_result_hit *output);
+void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *output);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float3	calc_lum_vect(float3 intersect, t_light *lum);
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray);
+float3	calc_lum_vect(float3 intersect, t_light lum);
+int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray);
 float	calc_delta(float a, float b, float c);
 float	ft_min(float u, float v);
 float	ft_abs_float(float u);

@@ -42,13 +42,18 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 		exit(1);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
-	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs);
-	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights);
-	cl_set_arg(cl->kernel, sizeof(t_scene), &i, env->scene);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
-	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
-	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
+
+		cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
+		cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
+
+		cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
+		cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
+		cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
+		cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->objs_number);
+		cl_set_arg(cl->kernel, sizeof(int), &i, &env->scene->lights_number);
+		cl_set_arg(cl->kernel, sizeof(t_cam), &i, &env->scene->cam);
+
+	if (cl_exec(cl, cl->data_size/ 4, cl->kernel))
 		exit(1);
 	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
 		exit(1);
@@ -66,12 +71,14 @@ int		recalc_scene(t_env *env)
 	recalc_img(env->scene);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
-	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs);
-	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights);
-	cl_set_arg(cl->kernel, sizeof(t_scene), &i, env->scene);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
-	cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
-	cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
+
+		cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
+		cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
+		cl_set_arg(cl->kernel, sizeof(t_scene2), &i, &env->scene2);
+		cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->height);
+		cl_set_arg(cl->kernel, sizeof(size_t), &i, &env->width);
+		cl_set_arg(cl->kernel, sizeof(float), &i, &env->width_per_height);
+
 	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
 		exit(1);
 	ft_memset(env->ptr, 0x00, env->width * env->height * 4);
@@ -83,8 +90,9 @@ int		recalc_scene(t_env *env)
 
 int		main(int ac, char **av)
 {
-	t_env	*env;
-	t_scene	scene;
+	t_env		*env;
+	t_scene		scene;
+	t_scene2	scene2;
 	struct s_cl cl;
 	struct s_cl_args cl_args;
 
@@ -108,15 +116,19 @@ int		main(int ac, char **av)
 
 	ft_bzero(&cl, sizeof(struct s_cl));
 
+	scene2.objs_number = scene.objs_number;
+	scene2.lights_number = scene.lights_number;
+	scene2.cam = scene.cam;
 	env->cl = &cl;
 	env->scene = &scene;
+	env->scene2 = scene2;
 	env->cl_args = &cl_args;
 
 
 	cl_args.objs = scene.objs;
 	cl_args.lights = scene.lights;
 	cl_args.objs_size = scene.objs_number * sizeof(t_obj);
-	cl_args.lights_size = scene.lights_number * sizeof(t_obj);
+	cl_args.lights_size = scene.lights_number * sizeof(t_light);
 
 	env->cl_args = &cl_args;
 

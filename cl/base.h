@@ -56,14 +56,11 @@ typedef struct		s_light
 
 typedef struct		s_scene
 {
-	char			*name;
-	float3		rot;
-	size_t			width;
-	size_t			height;
+	float3			rot;
+	int				width;
+	int				height;
 	t_cam			cam;
-	t_obj			*objs;
 	int				objs_number;
-	t_light			*lights;
 	int				lights_number;
 }					t_scene;
 

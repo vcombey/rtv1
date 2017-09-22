@@ -45,6 +45,7 @@ typedef struct		s_yaml
 
 typedef struct		s_scene
 {
+	char			*name;
 	cl_float3		rot;
 	size_t			width;
 	size_t			height;
@@ -56,6 +57,16 @@ typedef struct		s_scene
 	t_light			*lights;
 	size_t			lights_number;
 }					t_scene;
+
+typedef struct		s_scene2
+{
+	cl_float3			rot;
+	int				width;
+	int				height;
+	t_cam			cam;
+	int				objs_number;
+	int				lights_number;
+}					t_scene2;
 
 typedef struct		s_env
 {
@@ -83,6 +94,7 @@ typedef struct		s_env
 	struct s_cl		*cl;
 	struct s_cl_args	*cl_args;
 	t_scene			*scene;
+	t_scene2			scene2;
 }					t_env;
 
 typedef struct	s_func

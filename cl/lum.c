@@ -69,23 +69,23 @@ float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_v
 	return (ft_abs_float(intensite_diffuse));
 }
 
-float3	calc_lum_vect(float3 intersect, t_light *lum)
+float3	calc_lum_vect(float3 intersect, t_light lum)
 {
 	float3 lum_vect;
 	//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
-	//	sub_vect(lum_pos, lum->pos, obj->pos);
-	lum_vect = sub_vect(intersect, lum->pos);
+	//	sub_vect(lum_pos, lum.pos, obj->pos);
+	lum_vect = sub_vect(intersect, lum.pos);
 	NORMALIZE(lum_vect);
 	return (lum_vect);
 }
 
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray)
+int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray)
 {
 	float	intensite_diffuse;
 	int	color;
 	float	intensite_specular;
 	float3	lum_vect;
-	t_light	*light;
+	t_light	light;
 	int		i;
 
 	intensite_specular = 0;
@@ -93,7 +93,7 @@ int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray)
 
 	while (i < scene.lights_number)
 	{
-		light = scene.lights + i;
+		light = lights[i];
 		lum_vect = calc_lum_vect(result_hit->intersect, light);
 		/*
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))

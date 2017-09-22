@@ -58,14 +58,11 @@ typedef struct		s_light
 
 typedef struct		s_scene
 {
-	char			*name;
-	float3		rot;
-	size_t			width;
-	size_t			height;
+	float3			rot;
+	int				width;
+	int				height;
 	t_cam			cam;
-	t_obj			*objs;
 	int				objs_number;
-	t_light			*lights;
 	int				lights_number;
 }					t_scene;
 
@@ -131,8 +128,11 @@ struct		s_result_hit
 **	void	vectorial_product(float3 res, float3 u, float3 v);
 */
 
-int	calc_rayon(t_scene scene, float3 ray);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height);
+int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray);
+void	debug_light(t_scene scene, __global t_light *lights);
+void	debug_obj(t_scene scene,  __global t_obj *objs);
+void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights);
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, t_cam cam);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
@@ -140,15 +140,15 @@ float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 int	calc_dist(float t, float3 ray);
-void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(t_scene scene, float3 ray, struct s_result_hit *output);
+void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *output);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
-float3	calc_lum_vect(float3 intersect, t_light *lum);
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray);
+float3	calc_lum_vect(float3 intersect, t_light lum);
+int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray);
 float	calc_delta(float a, float b, float c);
 float	ft_min(float u, float v);
 float	ft_abs_float(float u);
@@ -162,22 +162,69 @@ float3	cpy_vect(float3 u, float3 v);
 float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
 #endif
-int	calc_rayon(t_scene scene, float3 ray)
+int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray)
 {
 	struct s_result_hit *result_hit;
 
-	if (hit(scene, ray, result_hit))
-		return (calc_all_lum(scene, result_hit, ray));
+	if (hit(objs, scene, ray, result_hit))
+		return (calc_all_lum(lights, scene, result_hit, ray));
 	return (0);
 }
 
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, t_scene scene, int height, int width, float width_per_height)
+void	debug_light(t_scene scene, __global t_light *lights)
+{
+	int		i;
+
+	i = 0;
+//	printf("tmp %zu\n", (size_t)tmp);
+	while (i < scene.lights_number)
+	{
+		printf("pos %f, %f, %f\n", lights[i].pos.x, lights[i].pos.y, lights[i].pos.z);
+		i++;
+	}
+}
+
+void	debug_obj(t_scene scene,  __global t_obj *objs)
+{
+	int		i;
+
+	i = 0;
+//	printf("tmp %zu\n", (size_t)tmp);
+	while (i < scene.objs_number)
+	{
+		printf("\nname %d\n", objs[i].type);
+		printf("color %zX\n", objs[i].color);
+		//printf("dir %f, %f, %f\n", objs[i].dir.x, objs[i].dir.y, objs[i].dir.z);
+		printf("pos %f, %f, %f\n", objs[i].pos.x, objs[i].pos.y, objs[i].pos.z);
+		printf("alpha %f\n", objs[i].alpha);
+		printf("rayon %f\n\n", objs[i].rayon);
+		i++;
+	}
+}
+
+void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights)
+{
+
+	printf("scenenb %f\n", scene.objs_number);
+	printf("scenenb %f\n", scene.lights_number);
+	
+//	printf("campos %f, %f, %f\n", scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
+//	printf("camdir %f, %f, %f\n", scene->cam.dir.x, scene->cam.dir.y, scene->cam.dir.z);
+	debug_obj(scene, objs);
+	debug_light(scene, lights);
+}
+
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, t_cam cam)
 {
 	float3	ray;
 	float	coef;
 	float3	norm_vert;
 	float3	norm_hor;
+	t_scene	scene;
 
+	scene.objs_number = objs_number;
+	scene.lights_number = lights_number;
+//	scene.cam = cam;
 	/*
 **	 	norm_vert.x = 0;
 **	 	norm_vert.y = 0;
@@ -192,6 +239,13 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	int	pix_vert;
 	int	pix_hor;
 	int		i =  get_global_id(0);
+	printf("coucou");
+	if (i == 1)
+	{
+		printf("lala");
+		debug_scene(scene, objs, lights);
+	}
+	printf("coucou");
 	pix_hor = i % width;
 	pix_vert = i / width;
 
@@ -200,13 +254,13 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray.z = scene.cam.dir.z;
 
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
-	//printf("coef %f\n", coef);
+//	printf("coef %f\n", coef);
 	ray.z += -coef * norm_vert.z;
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
-	//printf("coef %f\n", coef);
+//	printf("coef %f\n", coef);
 	ray.y += coef * norm_hor.y;
-	//printf("\nray %f, %f, %f\n", ray.x, ray.y, ray.z);
-	output[i] = calc_rayon(scene, ray);
+//	printf("\nray %f, %f, %f\n", ray.x, ray.y, ray.z);
+	output[i] = calc_rayon(objs, lights, scene, ray);
 }
 float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 {
@@ -342,44 +396,45 @@ int	calc_dist(float t, float3 ray)
 	return (dist);
 }
 
-void	assign_intersect_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
+void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
 	output->intersect = mult_vect(ray, output->t);
 	output->intersect = add_vect(output->intersect, pos);
 	cpy_vect(output->norm, output->intersect); // cpy dans obj norm
-	output->intersect = add_vect(output->intersect, obj->pos);
+	output->intersect = add_vect(output->intersect, obj.pos);
 }
 
-void	assign_norm_vect(t_obj *obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
+void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
 	(void)pos;
 	(void)ray;
 	(void)t;
-	if (obj->type == PLAN)
-		output->norm = obj->dir;
+	if (obj.type == PLAN)
+		output->norm = obj.dir;
 }
 
-int		hit(t_scene scene, float3 ray, struct s_result_hit *output)
+int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *output)
 {
 	int	dist;
 	float3	pos_translated;
 	float	t;
 	int	i = 0;
-	t_obj	*obj;
+	t_obj	obj;
 
 	output->obj = NULL;
 	output->dist = (int)-1;
 	while (i < scene.objs_number)
 	{
-		obj = scene.objs + i;
-		pos_translated = sub_vect(scene.cam.pos, obj->pos);
-		t = calc_obj(obj, pos_translated, ray);
+		obj = objs[i];
+
+		pos_translated = sub_vect(scene.cam.pos, obj.pos);
+		t = calc_obj(&obj, pos_translated, ray);
 		dist = calc_dist(t, ray);
 		if (dist != 0 && dist < output->dist)
 		{
 			output->dist = dist;
 			output->t = t;
-			output->obj = obj;
+			output->obj = &obj;
 			assign_intersect_norm_vect(obj, t, pos_translated, ray, output);
 			assign_norm_vect(obj, t, pos_translated, ray, output);
 		}
@@ -460,23 +515,23 @@ float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_v
 	return (ft_abs_float(intensite_diffuse));
 }
 
-float3	calc_lum_vect(float3 intersect, t_light *lum)
+float3	calc_lum_vect(float3 intersect, t_light lum)
 {
 	float3 lum_vect;
 	//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
-	//	sub_vect(lum_pos, lum->pos, obj->pos);
-	lum_vect = sub_vect(intersect, lum->pos);
+	//	sub_vect(lum_pos, lum.pos, obj->pos);
+	lum_vect = sub_vect(intersect, lum.pos);
 	NORMALIZE(lum_vect);
 	return (lum_vect);
 }
 
-int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray)
+int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray)
 {
 	float	intensite_diffuse;
 	int	color;
 	float	intensite_specular;
 	float3	lum_vect;
-	t_light	*light;
+	t_light	light;
 	int		i;
 
 	intensite_specular = 0;
@@ -484,7 +539,7 @@ int	calc_all_lum(t_scene scene, struct s_result_hit *result_hit, float3 ray)
 
 	while (i < scene.lights_number)
 	{
-		light = scene.lights + i;
+		light = lights[i];
 		lum_vect = calc_lum_vect(result_hit->intersect, light);
 		/*
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))

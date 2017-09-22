@@ -145,6 +145,8 @@ int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)
 {
 	int	err;
 
+	if (ptr == NULL)
+		printf("ptr is null\n");
 	err = 0;
 	err = clSetKernelArg(kernel, *i, size, ptr);
 	(*i)++;
@@ -163,12 +165,14 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 	int	err;
 
 	err = 0;
+	printf("meuh\n");
 	err = clGetKernelWorkGroupInfo(kernel, cl->device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(cl->local), &cl->local, NULL);
 	if (err != CL_SUCCESS)
 	{
 		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
 		exit(1);
 	}
+	printf("meuh1\n");
 
 	// Execute the kernel over the entire range of our 1d input data set
 	// using the maximum number of work group items for this device
@@ -179,6 +183,7 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 		printf("Error: Failed to execute kernel!\n");
 		return EXIT_FAILURE;
 	}
+	printf("meuh2\n");
 	clFinish(cl->commands);
 	printf("cl_exec ok\n");
 	return (EXIT_SUCCESS);
