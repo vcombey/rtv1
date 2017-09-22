@@ -53,9 +53,9 @@ typedef struct		s_scene
 	cl_float3		norm_hor;
 	cl_float3		norm_vert;
 	t_obj			*objs;
-	size_t			objs_number;
+	int				objs_number;
 	t_light			*lights;
-	size_t			lights_number;
+	int				lights_number;
 }					t_scene;
 
 typedef struct		s_scene2
@@ -73,8 +73,8 @@ typedef struct		s_env
 	void			*mlx;
 	void			*win;
 	void			*img;
-	size_t			width;
-	size_t			height;
+	int				width;
+	int				height;
 	size_t			up;
 	size_t			down;
 	size_t			right;

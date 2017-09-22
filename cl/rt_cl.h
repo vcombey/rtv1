@@ -61,7 +61,8 @@ typedef struct		s_scene
 	float3			rot;
 	int				width;
 	int				height;
-	t_cam			cam;
+	float3			cam_dir;
+	float3			cam_pos;
 	int				objs_number;
 	int				lights_number;
 }					t_scene;
@@ -132,7 +133,7 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 void	debug_light(t_scene scene, __global t_light *lights);
 void	debug_obj(t_scene scene,  __global t_obj *objs);
 void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights);
-__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, t_cam cam);
+__kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
@@ -142,7 +143,7 @@ float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 int	calc_dist(float t, float3 ray);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *output);
+int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);

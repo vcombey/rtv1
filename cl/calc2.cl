@@ -16,5 +16,6 @@ __global int *output,
 
 	printf("obj o %i ", objs[0].type);
 int	i	 = get_global_id(0);
+	printf("%i\n", i);
 	output[i] = 0xff00ff;
 }

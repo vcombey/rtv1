@@ -27,34 +27,36 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		output->norm = obj.dir;
 }
 
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *output)
+int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit)
 {
-	int	dist;
+	unsigned int	dist;
 	float3	pos_translated;
 	float	t;
 	int	i = 0;
 	t_obj	obj;
 
-	output->obj = NULL;
-	output->dist = (int)-1;
+	result_hit->obj = NULL;
+	result_hit->dist = 10000;
+//	printf ("scene objsnumber", scene.objs_number);
 	while (i < scene.objs_number)
 	{
-		obj = objs[i];
 
-		pos_translated = sub_vect(scene.cam.pos, obj.pos);
-		t = calc_obj(&obj, pos_translated, ray);
-		dist = calc_dist(t, ray);
-		if (dist != 0 && dist < output->dist)
-		{
-			output->dist = dist;
-			output->t = t;
-			output->obj = &obj;
-			assign_intersect_norm_vect(obj, t, pos_translated, ray, output);
-			assign_norm_vect(obj, t, pos_translated, ray, output);
-		}
+			obj = objs[i];
+			pos_translated = sub_vect(scene.cam_pos, obj.pos);
+			t = calc_obj(&obj, pos_translated, ray);
+			dist = calc_dist(t, ray);
+			if (dist != 0 && dist < result_hit->dist)
+			{
+				result_hit->dist = dist;
+				result_hit->t = t;
+				result_hit->obj = &obj;
+				assign_intersect_norm_vect(obj, t, pos_translated, ray, result_hit);
+				assign_norm_vect(obj, t, pos_translated, ray, result_hit);
+			}
+
 		i++;
 	}
-	if (output->obj == NULL)
+	if (result_hit->obj == NULL)
 		return (0);
 	return (1);
 }

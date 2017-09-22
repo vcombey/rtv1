@@ -91,6 +91,7 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 	intensite_specular = 0;
 	intensite_diffuse = 0.1;
 
+	i = 0;
 	while (i < scene.lights_number)
 	{
 		light = lights[i];

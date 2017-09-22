@@ -59,7 +59,8 @@ typedef struct		s_scene
 	float3			rot;
 	int				width;
 	int				height;
-	t_cam			cam;
+	float3			cam_dir;
+	float3			cam_pos;
 	int				objs_number;
 	int				lights_number;
 }					t_scene;
