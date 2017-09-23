@@ -74,9 +74,9 @@ cl_float3	calc_rotation_figure(cl_float3 ray, cl_float3 v)
 		{0, v.y, v.z},
 	};
 	float	mat_y[3][3] = {
-		{v.z, 0, -v.x},
+		{v.z, 0, v.x},
 		{0, 1, 0},
-		{v.x, 0, v.z},
+		{-v.x, 0, v.z},
 	};
 	float	mat_z[3][3] = {
 		{v.z, -v.x, 0},
@@ -104,4 +104,29 @@ cl_float3	rodrigues(cl_float3 input, cl_float3 v, float teta)
 	res = mat_mult_vect(mat, input);
 
 	return (res);
+}
+
+cl_float3	rot_x(float teta)
+{
+	float	mat_x[3][3] = {
+		{1, 0, 0},
+		{0, cos(teta), -sin(teta)},
+		{0, sin(teta), cos(teta)},
+	};
+}
+cl_float3	rot_y(float teta)
+{
+	float	mat_y[3][3] = {
+		{cos(teta), 0, sin(teta)},
+		{0, 1, 0},
+		{-sin(teta), 0, cos(teta)},
+	};
+}
+cl_float3	rot_z(float teta)
+{
+	float	mat_z[3][3] = {
+		{cos(teta), -sin(teta), 0},
+		{sin(teta), cos(teta), 0},
+		{0, 0, 1},
+	};
 }
