@@ -5,7 +5,7 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 	if (hit(objs, scene.objs_number, scene.cam_pos, ray, &result_hit))
 	{
 		//return (0xFF);
-		return (calc_all_lum(lights, scene, &result_hit, ray));
+		return (calc_all_lum(lights, objs, scene, &result_hit, ray));
 	}
 	return (0);
 }

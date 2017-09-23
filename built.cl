@@ -73,7 +73,7 @@ struct		s_result_hit
 	float			t;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
-	t_obj			*obj; //pointeur sur lobjet intersecter
+	t_obj			obj; //pointeur sur lobjet intersecter
 };
 
 # define KEY_ESCAPE 53
@@ -149,7 +149,8 @@ int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float3	calc_lum_vect(float3 intersect, t_light lum);
-int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray);
+int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, struct s_result_hit *result_hit, float3 ray);
+int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 lum_vect, struct s_result_hit  hit_forward);
 float	calc_delta(float a, float b, float c);
 float	ft_min(float u, float v);
 float	ft_abs_float(float u);
@@ -170,7 +171,7 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 	if (hit(objs, scene.objs_number, scene.cam_pos, ray, &result_hit))
 	{
 		//return (0xFF);
-		return (calc_all_lum(lights, scene, &result_hit, ray));
+		return (calc_all_lum(lights, objs, scene, &result_hit, ray));
 	}
 	return (0);
 }
@@ -424,8 +425,9 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	float	t;
 	int	i = 0;
 	t_obj	obj;
+	int		hit;
 
-	result_hit->obj = NULL;
+	hit = 0;
 	result_hit->dist = 1000.0;
 //	printf ("scene objsnumber", scene.objs_number);
 	while (i < objs_number)
@@ -436,19 +438,19 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, ray);
-			//if (dist != 0 && dist < result_hit->dist)
-			if (t > 0)
+			if (dist > 0.1 && dist < result_hit->dist)
 			{
 		//	printf("dist %f", dist);
+				hit = 1;
 				result_hit->dist = dist;
 				result_hit->t = t;
-				result_hit->obj = &obj;
+				result_hit->obj = obj;
 				assign_intersect_norm_vect(obj, t, pos_translated, ray, result_hit);
 				assign_norm_vect(obj, t, pos_translated, ray, result_hit);
 			}
 		i++;
 	}
-	if (result_hit->obj == NULL)
+	if (!hit)
 		return (0);
 	return (1);
 }
@@ -533,7 +535,7 @@ float3	calc_lum_vect(float3 intersect, t_light lum)
 	return (lum_vect);
 }
 
-int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray)
+int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, struct s_result_hit *result_hit, float3 ray)
 {
 	float	intensite_diffuse;
 	int	color;
@@ -554,16 +556,38 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))
 		**					return (0xFF0000);
 		*/
-	//	if (!obj_between_light(scene, obj, light, lum_vect))
-	//	{
+		if (!obj_between_light(scene, objs, light, lum_vect, *result_hit))
+		{
 			intensite_diffuse += calc_lum_diffuse(result_hit, ray, lum_vect);
 			intensite_specular += calc_lum_specular(result_hit, ray, lum_vect);
-	//	}
+		}
 		i++;
 	}
-	color = calc_color(intensite_diffuse, result_hit->obj->color);
+	color = calc_color(intensite_diffuse, result_hit->obj.color);
 	color = calc_color_specular(intensite_specular, color);
 	return (color);
+}
+int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 lum_vect, struct s_result_hit  hit_forward)
+{
+	struct s_result_hit hit_backward;
+	float3		obj_obj;
+	float3		obj_light;
+
+	lum_vect = mult_vect(lum_vect, -1);
+	if (!hit(objs, scene.objs_number, hit_forward.intersect, lum_vect, &hit_backward))
+		return (0);
+	obj_obj = sub_vect(hit_forward.intersect, hit_backward.intersect);
+	obj_light = sub_vect(hit_forward.intersect, lum.pos);
+//	if (hit_forward.obj == hit_backward.obj)
+//		return (0);
+	if (norme_carre(obj_obj) < norme_carre(obj_light))
+	{
+//		printf("ombre\n");
+		return (1);
+	}
+//	printf("\nobj_intersect x %f\ny %f\nz %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
+//	printf("\nhit_obj_intersect x %f\ny %f\nz %f\n", hit_obj_intersect.x, hit_obj_intersect.y, hit_obj_intersect.z);
+	return (0);
 }
 float	calc_delta(float a, float b, float c)
 {

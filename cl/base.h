@@ -71,7 +71,7 @@ struct		s_result_hit
 	float			t;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
-	t_obj			*obj; //pointeur sur lobjet intersecter
+	t_obj			obj; //pointeur sur lobjet intersecter
 };
 
 # define KEY_ESCAPE 53

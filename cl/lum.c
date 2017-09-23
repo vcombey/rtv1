@@ -79,7 +79,7 @@ float3	calc_lum_vect(float3 intersect, t_light lum)
 	return (lum_vect);
 }
 
-int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray)
+int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, struct s_result_hit *result_hit, float3 ray)
 {
 	float	intensite_diffuse;
 	int	color;
@@ -100,14 +100,14 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))
 		**					return (0xFF0000);
 		*/
-	//	if (!obj_between_light(scene, obj, light, lum_vect))
-	//	{
+		if (!obj_between_light(scene, objs, light, lum_vect, *result_hit))
+		{
 			intensite_diffuse += calc_lum_diffuse(result_hit, ray, lum_vect);
 			intensite_specular += calc_lum_specular(result_hit, ray, lum_vect);
-	//	}
+		}
 		i++;
 	}
-	color = calc_color(intensite_diffuse, result_hit->obj->color);
+	color = calc_color(intensite_diffuse, result_hit->obj.color);
 	color = calc_color_specular(intensite_specular, color);
 	return (color);
 }

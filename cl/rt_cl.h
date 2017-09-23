@@ -73,7 +73,7 @@ struct		s_result_hit
 	float			t;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
-	t_obj			*obj; //pointeur sur lobjet intersecter
+	t_obj			obj; //pointeur sur lobjet intersecter
 };
 
 # define KEY_ESCAPE 53
@@ -149,7 +149,8 @@ int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
 float3	calc_lum_vect(float3 intersect, t_light lum);
-int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *result_hit, float3 ray);
+int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, struct s_result_hit *result_hit, float3 ray);
+int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 lum_vect, struct s_result_hit  hit_forward);
 float	calc_delta(float a, float b, float c);
 float	ft_min(float u, float v);
 float	ft_abs_float(float u);

@@ -36,8 +36,9 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	float	t;
 	int	i = 0;
 	t_obj	obj;
+	int		hit;
 
-	result_hit->obj = NULL;
+	hit = 0;
 	result_hit->dist = 1000.0;
 //	printf ("scene objsnumber", scene.objs_number);
 	while (i < objs_number)
@@ -48,19 +49,19 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, ray);
-			//if (dist != 0 && dist < result_hit->dist)
-			if (t > 0)
+			if (dist > 0.1 && dist < result_hit->dist)
 			{
 		//	printf("dist %f", dist);
+				hit = 1;
 				result_hit->dist = dist;
 				result_hit->t = t;
-				result_hit->obj = &obj;
+				result_hit->obj = obj;
 				assign_intersect_norm_vect(obj, t, pos_translated, ray, result_hit);
 				assign_norm_vect(obj, t, pos_translated, ray, result_hit);
 			}
 		i++;
 	}
-	if (result_hit->obj == NULL)
+	if (!hit)
 		return (0);
 	return (1);
 }

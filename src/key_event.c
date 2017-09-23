@@ -24,7 +24,7 @@ void	rot_right(t_cam *cam)
 	old_posx = cam->dir.x;
 	cam->dir.x = cam->dir.x * cos(TETA) - cam->dir.y * sin(TETA);
 	cam->dir.y = old_posx * sin(TETA) + cam->dir.y * cos(TETA);
-	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
+//	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
 }
 
 void	rot_left(t_cam *cam)
@@ -34,7 +34,7 @@ void	rot_left(t_cam *cam)
 	old_posx = cam->dir.x;
 	cam->dir.x = cam->dir.x * cos(-TETA) - cam->dir.y * sin(-TETA);
 	cam->dir.y = old_posx * sin(-TETA) + cam->dir.y * cos(-TETA);
-	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
+//	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
 }
 
 static void	rot_arround_left(t_cam *cam)
@@ -46,7 +46,7 @@ static void	rot_arround_left(t_cam *cam)
 	old_posx = cam->pos.x;
 	cam->pos.x = cam->pos.x * cos(-TETA) - cam->pos.y * sin(-TETA);
 	cam->pos.y = old_posx * sin(-TETA) + cam->pos.y * cos(-TETA);
-	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
+//	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
 }
 
 static void	rot_arround_right(t_cam *cam)
@@ -58,7 +58,7 @@ static void	rot_arround_right(t_cam *cam)
 	old_posx = cam->pos.x;
 	cam->pos.x = cam->pos.x * cos(TETA) - cam->pos.y * sin(TETA);
 	cam->pos.y = old_posx * sin(TETA) + cam->pos.y * cos(TETA);
-	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
+//	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
 }
 
 cl_float3	vectorial_product(cl_float3 u, cl_float3 v)
@@ -94,7 +94,7 @@ cl_float3	normalize(cl_float3 v)
 void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 {
 	dir = normalize(dir);
-	printf("dir %f, %f, %f\n", dir.x, dir.y,dir.z); 
+//	printf("dir %f, %f, %f\n", dir.x, dir.y,dir.z); 
 	if (dir.y != 0)
 	{
 		norm_hor->z = 0;
@@ -114,8 +114,8 @@ void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 	*norm_hor = normalize(*norm_hor);
 	*norm_vert = vectorial_product(*norm_hor, dir);
 	*norm_vert = normalize(*norm_vert);
-	printf("hor %f, %f, %f\n", norm_hor->x, norm_hor->y,norm_hor->z); 
-	printf("vert %f, %f, %f\n", norm_vert->x, norm_vert->y,norm_vert->z); 
+//	printf("hor %f, %f, %f\n", norm_hor->x, norm_hor->y,norm_hor->z); 
+//	printf("vert %f, %f, %f\n", norm_vert->x, norm_vert->y,norm_vert->z); 
 }
 
 int			recalc_img(void *scene)
