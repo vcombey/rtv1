@@ -163,5 +163,6 @@ void	init_scene(t_scene *scene);
 int		quit(void *param);
 
 const char *getErrorString(cl_int error);
+void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir);
 
 #endif

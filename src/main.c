@@ -134,6 +134,7 @@ int		main(int ac, char **av)
 	env->cl_args = &cl_args;
 
 	recalc_img(env->scene);
+	init_norm_cam_dir(&scene.norm_vert, &scene.norm_hor, scene.cam.dir);
 	calc_scene(&cl, &cl_args, env);
 
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);

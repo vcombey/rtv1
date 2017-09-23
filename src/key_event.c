@@ -6,6 +6,16 @@
 #include "libft.h"
 #define TETA 0.02
 
+cl_float3 rot(cl_float3 v, double teta)
+{
+	double tmp;
+
+	tmp = v.x;
+	v.x = v.x * cos(teta) - v.y * sin(teta);
+	v.y = tmp * sin(teta) + v.y * cos(teta);
+	return (v);
+}
+
 void	mv_up(t_cam *cam)
 {
 	cam->pos.x += cam->dir.x * 0.4;
@@ -20,45 +30,24 @@ void	mv_down(t_cam *cam)
 
 void	rot_right(t_cam *cam)
 {
-	double old_posx;
-	old_posx = cam->dir.x;
-	cam->dir.x = cam->dir.x * cos(TETA) - cam->dir.y * sin(TETA);
-	cam->dir.y = old_posx * sin(TETA) + cam->dir.y * cos(TETA);
-//	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
+	cam->dir = rot(cam->dir, TETA);
 }
 
 void	rot_left(t_cam *cam)
 {
-
-	double old_posx;
-	old_posx = cam->dir.x;
-	cam->dir.x = cam->dir.x * cos(-TETA) - cam->dir.y * sin(-TETA);
-	cam->dir.y = old_posx * sin(-TETA) + cam->dir.y * cos(-TETA);
-//	printf("camdir %f, %f, %f\n", cam->dir.x, cam->dir.y,cam->dir.z);
+	cam->dir = rot(cam->dir, -TETA);
 }
 
 static void	rot_arround_left(t_cam *cam)
 {
-	double old_posx;
-	old_posx = cam->dir.x;
-	cam->dir.x = cam->dir.x * cos(-TETA) - cam->dir.y * sin(-TETA);
-	cam->dir.y = old_posx * sin(-TETA) + cam->dir.y * cos(-TETA);
-	old_posx = cam->pos.x;
-	cam->pos.x = cam->pos.x * cos(-TETA) - cam->pos.y * sin(-TETA);
-	cam->pos.y = old_posx * sin(-TETA) + cam->pos.y * cos(-TETA);
-//	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
+	cam->pos = rot(cam->pos, -TETA);
+	cam->dir = rot(cam->dir, -TETA);
 }
 
 static void	rot_arround_right(t_cam *cam)
 {
-	double old_posx;
-	old_posx = cam->dir.x;
-	cam->dir.x = cam->dir.x * cos(TETA) - cam->dir.y * sin(TETA);
-	cam->dir.y = old_posx * sin(TETA) + cam->dir.y * cos(TETA);
-	old_posx = cam->pos.x;
-	cam->pos.x = cam->pos.x * cos(TETA) - cam->pos.y * sin(TETA);
-	cam->pos.y = old_posx * sin(TETA) + cam->pos.y * cos(TETA);
-//	printf("campos %f, %f, %f\n", cam->pos.x, cam->pos.y,cam->pos.z);
+	cam->pos = rot(cam->pos, TETA);
+	cam->dir = rot(cam->dir, TETA);
 }
 
 cl_float3	vectorial_product(cl_float3 u, cl_float3 v)
