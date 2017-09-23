@@ -302,7 +302,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	alpha = 0.7;
+	float	alpha = 0.6;
 	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
 //	calc_rotation_figure(ray, obj->dir);
@@ -315,6 +315,8 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	if (delta < 0)
 		return (0x0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	if (t < 0.001)
+		return (0);
 	return (t);
 }
 
@@ -458,6 +460,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		hor.z = 0;
 		hor = rot(hor, -M_PI/2);
 		output->norm = rodrigues(output->norm, hor, M_PI/2);
+		output->norm.z = 0;
 	}
 }
 

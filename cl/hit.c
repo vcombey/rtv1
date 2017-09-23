@@ -35,7 +35,8 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		hor = output->norm;
 		hor.z = 0;
 		hor = rot(hor, -M_PI/2);
-		output->norm = rodrigues(output->norm, hor, -M_PI/2);
+		output->norm = rodrigues(output->norm, hor, M_PI/2);
+		output->norm.z = 0;
 	}
 }
 

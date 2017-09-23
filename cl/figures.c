@@ -37,7 +37,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	alpha = 0.7;
+	float	alpha = 0.6;
 	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
 //	calc_rotation_figure(ray, obj->dir);
@@ -50,6 +50,8 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	if (delta < 0)
 		return (0x0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	if (t < 0.001)
+		return (0);
 	return (t);
 }
 
