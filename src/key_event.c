@@ -6,16 +6,6 @@
 #include "libft.h"
 #define TETA 0.02
 
-cl_float3 rot(cl_float3 v, double teta)
-{
-	double tmp;
-
-	tmp = v.x;
-	v.x = v.x * cos(teta) - v.y * sin(teta);
-	v.y = tmp * sin(teta) + v.y * cos(teta);
-	return (v);
-}
-
 void	mv_up(t_cam *cam)
 {
 	cam->pos.x += cam->dir.x * 0.4;
@@ -50,39 +40,9 @@ static void	rot_arround_right(t_cam *cam)
 	cam->dir = rot(cam->dir, TETA * 3);
 }
 
-cl_float3	vectorial_product(cl_float3 u, cl_float3 v)
-{
-	cl_float3	res;
-
-	res.x = u.y * v.z - u.z * v.y;
-	res.y = u.z * v.x - u.x * v.z;
-	res.z = u.x * v.y - u.y * v.x;
-	return (res);
-}
-
-double	norme_carre(cl_float3 v)
-{
-	return (v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
-cl_float3	div_vect(cl_float3 v, double t)
-{
-	cl_float3	res;
-
-	res.x = v.x / t;
-	res.y = v.y / t;
-	res.z = v.z / t;
-	return (res);
-}
-
-cl_float3	normalize(cl_float3 v)
-{
-	return (div_vect(v, sqrt(norme_carre(v))));
-}
-
 void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 {
-	dir = normalize(dir);
+	dir = NORMALIZE(dir);
 //	printf("dir %f, %f, %f\n", dir.x, dir.y,dir.z); 
 	*norm_hor = rot(dir, -M_PI / 2);
 	*norm_vert =  (cl_float3){.x = 0, .y = 0, .z = 1};

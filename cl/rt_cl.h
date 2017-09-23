@@ -44,6 +44,7 @@ typedef struct		s_env
 typedef struct		s_obj
 {
 	int				type;
+	int				indice;
 	float3			pos;
 	float3			dir;
 	size_t			color;
@@ -160,7 +161,6 @@ float3	NORMALIZE(float3 v);
 float3	mult_vect( float3 v, float t);
 float3	div_vect(float3 v, float t);
 float3	add_vect(float3 u, float3 v);
-float3	cpy_vect(float3 u, float3 v);
 float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
 float3 rot(float3 v, float teta);

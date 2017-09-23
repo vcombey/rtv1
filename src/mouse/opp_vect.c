@@ -1,6 +1,7 @@
-float3	mult_vect( float3 v, float t)
+#include "rt.h"
+cl_float3	mult_vect( cl_float3 v, float t)
 {
-	float3	res;
+	cl_float3	res;
 
 	res.x = v.x * t;
 	res.y = v.y * t;
@@ -8,9 +9,9 @@ float3	mult_vect( float3 v, float t)
 	return (res);
 }
 
-float3	div_vect(float3 v, float t)
+cl_float3	div_vect(cl_float3 v, float t)
 {
-	float3	res;
+	cl_float3	res;
 
 	res.x = v.x / t;
 	res.y = v.y / t;
@@ -18,9 +19,9 @@ float3	div_vect(float3 v, float t)
 	return (res);
 }
 
-float3	add_vect(float3 u, float3 v)
+cl_float3	add_vect(cl_float3 u, cl_float3 v)
 {
-	float3	res;
+	cl_float3	res;
 
 	res.x = u.x + v.x;
 	res.y = u.y + v.y;
@@ -28,9 +29,9 @@ float3	add_vect(float3 u, float3 v)
 	return (res);
 }
 
-float3	sub_vect(float3 u, float3 v)
+cl_float3	sub_vect(cl_float3 u, cl_float3 v)
 {
-	float3	res;
+	cl_float3	res;
 
 	res.x = u.x - v.x;
 	res.y = u.y - v.y;
@@ -38,9 +39,9 @@ float3	sub_vect(float3 u, float3 v)
 	return (res);
 }
 
-float3	vectorial_product(float3 u, float3 v)
+cl_float3	vectorial_product(cl_float3 u, cl_float3 v)
 {
-	float3	res;
+	cl_float3	res;
 
 	res.x = u.y * v.z - u.z * v.y;
 	res.y = u.z * v.x - u.x * v.z;

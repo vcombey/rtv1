@@ -42,6 +42,7 @@ typedef struct		s_env
 typedef struct		s_obj
 {
 	int				type;
+	int				indice;
 	float3			pos;
 	float3			dir;
 	size_t			color;

@@ -92,7 +92,19 @@ typedef struct		s_env
 	struct s_cl_args	*cl_args;
 	t_scene			*scene;
 	t_scene2			scene2;
+	int				mouse_x;
+	int				mouse_y;
 }					t_env;
+
+struct		s_result_hit
+{
+	float			dist;
+	float			t;
+	int				indice;
+	cl_float3			norm; //contient le vecteur normal a la surface
+	cl_float3			intersect; //contient le point dans le plan non translate d'intersection
+	t_obj			obj; //pointeur sur lobjet intersecter
+};
 
 typedef struct	s_func
 {
@@ -164,5 +176,20 @@ int		quit(void *param);
 
 const char *getErrorString(cl_int error);
 void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir);
+int			mouse_event(int button, int x, int y);
+float	calc_obj(t_obj *obj, cl_float3 pos, cl_float3 ray);
 
+float	ft_min(float u, float v);
+float	ft_abs_float(float u);
+float	norme_carre(cl_float3 v);
+float	scalar_product(cl_float3 u, cl_float3 v);
+cl_float3	NORMALIZE(cl_float3 v);
+cl_float3	mult_vect( cl_float3 v, float t);
+cl_float3	div_vect(cl_float3 v, float t);
+cl_float3	add_vect(cl_float3 u, cl_float3 v);
+cl_float3	cpy_vect(cl_float3 u, cl_float3 v);
+cl_float3	sub_vect(cl_float3 u, cl_float3 v);
+cl_float3	vectorial_product(cl_float3 u, cl_float3 v);
+cl_float3 rot(cl_float3 v, float teta);
+float	calc_delta(float a, float b, float c);
 #endif

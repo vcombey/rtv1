@@ -139,9 +139,10 @@ int		main(int ac, char **av)
 
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
+//	mlx_hook(env->win, MOTIONNOTIFY, POINTERMOTIONMASK, &mouse_event, NULL);
 	mlx_loop_hook(env->mlx, recalc_scene, env);
 	mlx_hook(env->win, 17, 1, &quit, NULL);
-
+	mlx_mouse_hook(env->win, &mouse_event, NULL);
 	mlx_loop(env->mlx);
 	/*	clReleaseMemObject(output);
 		clReleaseProgram(program);
