@@ -73,7 +73,6 @@ int		recalc_scene(t_env *env)
 	recalc_img(env->scene);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
-
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
 	cl_set_arg(cl->kernel, sizeof(int), &i, &env->height);
@@ -86,7 +85,7 @@ int		recalc_scene(t_env *env)
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_hor);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_vert);
 
-	if (cl_exec(cl, cl->data_size / 4, cl->kernel))
+	if (cl_exec(cl, env->width * env->height, cl->kernel))
 		exit(1);
 	ft_memset(env->ptr, 0x00, env->width * env->height * 4);
 	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
@@ -137,10 +136,10 @@ int		main(int ac, char **av)
 	recalc_img(env->scene);
 	calc_scene(&cl, &cl_args, env);
 
-		mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
-		mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
-	//	mlx_loop_hook(env->mlx, recalc_scene, env);
-		mlx_hook(env->win, 17, 1, &quit, NULL);
+	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
+	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
+	mlx_loop_hook(env->mlx, recalc_scene, env);
+	mlx_hook(env->win, 17, 1, &quit, NULL);
 
 	mlx_loop(env->mlx);
 	/*	clReleaseMemObject(output);

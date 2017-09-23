@@ -47,11 +47,11 @@ float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_
 
 	reflection_vect = mult_vect(result_hit->norm, 2 * scalar_product(lum_vect, result_hit->norm));
 	reflection_vect = sub_vect(reflection_vect, lum_vect);
-	NORMALIZE(ray); //??
+	ray = NORMALIZE(ray); //??
 	intensite_specular = scalar_product(reflection_vect, ray);
 	if (intensite_specular < 0)
 		return (0);
-	intensite_specular = 0.7 * pow(intensite_specular, 11);
+	intensite_specular = 0.3 * pow(intensite_specular, 11);
 	return (intensite_specular);
 }
 
@@ -60,7 +60,7 @@ float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_v
 	float	intensite_diffuse;
 
 	(void)ray;
-	NORMALIZE(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
+	result_hit->norm = NORMALIZE(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
 	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 	//	obj->intersectalize(obj->intersect); // pk obj->intersect-sphere n est pas de obj->intersecte rayon ?
 	intensite_diffuse = scalar_product(lum_vect, result_hit->norm);
@@ -75,7 +75,7 @@ float3	calc_lum_vect(float3 intersect, t_light lum)
 	//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 	//	sub_vect(lum_pos, lum.pos, obj->pos);
 	lum_vect = sub_vect(intersect, lum.pos);
-	NORMALIZE(lum_vect);
+	lum_vect = NORMALIZE(lum_vect);
 	return (lum_vect);
 }
 
@@ -100,11 +100,11 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))
 		**					return (0xFF0000);
 		*/
-//		if (!obj_between_light(scene, obj, light, lum_vect))
-//		{
+		if (!obj_between_light(scene, obj, light, lum_vect))
+		{
 			intensite_diffuse += calc_lum_diffuse(result_hit, ray, lum_vect);
 			intensite_specular += calc_lum_specular(result_hit, ray, lum_vect);
-//		}
+		}
 		i++;
 	}
 	color = calc_color(intensite_diffuse, result_hit->obj->color);

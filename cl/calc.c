@@ -4,8 +4,8 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 
 	if (hit(objs, scene, ray, &result_hit))
 	{
-		return (0xFF);
-		//return (calc_all_lum(lights, scene, result_hit, ray));
+		//return (0xFF);
+		return (calc_all_lum(lights, scene, &result_hit, ray));
 	}
 	return (0);
 }
@@ -71,8 +71,8 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 //	printf("scene objs number %i\n", scene.objs_number);
 //	printf("scenen light number %i\n", scene.lights_number);
 
-	if (i == 1)
-		debug_scene(scene, objs, lights);
+//	if (i == 1)
+//		debug_scene(scene, objs, lights);
 	pix_hor = i % width;
 	pix_vert = i / width;
 

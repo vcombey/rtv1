@@ -109,7 +109,7 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 //	printf("t %f", t);
 	if (t <= 0)
 	{
-		printf("t < 0");
+	//	printf("t < 0");
 		return (0);
 	}
 	return (t);

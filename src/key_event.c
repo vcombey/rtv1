@@ -4,7 +4,7 @@
 #include <mlx.h>
 #include <stdio.h>
 #include "libft.h"
-#define TETA 0.20
+#define TETA 0.02
 
 void	mv_up(t_cam *cam)
 {
@@ -129,15 +129,15 @@ int			recalc_img(void *scene)
 	env = singleton_env();
 	if (env->up)
 		mv_up(&s->cam);
-	else if (env->down)
+	if (env->down)
 		mv_down(&s->cam);
-	else if (env->right)
+	if (env->left)
 		rot_right(&s->cam);
-	else if (env->left)
+	if (env->right)
 		rot_left(&s->cam);
-	else if (env->key_r)
+	if (env->key_r)
 		rot_arround_left( &s->cam);
-	else if (env->key_t)
+	if (env->key_t)
 		rot_arround_right(&s->cam);
 	else
 		init = 0;
