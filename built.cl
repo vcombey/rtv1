@@ -134,10 +134,10 @@ void	debug_light(t_scene scene, __global t_light *lights);
 void	debug_obj(t_scene scene,  __global t_obj *objs);
 void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights);
 __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light *lights, int height, int width, float width_per_height, int objs_number, int lights_number, float3 cam_dir, float3 cam_pos, float3 norm_hor, float3 norm_vert);
+float	ft_min_positiv(float a, float b);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
-float	ft_min_positiv(float a, float b);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 float	calc_dist(float t, float3 ray);
@@ -163,6 +163,11 @@ float3	add_vect(float3 u, float3 v);
 float3	cpy_vect(float3 u, float3 v);
 float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
+float3 rot(float3 v, float teta);
+void	mat_mult(float res[3][3], float a[3][3], float b[3][3]);
+float3	mat_mult_vect(float a[3][3], float3 x);
+float3	calc_rotation_figure(float3 ray, float3 v);
+float3	rodrigues(float3 input, float3 v, float teta);
 #endif
 int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray)
 {
@@ -258,6 +263,15 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);
 }
+float	ft_min_positiv(float a, float b)
+{
+	if (a < 0 && b > 0)
+		return (b);
+	if (a > 0 && b < 0)
+		return (a);
+	return (ft_min(a, b));
+}
+
 float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 {
 	float	t;
@@ -300,9 +314,42 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0x0);
-	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
 	return (t);
 }
+
+/*
+**	float	calc_cylindre_quifait_cone(t_obj *obj, float3 pos, float3 ray)
+**	{
+**		float	delta;
+**		float	a;
+**		float	b;
+**		float	c;
+**		float	t;
+**		float	coef_1;
+**		float	coef_2;
+**		float	coef_div;
+**	
+**	//	calc_rotation_figure(ray, obj->dir);
+**	
+**		coef_div = obj->dir.x * obj->dir.x + obj->dir.y * obj->dir.y + obj->dir.z * obj->dir.z;
+**		if (coef_div == 0)
+**			return (0);
+**		coef_1 = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
+**		coef_2 = obj->dir.x * pos.x + obj->dir.y * pos.y + obj->dir.z * pos.z;
+**		a = ray.x * ray.x + ray.y * ray.y - coef_1 * coef_1 / coef_div;
+**		b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * coef_1 * coef_2 / coef_div;
+**		c = pos.x * pos.x + pos.y * pos.y - obj->rayon * obj->rayon - coef_2 * coef_2 / coef_div;
+**		delta = calc_delta(a, b, c);
+**		//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
+**		if (delta < 0)
+**			return (0x0);
+**		t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+**		if (t < 0.1)
+**			return (0);
+**		return (t);
+**	}
+*/
 
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 {
@@ -317,32 +364,17 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 
 //	calc_rotation_figure(ray, obj->dir);
 
-	coef_div = obj->dir.x * obj->dir.x + obj->dir.y * obj->dir.y + obj->dir.z * obj->dir.z;
-	if (coef_div == 0)
-		return (0);
-	coef_1 = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
-	coef_2 = obj->dir.x * pos.x + obj->dir.y * pos.y + obj->dir.z * pos.z;
-	a = ray.x * ray.x + ray.y * ray.y - coef_1 * coef_1 / coef_div;
-	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * coef_1 * coef_2 / coef_div;
-	c = pos.x * pos.x + pos.y * pos.y - obj->rayon * obj->rayon - coef_2 * coef_2 / coef_div;
-
+	a = ray.x * ray.x + ray.y * ray.y;
+	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;
+	c = pos.x * pos.x + pos.y * pos.y - obj->rayon * obj->rayon;
 	delta = calc_delta(a, b, c);
 	//printf("a %f, b %f, c %f, delta %f\n", a, b, c, delta);
 	if (delta < 0)
 		return (0x0);
-	t = ft_min((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-	if (t < 0.1)
+	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	if (t < 0.001)
 		return (0);
 	return (t);
-}
-
-float	ft_min_positiv(float a, float b)
-{
-	if (a < 0 && b > 0)
-		return (b);
-	if (a > 0 && b < 0)
-		return (a);
-	return (ft_min(a, b));
 }
 
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
@@ -417,6 +449,16 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	(void)t;
 	if (obj.type == PLAN)
 		output->norm = obj.dir;
+	if (obj.type == CYLINDRE)
+		output->norm.z = 0;
+	if (obj.type == CONE)
+	{
+		float3	hor;
+		hor = output->norm;
+		hor.z = 0;
+		hor = rot(hor, -M_PI/2);
+		output->norm = rodrigues(output->norm, hor, M_PI/2);
+	}
 }
 
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
@@ -439,7 +481,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, ray);
-			if (dist > 0.1 && dist < result_hit->dist)
+			if (dist > 0.0001 && dist < result_hit->dist)
 			{
 		//	printf("dist %f", dist);
 				hit = 1;
@@ -675,5 +717,108 @@ float3	vectorial_product(float3 u, float3 v)
 	res.x = u.y * v.z - u.z * v.y;
 	res.y = u.z * v.x - u.x * v.z;
 	res.z = u.x * v.y - u.y * v.x;
+	return (res);
+}
+float3 rot(float3 v, float teta)
+{
+	float tmp;
+
+	tmp = v.x;
+	v.x = v.x * cos(teta) - v.y * sin(teta);
+	v.y = tmp * sin(teta) + v.y * cos(teta);
+	return (v);
+}
+
+static float	mat_mult_coef(float a[3][3], float b[3][3], int a_line, int b_col)
+{
+	int	i;
+	float	res;
+
+	res = 0;
+	i = 0;
+	while (i < 3)
+	{
+		res += a[a_line][i] * b[i][b_col];
+		i++;
+	}
+	return (res);
+}
+
+void	mat_mult(float res[3][3], float a[3][3], float b[3][3])
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 3)
+	{
+		j = 0;
+		while (j < 3)
+		{
+			res[i][j] = mat_mult_coef(a, b, i, j);
+			j++;
+		}
+		i++;
+	}
+}
+
+static float	mat_mult_vect_coef(float a[3][3], float3 b, int a_line)
+{
+	float	res;
+
+	res = 0;
+	res += a[a_line][0] * b.x;
+	res += a[a_line][1] * b.y;
+	res += a[a_line][2] * b.z;
+	return (res);
+}
+
+float3	mat_mult_vect(float a[3][3], float3 x)
+{
+	float3	res;
+
+	res.x = mat_mult_vect_coef(a, x, 0);
+	res.y = mat_mult_vect_coef(a, x, 1);
+	res.z = mat_mult_vect_coef(a, x, 2);
+}
+
+float3	calc_rotation_figure(float3 ray, float3 v)
+{
+//	v = NORMALIZE(v);
+	float	mat_x[3][3] = {
+		{1, 0, 0},
+		{0, v.z, -v.y},
+		{0, v.y, v.z},
+	};
+	float	mat_y[3][3] = {
+		{v.z, 0, -v.x},
+		{0, 1, 0},
+		{v.x, 0, v.z},
+	};
+	float	mat_z[3][3] = {
+		{v.z, -v.x, 0},
+		{v.x, v.z, 0},
+		{0, 0, 1},
+	};
+	float	res[3][3];
+	mat_mult(res, mat_y, mat_x);
+	ray = mat_mult_vect(res, ray);
+
+	return (ray);
+	(void)mat_y;
+	(void)mat_z;
+}
+
+float3	rodrigues(float3 input, float3 v, float teta)
+{
+	float3	res;
+	float	mat[3][3] = {
+		{cos(teta) + (1 - cos(teta)) * v.x * v.x,			(1 - cos(teta)) * v.x * v.y - sin(teta) * v.z,				(1 - cos(teta)) * v.x * v.z + sin(teta) * v.y},
+		{(1 - cos(teta)) * v.x * v.y - sin(teta) * v.z,		cos(teta) + (1 - cos(teta)) * v.y * v.y,					(1 - cos(teta)) * v.y * v.z - sin(teta) * v.x},
+		{(1 - cos(teta)) * v.x * v.z - sin(teta) * v.y,		(1 - cos(teta)) * v.y * v.z - sin(teta) * v.x,				cos(teta) + (1 - cos(teta)) * v.z * v.z,}
+	};
+
+	res = mat_mult_vect(mat, input);
+
 	return (res);
 }

@@ -27,6 +27,16 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	(void)t;
 	if (obj.type == PLAN)
 		output->norm = obj.dir;
+	if (obj.type == CYLINDRE)
+		output->norm.z = 0;
+	if (obj.type == CONE)
+	{
+		float3	hor;
+		hor = output->norm;
+		hor.z = 0;
+		hor = rot(hor, -M_PI/2);
+		output->norm = rodrigues(output->norm, hor, -M_PI/2);
+	}
 }
 
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
@@ -49,7 +59,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, ray);
-			if (dist > 0.1 && dist < result_hit->dist)
+			if (dist > 0.0001 && dist < result_hit->dist)
 			{
 		//	printf("dist %f", dist);
 				hit = 1;

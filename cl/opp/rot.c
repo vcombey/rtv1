@@ -1,3 +1,13 @@
+float3 rot(float3 v, float teta)
+{
+	float tmp;
+
+	tmp = v.x;
+	v.x = v.x * cos(teta) - v.y * sin(teta);
+	v.y = tmp * sin(teta) + v.y * cos(teta);
+	return (v);
+}
+
 static float	mat_mult_coef(float a[3][3], float b[3][3], int a_line, int b_col)
 {
 	int	i;
@@ -31,22 +41,18 @@ void	mat_mult(float res[3][3], float a[3][3], float b[3][3])
 	}
 }
 
-float	mat_mult_vect_coef(float a[3][3], float b[3], int a_line)
+static float	mat_mult_vect_coef(float a[3][3], float3 b, int a_line)
 {
-	int	i;
 	float	res;
 
 	res = 0;
-	i = 0;
-	while (i < 3)
-	{
-		res += a[a_line][i] * b[i];
-		i++;
-	}
+	res += a[a_line][0] * b.x;
+	res += a[a_line][1] * b.y;
+	res += a[a_line][2] * b.z;
 	return (res);
 }
 
-float3	mat_mult_vect(float a[3][3], float x[3])
+float3	mat_mult_vect(float a[3][3], float3 x)
 {
 	float3	res;
 
@@ -82,13 +88,13 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 	(void)mat_z;
 }
 
-void	rodrigues(float3 input, float3 v, float teta)
+float3	rodrigues(float3 input, float3 v, float teta)
 {
 	float3	res;
 	float	mat[3][3] = {
 		{cos(teta) + (1 - cos(teta)) * v.x * v.x,			(1 - cos(teta)) * v.x * v.y - sin(teta) * v.z,				(1 - cos(teta)) * v.x * v.z + sin(teta) * v.y},
 		{(1 - cos(teta)) * v.x * v.y - sin(teta) * v.z,		cos(teta) + (1 - cos(teta)) * v.y * v.y,					(1 - cos(teta)) * v.y * v.z - sin(teta) * v.x},
-		{(1 - cos(teta)) * v.x * v.z - sin(teta) * v.y,		(1 - cos(teta)) * v.y * v.z - sin(teta) * v.x,				cos(teta) + (1 - cos(teta)) * v.z * v.z,
+		{(1 - cos(teta)) * v.x * v.z - sin(teta) * v.y,		(1 - cos(teta)) * v.y * v.z - sin(teta) * v.x,				cos(teta) + (1 - cos(teta)) * v.z * v.z,}
 	};
 
 	res = mat_mult_vect(mat, input);
