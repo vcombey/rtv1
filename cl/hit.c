@@ -29,7 +29,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		output->norm = obj.dir;
 }
 
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, float3 cam_pos,  struct s_result_hit *result_hit)
+int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
 {
 	float	dist;
 	float3	pos_translated;
@@ -40,7 +40,7 @@ int		hit(__global t_obj *objs, t_scene scene, float3 ray, float3 cam_pos,  struc
 	result_hit->obj = NULL;
 	result_hit->dist = 1000.0;
 //	printf ("scene objsnumber", scene.objs_number);
-	while (i < scene.objs_number)
+	while (i < objs_number)
 	{
 			obj = objs[i];
 			pos_translated = sub_vect(cam_pos, obj.pos);

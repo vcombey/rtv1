@@ -100,11 +100,11 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))
 		**					return (0xFF0000);
 		*/
-		if (!obj_between_light(scene, obj, light, lum_vect))
-		{
+	//	if (!obj_between_light(scene, obj, light, lum_vect))
+	//	{
 			intensite_diffuse += calc_lum_diffuse(result_hit, ray, lum_vect);
 			intensite_specular += calc_lum_specular(result_hit, ray, lum_vect);
-		}
+	//	}
 		i++;
 	}
 	color = calc_color(intensite_diffuse, result_hit->obj->color);

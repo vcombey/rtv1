@@ -143,7 +143,7 @@ float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 float	calc_dist(float t, float3 ray);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit);
+int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);

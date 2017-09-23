@@ -143,7 +143,7 @@ float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 float	calc_dist(float t, float3 ray);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit);
+int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);
 int	calc_color(float coef_lum, int color);
 int	calc_color_specular(float coef_lum, int color);
 float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_vect);
@@ -167,7 +167,7 @@ int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, fl
 {
 	struct s_result_hit result_hit;
 
-	if (hit(objs, scene, ray, &result_hit))
+	if (hit(objs, scene.objs_number, scene.cam_pos, ray, &result_hit))
 	{
 		//return (0xFF);
 		return (calc_all_lum(lights, scene, &result_hit, ray));
@@ -417,7 +417,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		output->norm = obj.dir;
 }
 
-int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *result_hit)
+int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
 {
 	float	dist;
 	float3	pos_translated;
@@ -428,10 +428,10 @@ int		hit(__global t_obj *objs, t_scene scene, float3 ray, struct s_result_hit *r
 	result_hit->obj = NULL;
 	result_hit->dist = 1000.0;
 //	printf ("scene objsnumber", scene.objs_number);
-	while (i < scene.objs_number)
+	while (i < objs_number)
 	{
 			obj = objs[i];
-			pos_translated = sub_vect(scene.cam_pos, obj.pos);
+			pos_translated = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
@@ -554,11 +554,11 @@ int	calc_all_lum(__global t_light *lights, t_scene scene, struct s_result_hit *r
 		**				if (obj_between_light(scene, obj, tmp, lum_vect))
 		**					return (0xFF0000);
 		*/
-		if (!obj_between_light(scene, obj, light, lum_vect))
-		{
+	//	if (!obj_between_light(scene, obj, light, lum_vect))
+	//	{
 			intensite_diffuse += calc_lum_diffuse(result_hit, ray, lum_vect);
 			intensite_specular += calc_lum_specular(result_hit, ray, lum_vect);
-		}
+	//	}
 		i++;
 	}
 	color = calc_color(intensite_diffuse, result_hit->obj->color);
