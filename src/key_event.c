@@ -71,6 +71,7 @@ void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 //	printf("vert %f, %f, %f\n", norm_vert->x, norm_vert->y,norm_vert->z); 
 }
 
+#define teta_rot 0.01
 int			recalc_img(void *scene)
 {
 	t_env	*env;

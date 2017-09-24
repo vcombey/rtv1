@@ -12,10 +12,7 @@ int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 l
 //	if (hit_forward.obj == hit_backward.obj)
 //		return (0);
 	if (norme_carre(obj_obj) < norme_carre(obj_light))
-	{
-//		printf("ombre\n");
 		return (1);
-	}
 //	printf("\nobj_intersect x %f\ny %f\nz %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 //	printf("\nhit_obj_intersect x %f\ny %f\nz %f\n", hit_obj_intersect.x, hit_obj_intersect.y, hit_obj_intersect.z);
 	return (0);

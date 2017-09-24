@@ -144,12 +144,12 @@ typedef struct	s_func
 # define SCREEN_WIDTH 1280
 # define SCREEN_HEIGHT 800
 # define WIDTH_PER_HEIGHT SCREEN_WIDTH/SCREEN_HEIGHT
-# define KEY_7 90
-# define KEY_4 87
+# define KEY_7 89
+# define KEY_4 86
 # define KEY_8 91
 # define KEY_5 87
 # define KEY_9 92
-# define KEY_6 89
+# define KEY_6 88
 
 t_env				*env(void);
 int					init_env(t_env *env);

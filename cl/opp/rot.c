@@ -59,6 +59,7 @@ float3	mat_mult_vect(float a[3][3], float3 x)
 	res.x = mat_mult_vect_coef(a, x, 0);
 	res.y = mat_mult_vect_coef(a, x, 1);
 	res.z = mat_mult_vect_coef(a, x, 2);
+	return (res);
 }
 
 float3	calc_rotation_figure(float3 ray, float3 v)

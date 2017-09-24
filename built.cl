@@ -305,7 +305,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	alpha = 0.6;
 	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
-//	calc_rotation_figure(ray, obj->dir);
+	ray = calc_rotation_figure(ray, obj->dir);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -364,7 +364,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	coef_2;
 	float	coef_div;
 
-//	calc_rotation_figure(ray, obj->dir);
+	ray = calc_rotation_figure(ray, obj->dir);
 
 	a = ray.x * ray.x + ray.y * ray.y;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;
@@ -627,10 +627,7 @@ int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 l
 //	if (hit_forward.obj == hit_backward.obj)
 //		return (0);
 	if (norme_carre(obj_obj) < norme_carre(obj_light))
-	{
-//		printf("ombre\n");
 		return (1);
-	}
 //	printf("\nobj_intersect x %f\ny %f\nz %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 //	printf("\nhit_obj_intersect x %f\ny %f\nz %f\n", hit_obj_intersect.x, hit_obj_intersect.y, hit_obj_intersect.z);
 	return (0);
@@ -773,6 +770,7 @@ float3	mat_mult_vect(float a[3][3], float3 x)
 	res.x = mat_mult_vect_coef(a, x, 0);
 	res.y = mat_mult_vect_coef(a, x, 1);
 	res.z = mat_mult_vect_coef(a, x, 2);
+	return (res);
 }
 
 float3	calc_rotation_figure(float3 ray, float3 v)

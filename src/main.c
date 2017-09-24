@@ -71,6 +71,8 @@ int		recalc_scene(t_env *env)
 	cl = env->cl;
 	cl_args = env->cl_args;
 	recalc_img(env->scene);
+	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
+		exit(1);
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);

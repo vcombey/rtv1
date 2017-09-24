@@ -39,7 +39,7 @@ int		ft_key_pressed(int keycode, void *env)
 	if (keycode == KEY_6)
 		cast->rotz = 1;
 	if (keycode == KEY_9)
-		cast->rotx = -1;
+		cast->rotz = -1;
 	return (0);
 }
 
@@ -77,6 +77,6 @@ int		ft_key_release(int keycode, void *env)
 	if (keycode == KEY_6)
 		cast->rotz = 0;
 	if (keycode == KEY_9)
-		cast->rotx = 0;
+		cast->rotz = 0;
 	return (0);
 }
