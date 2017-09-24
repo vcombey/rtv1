@@ -28,6 +28,18 @@ int		ft_key_pressed(int keycode, void *env)
 		cast->key_t = 1;
 	if (keycode == KEY_ESCAPE)
 		exit(0);
+	if (keycode == KEY_4)
+		cast->rotx = 1;
+	if (keycode == KEY_7)
+		cast->rotx = -1;
+	if (keycode == KEY_5)
+		cast->roty = 1;
+	if (keycode == KEY_8)
+		cast->roty = -1;
+	if (keycode == KEY_6)
+		cast->rotz = 1;
+	if (keycode == KEY_9)
+		cast->rotx = -1;
 	return (0);
 }
 
@@ -54,5 +66,17 @@ int		ft_key_release(int keycode, void *env)
 		cast->key_r = 0;
 	if (keycode == KEY_T)
 		cast->key_t = 0;
+	if (keycode == KEY_4)
+		cast->rotx = 0;
+	if (keycode == KEY_7)
+		cast->rotx = 0;
+	if (keycode == KEY_5)
+		cast->roty = 0;
+	if (keycode == KEY_8)
+		cast->roty = 0;
+	if (keycode == KEY_6)
+		cast->rotz = 0;
+	if (keycode == KEY_9)
+		cast->rotx = 0;
 	return (0);
 }

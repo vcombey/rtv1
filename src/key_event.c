@@ -92,6 +92,10 @@ int			recalc_img(void *scene)
 		rot_arround_left( &s->cam);
 	if (env->key_t)
 		rot_arround_right(&s->cam);
+	if (env->rotx != 0)
+	if (env->roty != 0)
+	if (env->rotz != 0)
+
 	else
 		init = 0;
 	init_norm_cam_dir(&s->norm_vert, &s->norm_hor, s->cam.dir);
