@@ -784,9 +784,9 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 		{0, v.y, v.z},
 	};
 	float	mat_y[3][3] = {
-		{v.z, 0, -v.x},
+		{v.z, 0, v.x},
 		{0, 1, 0},
-		{v.x, 0, v.z},
+		{-v.x, 0, v.z},
 	};
 	float	mat_z[3][3] = {
 		{v.z, -v.x, 0},

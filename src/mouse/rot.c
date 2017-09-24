@@ -106,7 +106,7 @@ cl_float3	rodrigues(cl_float3 input, cl_float3 v, float teta)
 	return (res);
 }
 
-cl_float3	rot_x(float3 v, float teta)
+cl_float3	rot_x(cl_float3 v, float teta)
 {
 	float	mat[3][3] = {
 		{1, 0, 0},
@@ -115,7 +115,7 @@ cl_float3	rot_x(float3 v, float teta)
 	};
 	return (mat_mult_vect(mat, v));
 }
-cl_float3	rot_y(float3 v, float teta)
+cl_float3	rot_y(cl_float3 v, float teta)
 {
 	float	mat[3][3] = {
 		{cos(teta), 0, sin(teta)},
@@ -124,7 +124,7 @@ cl_float3	rot_y(float3 v, float teta)
 	};
 	return (mat_mult_vect(mat, v));
 }
-cl_float3	rot_z(float3 v, float teta)
+cl_float3	rot_z(cl_float3 v, float teta)
 {
 	float	mat[3][3] = {
 		{cos(teta), -sin(teta), 0},

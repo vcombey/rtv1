@@ -93,8 +93,14 @@ int			recalc_img(void *scene)
 	if (env->key_t)
 		rot_arround_right(&s->cam);
 	if (env->rotx != 0)
+	{
+		s->objs[env->indice_obj].dir = rot_x(s->objs[env->indice_obj].dir, 0.1 * env->rotx);//segf
+		printf("%f, %f, %f", s->objs[env->indice_obj].dir.x, s->objs[env->indice_obj].dir.y, s->objs[env->indice_obj].dir.z);
+	}
 	if (env->roty != 0)
+		s->objs[env->indice_obj].dir = rot_y(s->objs[env->indice_obj].dir, 0.1 * env->roty);//segf
 	if (env->rotz != 0)
+		s->objs[env->indice_obj].dir = rot_z(s->objs[env->indice_obj].dir, 0.1 * env->rotz);//segf
 
 	else
 		init = 0;

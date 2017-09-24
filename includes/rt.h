@@ -97,6 +97,7 @@ typedef struct		s_env
 	int				rotx;
 	int				roty;
 	int				rotz;
+	int				indice_obj;
 }					t_env;
 
 struct		s_result_hit
@@ -201,4 +202,7 @@ cl_float3	sub_vect(cl_float3 u, cl_float3 v);
 cl_float3	vectorial_product(cl_float3 u, cl_float3 v);
 cl_float3 rot(cl_float3 v, float teta);
 float	calc_delta(float a, float b, float c);
+cl_float3	rot_x(cl_float3 v, float teta);
+cl_float3	rot_y(cl_float3 v, float teta);
+cl_float3	rot_z(cl_float3 v, float teta);
 #endif

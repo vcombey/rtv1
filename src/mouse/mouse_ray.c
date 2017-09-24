@@ -80,7 +80,8 @@ int		mouse_event(int button, int x, int y)
 
 		if (hit(env->scene->objs, env->scene->objs_number, env->scene->cam.pos, ray, &result_hit))
 		{
-			printf("name %d\n",result_hit.obj.type);
+			env->indice_obj = result_hit.indice;
+			printf("name %d\n",env->indice_obj);
 		}
 	}
 	return (1);
