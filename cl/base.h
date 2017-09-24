@@ -70,6 +70,7 @@ struct		s_result_hit
 {
 	float			dist;
 	float			t;
+	float3			ray;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			obj; //pointeur sur lobjet intersecter

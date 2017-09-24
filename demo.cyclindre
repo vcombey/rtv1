@@ -6,7 +6,7 @@ scene:
 	windows_size: 1280 800
 	object:
 		cylindre:
-			origin: 0 2 0
+			origin: 0 0 0
 			vecteur:  0 0 1
 			colorRGB: 0x3498db
 			rayon: 0.5

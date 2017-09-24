@@ -71,6 +71,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 	};
 	ray = mat_mult_vect(res, ray);
 
+	ray =NORMALIZE(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;

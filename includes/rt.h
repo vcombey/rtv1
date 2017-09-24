@@ -98,6 +98,7 @@ typedef struct		s_env
 	int				roty;
 	int				rotz;
 	int				indice_obj;
+	int				obj_has_changed;
 }					t_env;
 
 struct		s_result_hit

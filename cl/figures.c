@@ -18,6 +18,7 @@ float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 **		obj->dir.y = 1;
 **		obj->dir.z = 1;
 */
+	//ray = calc_rotation_figure(ray, obj->dir);
 	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
 	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
@@ -109,8 +110,10 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	if (delta < 0)
 		return (0x0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-	if (t < 0.001)
-		return (0);
+
+		if (t < 0.001)
+			return (0);
+
 	return (t);
 }
 

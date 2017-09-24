@@ -72,6 +72,7 @@ struct		s_result_hit
 {
 	float			dist;
 	float			t;
+	float3			ray;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			obj; //pointeur sur lobjet intersecter
@@ -141,7 +142,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
-float	calc_dist(float t, float3 ray);
+float	calc_dist(float t, float3 ray, t_obj *obj);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);

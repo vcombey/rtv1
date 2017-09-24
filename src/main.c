@@ -71,8 +71,12 @@ int		recalc_scene(t_env *env)
 	cl = env->cl;
 	cl_args = env->cl_args;
 	recalc_img(env->scene);
-	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
-		exit(1);
+	if (env->obj_has_changed)
+	{
+		env->obj_has_changed = 0;
+		if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
+			exit(1);
+	}
 	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
@@ -141,7 +145,7 @@ int		main(int ac, char **av)
 
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
-//	mlx_hook(env->win, MOTIONNOTIFY, POINTERMOTIONMASK, &mouse_event, NULL);
+	//	mlx_hook(env->win, MOTIONNOTIFY, POINTERMOTIONMASK, &mouse_event, NULL);
 	mlx_loop_hook(env->mlx, recalc_scene, env);
 	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_mouse_hook(env->win, &mouse_event, NULL);

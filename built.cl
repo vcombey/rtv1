@@ -72,6 +72,7 @@ struct		s_result_hit
 {
 	float			dist;
 	float			t;
+	float3			ray;
 	float3			norm; //contient le vecteur normal a la surface
 	float3			intersect; //contient le point dans le plan non translate d'intersection
 	t_obj			obj; //pointeur sur lobjet intersecter
@@ -141,7 +142,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray);
 float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
-float	calc_dist(float t, float3 ray);
+float	calc_dist(float t, float3 ray, t_obj *obj);
 void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);
@@ -283,6 +284,7 @@ float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 **		obj->dir.y = 1;
 **		obj->dir.z = 1;
 */
+	//ray = calc_rotation_figure(ray, obj->dir);
 	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
 	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
@@ -374,8 +376,10 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	if (delta < 0)
 		return (0x0);
 	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
-	if (t < 0.001)
-		return (0);
+
+		if (t < 0.001)
+			return (0);
+
 	return (t);
 }
 
@@ -422,17 +426,20 @@ float	calc_obj(t_obj *obj, float3 pos, float3 ray)
 		return (calc_cylindre(obj, pos, ray));
 	return (0);
 }
-float	calc_dist(float t, float3 ray)
+float	calc_dist(float t, float3 ray, t_obj *obj)
 {
 	float3	cam_to_obj;
 	float	dist;
 
+	(void)obj;
 	cam_to_obj = mult_vect(ray, t);
 	dist = norme_carre(cam_to_obj);
+	
 	/*
-**		if (dist < 0.1)
-**			return (0);
+**			if (dist < 0.1)
+**				return (0);
 */
+
 	return (dist);
 }
 
@@ -440,12 +447,13 @@ void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, stru
 {
 	output->intersect = mult_vect(ray, output->t);
 	output->intersect = add_vect(output->intersect, pos);
-	output->norm = output->intersect;
+	output->norm = output->intersect; //c'est le vecteur d intersection si la position de lobjet vaut 0
 	output->intersect = add_vect(output->intersect, obj.pos);
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
+	float	teta;
 	(void)pos;
 	(void)ray;
 	(void)t;
@@ -458,9 +466,13 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		float3	hor;
 		hor = output->norm;
 		hor.z = 0;
+		if (output->intersect.z > obj.pos.z)
+			teta = M_PI / 2;
+		else
+			teta = -M_PI / 2;
 		hor = rot(hor, -M_PI/2);
-		output->norm = rodrigues(output->norm, hor, M_PI/2);
-		output->norm.z = 0;
+		output->norm = rodrigues(output->norm, hor, -teta);
+		//output->norm.z = 0;
 	}
 }
 
@@ -474,7 +486,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	int		hit;
 
 	hit = 0;
-	result_hit->dist = 1000.0;
+	result_hit->dist = 100000.0;
 //	printf ("scene objsnumber", scene.objs_number);
 	while (i < objs_number)
 	{
@@ -482,8 +494,12 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			pos_translated = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
+			if (obj.type != PLAN && obj.type != SPHERE)
+				result_hit->ray = calc_rotation_figure(ray, obj.dir);
+			else
+				result_hit->ray = ray;
 			//printf("t %f", t );
-			dist = calc_dist(t, ray);
+			dist = calc_dist(t, result_hit->ray, &obj);
 			if (dist > 0.0001 && dist < result_hit->dist)
 			{
 		//	printf("dist %f", dist);
@@ -491,8 +507,8 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				result_hit->dist = dist;
 				result_hit->t = t;
 				result_hit->obj = obj;
-				assign_intersect_norm_vect(obj, t, pos_translated, ray, result_hit);
-				assign_norm_vect(obj, t, pos_translated, ray, result_hit);
+				assign_intersect_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
+				assign_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
 			}
 		i++;
 	}
@@ -775,7 +791,7 @@ float3	mat_mult_vect(float a[3][3], float3 x)
 
 float3	calc_rotation_figure(float3 ray, float3 v)
 {
-//	v = NORMALIZE(v);
+	v = NORMALIZE(v);
 	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},
@@ -795,6 +811,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 	mat_mult(res, mat_y, mat_x);
 	ray = mat_mult_vect(res, ray);
 
+	ray = NORMALIZE(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;
