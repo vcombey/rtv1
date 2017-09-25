@@ -102,7 +102,6 @@ int		main(int ac, char **av)
 {
 	t_env		*env;
 	t_scene		scene;
-	t_scene2	scene2;
 	struct s_cl cl;
 	struct s_cl_args cl_args;
 
@@ -117,12 +116,8 @@ int		main(int ac, char **av)
 	env->width_per_height = (float)env->width / (float)env->height;
 	init_env(env);
 	ft_bzero(&cl, sizeof(struct s_cl));
-	scene2.objs_number = scene.objs_number;
-	scene2.lights_number = scene.lights_number;
-	scene2.cam = scene.cam;
 	env->cl = &cl;
 	env->scene = &scene;
-	env->scene2 = scene2;
 	env->cl_args = &cl_args;
 	cl_args.objs = scene.objs;
 	cl_args.lights = scene.lights;

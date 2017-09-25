@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 18:08:54 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 19:28:28 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,11 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
+		{
+			new->dirx = (cl_float3){.x = 1, .y = 0, .z = 0};
+			new->diry = (cl_float3){.x = 0, .y = 1, .z = 0};
 			new->dirz = get_coordinates(new->dirz, lines[i].value);
+		}
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -136,7 +140,11 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
+		{
+			new->dirx = (cl_float3){.x = 1, .y = 0, .z = 0};
+			new->diry = (cl_float3){.x = 0, .y = 1, .z = 0};
 			new->dirz = get_coordinates(new->dirz, lines[i].value);
+		}
 		else if (ft_strequ(lines[i].key, "alpha"))
 			new->alpha = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))

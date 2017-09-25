@@ -57,16 +57,6 @@ typedef struct		s_scene
 	int				lights_number;
 }					t_scene;
 
-typedef struct		s_scene2
-{
-	cl_float3			rot;
-	int				width;
-	int				height;
-	t_cam			cam;
-	int				objs_number;
-	int				lights_number;
-}					t_scene2;
-
 typedef struct		s_env
 {
 	void			*mlx;
@@ -93,7 +83,6 @@ typedef struct		s_env
 	struct s_cl		*cl;
 	struct s_cl_args	*cl_args;
 	t_scene			*scene;
-	t_scene2			scene2;
 	int				mouse_x;
 	int				mouse_y;
 	int				rotx;

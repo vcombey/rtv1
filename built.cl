@@ -491,8 +491,8 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	int	i = 0;
 	t_obj	obj;
 	int		hit;
-				float matrix[3][3];
-				float inverted_matrix[3][3];
+	float matrix[3][3];
+	float inverted_matrix[3][3];
 
 	hit = 0;
 	result_hit->dist = 100000.0;
@@ -504,13 +504,15 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
-				float3	vx;
-				vx.x = 0; vx.y = 0; vx.z = 1;
-				float3	vy;
-				vy.x = 0; vy.y = 1; vy.z = 0;
-				float3	vz;
-				vz.x = -1; vz.y = 0; vz.z = 0;
-				set_rotation_matrix(matrix, vx, vy, vz);
+/*
+**					float3	vx;
+**					vx.x = 0; vx.y = 0; vx.z = 1;
+**					float3	vy;
+**					vy.x = 0; vy.y = 1; vy.z = 0;
+**					float3	vz;
+**					vz.x = -1; vz.y = 0; vz.z = 0;
+*/
+				set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
 				//debug_mat(matrix);
 				invert_matrix(matrix, inverted_matrix);
 				
