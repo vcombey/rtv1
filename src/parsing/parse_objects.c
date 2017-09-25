@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:49:39 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 18:08:54 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
-			new->dir = get_coordinates(new->dir, lines[i].value);
+			new->dirz = get_coordinates(new->dirz, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -76,7 +76,7 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
-			new->dir = get_coordinates(new->dir, lines[i].value);
+			new->dirz = get_coordinates(new->dirz, lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
 			new->color = get_hexa(lines[i].value);
 		else
@@ -105,7 +105,7 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
-			new->dir = get_coordinates(new->dir, lines[i].value);
+			new->dirz = get_coordinates(new->dirz, lines[i].value);
 		else if (ft_strequ(lines[i].key, "rayon"))
 			new->rayon = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))
@@ -136,7 +136,7 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
-			new->dir = get_coordinates(new->dir, lines[i].value);
+			new->dirz = get_coordinates(new->dirz, lines[i].value);
 		else if (ft_strequ(lines[i].key, "alpha"))
 			new->alpha = get_rayon(lines[i].value);
 		else if (ft_strequ(lines[i].key, "colorRGB"))

@@ -46,7 +46,9 @@ typedef struct		s_obj
 	int				type;
 	int				indice;
 	float3			pos;
-	float3			dir;
+	float3			dirx;
+	float3			diry;
+	float3			dirz;
 	size_t			color;
 	double			alpha;
 	double			rayon;
@@ -282,10 +284,10 @@ float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 	float	diviseur;
 	//ray = calc_rotation_figure(ray, obj->dir);
-	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
+	diviseur = obj->dirz.x * ray.x + obj->dirz.y * ray.y + obj->dirz.z * ray.z;
 	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
-	t = pos.x * obj->dir.x + pos.y * obj->dir.y + pos.z * obj->dir.z;
+	t = pos.x * obj->dirz.x + pos.y * obj->dirz.y + pos.z * obj->dirz.z;
 	t = -t / diviseur;
 	if (t < 0.001)
 		return (0);
@@ -301,7 +303,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 	float	tan_alpha_carre = tan(obj->alpha) * tan(obj->alpha);
 
-//	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dirz);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -328,7 +330,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 **		float	coef_2;
 **		float	coef_div;
 **	
-**	//	calc_rotation_figure(ray, obj->dir);
+**	//	calc_rotation_figure(ray, obj->dirz);
 **	
 **		coef_div = obj->dir.x * obj->dir.x + obj->dir.y * obj->dir.y + obj->dir.z * obj->dir.z;
 **		if (coef_div == 0)
@@ -360,7 +362,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	coef_2;
 	float	coef_div;
 
-//	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dirz);
 
 	a = ray.x * ray.x + ray.y * ray.y;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;
@@ -452,7 +454,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	(void)ray;
 	(void)t;
 	if (obj.type == PLAN)
-		output->norm = obj.dir;
+		output->norm = obj.dirz;
 	if (obj.type == CYLINDRE)
 		output->norm.z = 0;
 	if (obj.type == CONE)
@@ -470,6 +472,17 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	}
 }
 
+				/*
+**						inverted_matrix[0][0] = 1;
+**						inverted_matrix[0][1] = 0;
+**						inverted_matrix[0][2] = 0;
+**						inverted_matrix[1][0] = 0;
+**						inverted_matrix[1][1] = 1;
+**						inverted_matrix[1][2] = 0;
+**						inverted_matrix[2][0] = 0;
+**						inverted_matrix[2][1] = 0;
+**						inverted_matrix[2][2] = 1;
+*/
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
 {
 	float	dist;
@@ -492,26 +505,15 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
 				float3	vx;
-				vx.x = 1; vx.y = 0; vx.z = 0;
+				vx.x = 0; vx.y = 0; vx.z = 1;
 				float3	vy;
 				vy.x = 0; vy.y = 1; vy.z = 0;
 				float3	vz;
-				vz.x = 0; vz.y = 0; vz.z = 1;
+				vz.x = -1; vz.y = 0; vz.z = 0;
 				set_rotation_matrix(matrix, vx, vy, vz);
 				//debug_mat(matrix);
 				invert_matrix(matrix, inverted_matrix);
 				
-				/*
-**						inverted_matrix[0][0] = 1;
-**						inverted_matrix[0][1] = 0;
-**						inverted_matrix[0][2] = 0;
-**						inverted_matrix[1][0] = 0;
-**						inverted_matrix[1][1] = 1;
-**						inverted_matrix[1][2] = 0;
-**						inverted_matrix[2][0] = 0;
-**						inverted_matrix[2][1] = 0;
-**						inverted_matrix[2][2] = 1;
-*/
 				//debug_mat(inverted_matrix);
 				result_hit->ray = mat_mult_vect(inverted_matrix, ray);
 				pos_translated = mat_mult_vect(inverted_matrix, pos_translated);

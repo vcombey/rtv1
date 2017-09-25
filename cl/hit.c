@@ -30,7 +30,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	(void)ray;
 	(void)t;
 	if (obj.type == PLAN)
-		output->norm = obj.dir;
+		output->norm = obj.dirz;
 	if (obj.type == CYLINDRE)
 		output->norm.z = 0;
 	if (obj.type == CONE)
@@ -81,11 +81,11 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
 				float3	vx;
-				vx.x = 1; vx.y = 0; vx.z = 0;
+				vx.x = 0; vx.y = 0; vx.z = 1;
 				float3	vy;
 				vy.x = 0; vy.y = 1; vy.z = 0;
 				float3	vz;
-				vz.x = 0; vz.y = 0; vz.z = 1;
+				vz.x = -1; vz.y = 0; vz.z = 0;
 				set_rotation_matrix(matrix, vx, vy, vz);
 				//debug_mat(matrix);
 				invert_matrix(matrix, inverted_matrix);

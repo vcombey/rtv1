@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 16:10:51 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 18:12:51 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,24 @@ int			recalc_img(void *scene)
 		rot_arround_right(&s->cam);
 	if (env->rotx != 0)
 	{
-		s->objs[env->indice_obj].dir = rot_x(s->objs[env->indice_obj].dir, TETA_ROT * env->rotx);//segf
+		s->objs[env->indice_obj].dirx = rot_x(s->objs[env->indice_obj].dirx, TETA_ROT * env->rotx);//segf
+		s->objs[env->indice_obj].diry = rot_x(s->objs[env->indice_obj].diry, TETA_ROT * env->rotx);//segf
+		s->objs[env->indice_obj].dirz = rot_x(s->objs[env->indice_obj].dirz, TETA_ROT * env->rotx);//segf
 		env->obj_has_changed = 1;
-		printf("%f, %f, %f", s->objs[env->indice_obj].dir.x, s->objs[env->indice_obj].dir.y, s->objs[env->indice_obj].dir.z);
+		printf("%f, %f, %f", s->objs[env->indice_obj].dirz.x, s->objs[env->indice_obj].dirz.y, s->objs[env->indice_obj].dirz.z);
 	}
 	if (env->roty != 0)
 	{
-		s->objs[env->indice_obj].dir = rot_y(s->objs[env->indice_obj].dir, TETA_ROT * env->roty);//segf
+		s->objs[env->indice_obj].dirx = rot_y(s->objs[env->indice_obj].dirx, TETA_ROT * env->roty);//segf
+		s->objs[env->indice_obj].diry = rot_y(s->objs[env->indice_obj].diry, TETA_ROT * env->roty);//segf
+		s->objs[env->indice_obj].dirz = rot_y(s->objs[env->indice_obj].dirz, TETA_ROT * env->roty);//segf
 		env->obj_has_changed = 1;
 	}
 	if (env->rotz != 0)
 	{
-		s->objs[env->indice_obj].dir = rot_z(s->objs[env->indice_obj].dir, TETA_ROT * env->rotz);//segf
+		s->objs[env->indice_obj].dirx = rot_z(s->objs[env->indice_obj].dirx, TETA_ROT * env->rotz);//segf
+		s->objs[env->indice_obj].diry = rot_z(s->objs[env->indice_obj].diry, TETA_ROT * env->rotz);//segf
+		s->objs[env->indice_obj].dirz = rot_z(s->objs[env->indice_obj].dirz, TETA_ROT * env->rotz);//segf
 		env->obj_has_changed = 1;
 	}
 

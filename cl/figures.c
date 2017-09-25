@@ -12,10 +12,10 @@ float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 	float	diviseur;
 	//ray = calc_rotation_figure(ray, obj->dir);
-	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
+	diviseur = obj->dirz.x * ray.x + obj->dirz.y * ray.y + obj->dirz.z * ray.z;
 	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
-	t = pos.x * obj->dir.x + pos.y * obj->dir.y + pos.z * obj->dir.z;
+	t = pos.x * obj->dirz.x + pos.y * obj->dirz.y + pos.z * obj->dirz.z;
 	t = -t / diviseur;
 	if (t < 0.001)
 		return (0);
@@ -31,7 +31,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 	float	tan_alpha_carre = tan(obj->alpha) * tan(obj->alpha);
 
-//	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dirz);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -58,7 +58,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 **		float	coef_2;
 **		float	coef_div;
 **	
-**	//	calc_rotation_figure(ray, obj->dir);
+**	//	calc_rotation_figure(ray, obj->dirz);
 **	
 **		coef_div = obj->dir.x * obj->dir.x + obj->dir.y * obj->dir.y + obj->dir.z * obj->dir.z;
 **		if (coef_div == 0)
@@ -90,7 +90,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	coef_2;
 	float	coef_div;
 
-//	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dirz);
 
 	a = ray.x * ray.x + ray.y * ray.y;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;

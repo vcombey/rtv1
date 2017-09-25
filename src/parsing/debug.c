@@ -26,7 +26,7 @@ void	debug_obj(t_scene *scene)
 	{
 		printf("\nname %d\n", scene->objs[i].type);
 		printf("color %zX\n", scene->objs[i].color);
-		printf("dir %f, %f, %f\n", scene->objs[i].dir.x, scene->objs[i].dir.y, scene->objs[i].dir.z);
+		printf("dir %f, %f, %f\n", scene->objs[i].dirz.x, scene->objs[i].dirz.y, scene->objs[i].dirz.z);
 		printf("pos %f, %f, %f\n", scene->objs[i].pos.x, scene->objs[i].pos.y, scene->objs[i].pos.z);
 		printf("alpha %f\n", scene->objs[i].alpha);
 		printf("rayon %f\n\n", scene->objs[i].rayon);

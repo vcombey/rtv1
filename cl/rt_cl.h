@@ -46,7 +46,9 @@ typedef struct		s_obj
 	int				type;
 	int				indice;
 	float3			pos;
-	float3			dir;
+	float3			dirx;
+	float3			diry;
+	float3			dirz;
 	size_t			color;
 	double			alpha;
 	double			rayon;

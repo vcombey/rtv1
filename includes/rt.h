@@ -22,7 +22,9 @@ typedef struct		s_obj
 {
 	int				type;
 	cl_float3		pos;
-	cl_float3		dir;
+	cl_float3		dirx;
+	cl_float3		diry;
+	cl_float3		dirz;
 	size_t			color;
 	double			alpha;
 	double			rayon;
