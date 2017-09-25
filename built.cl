@@ -170,6 +170,9 @@ float3	mat_mult_vect(float a[3][3], float3 x);
 float3	calc_rotation_figure(float3 ray, float3 v);
 float3	euler_rotation(float3 ray, float3 v);
 float3	rodrigues(float3 input, float3 v, float teta);
+int		invert_matrix(float matrix[3][3], float inverted_matrix[3][3]);
+void	set_rotation_matrix(float matrix[3][3], float3 vx, float3 vy, float3 vz);
+void	debug_mat(float matrix[3][3]);
 #endif
 int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray)
 {
@@ -475,6 +478,8 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	int	i = 0;
 	t_obj	obj;
 	int		hit;
+				float matrix[3][3];
+				float inverted_matrix[3][3];
 
 	hit = 0;
 	result_hit->dist = 100000.0;
@@ -485,7 +490,32 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			pos_translated = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			if (obj.type != PLAN && obj.type != SPHERE)
-				result_hit->ray = calc_rotation_figure(ray, obj.dir);
+			{
+				float3	vx;
+				vx.x = 1; vx.y = 0; vx.z = 0;
+				float3	vy;
+				vy.x = 0; vy.y = 1; vy.z = 0;
+				float3	vz;
+				vz.x = 0; vz.y = 0; vz.z = 1;
+				set_rotation_matrix(matrix, vx, vy, vz);
+				//debug_mat(matrix);
+				invert_matrix(matrix, inverted_matrix);
+				
+				/*
+**						inverted_matrix[0][0] = 1;
+**						inverted_matrix[0][1] = 0;
+**						inverted_matrix[0][2] = 0;
+**						inverted_matrix[1][0] = 0;
+**						inverted_matrix[1][1] = 1;
+**						inverted_matrix[1][2] = 0;
+**						inverted_matrix[2][0] = 0;
+**						inverted_matrix[2][1] = 0;
+**						inverted_matrix[2][2] = 1;
+*/
+				//debug_mat(inverted_matrix);
+				result_hit->ray = mat_mult_vect(inverted_matrix, ray);
+				pos_translated = mat_mult_vect(inverted_matrix, pos_translated);
+			}
 			else
 				result_hit->ray = ray;
 			t = calc_obj(&obj, pos_translated, result_hit->ray); //TODO objs est ds la stack de la fct
@@ -500,6 +530,11 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				result_hit->obj = obj;
 				assign_intersect_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
 				assign_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
+				if (obj.type != PLAN && obj.type != SPHERE)
+				{
+					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
+					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
+				}
 			}
 		i++;
 	}
@@ -800,15 +835,37 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 	};
 	float	res[3][3];
 
-	//mat_mult(res, mat_y, mat_x);
-	mat_mult(res, mat_z, mat_x);
-	ray = mat_mult_vect(res, ray);
+	mat_mult(res, mat_y, mat_x);
+	
+		mat_mult(res, mat_y, mat_x);
+		ray = mat_mult_vect(res, ray);
 
 	ray = NORMALIZE(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;
 }
+
+/*
+**	float3	rotation_change_repere(float3 ray, float3 v)
+**	{
+**		v = NORMALIZE(v);
+**		float	mat_x[3][3] = {
+**			{v.x, 0, 0},
+**			{v.y, v.z, -v.y},
+**			{v.x, v.y, v.z},
+**		};
+**	
+**		//mat_mult(res, mat_y, mat_x);
+**		mat_mult(res, mat_y, mat_x);
+**		ray = mat_mult_vect(res, ray);
+**	
+**		ray = NORMALIZE(ray);
+**		return (ray);
+**		(void)mat_y;
+**		(void)mat_z;
+**	}
+*/
 
 float3	euler_rotation(float3 ray, float3 v)
 {
@@ -842,4 +899,54 @@ float3	rodrigues(float3 input, float3 v, float teta)
 	res = mat_mult_vect(mat, input);
 
 	return (res);
+}
+
+int		invert_matrix(float matrix[3][3], float inverted_matrix[3][3])
+{
+	float	det;
+
+	det = matrix[0][0] * (matrix[1][4%3] * matrix[2][8%6] - matrix[2][7%6] * matrix[1][5%3])
+		- matrix[0][1] * (matrix[1][3%3] * matrix[2][8%6] - matrix[2][6%6] * matrix[1][5%3])
+		+ matrix[0][2] * (matrix[1][3%3] * matrix[2][7%6] - matrix[2][6%6] * matrix[1][4%3]);
+	if (fabs(det) < 0.0005)
+		return (0);
+	inverted_matrix[0][0] = matrix[1][4%3] * matrix[2][8%6] - matrix[1][5%3] * matrix[2][7%6] / det;
+	inverted_matrix[0][1] = -(matrix[0][1] * matrix[2][8%6] - matrix[2][7%6] * matrix[0][2]) / det;
+	inverted_matrix[0][2] = matrix[0][1] * matrix[1][5%3] - matrix[1][4%3] * matrix[0][2] / det;
+	inverted_matrix[1][3%3] = -(matrix[1][3%3] * matrix[2][8%6] - matrix[1][5%3] * matrix[2][6%6]) / det;
+	inverted_matrix[1][4%3] = matrix[0][0] * matrix[2][8%6] - matrix[2][6%6] * matrix[0][2] / det;
+	inverted_matrix[1][5%3] = -(matrix[0][0] * matrix[1][5%3] - matrix[1][3%3] * matrix[0][2]) / det;
+	inverted_matrix[2][6%6] = matrix[1][3%3] * matrix[2][7%6] - matrix[2][6%6] * matrix[1][4%3] / det;
+	inverted_matrix[2][7%6] = -(matrix[0][0] * matrix[2][7%6] - matrix[2][6%6] * matrix[0][1]) / det;
+	inverted_matrix[2][8%6] = matrix[0][0] * matrix[1][4%3] - matrix[0][1] * matrix[1][3%3] / det;
+	return (1);
+}
+
+void	set_rotation_matrix(float matrix[3][3], float3 vx, float3 vy, float3 vz)
+{
+	matrix[0][0] = vx.x;
+	matrix[0][1] = vy.x;
+	matrix[0][2] = vz.x;
+	matrix[1][0] = vx.y;
+	matrix[1][1] = vy.y;
+	matrix[1][2] = vz.y;
+	matrix[2][0] = vx.z;
+	matrix[2][1] = vy.z;
+	matrix[2][2] = vz.z;
+}
+void	debug_mat(float matrix[3][3])
+{
+	int	i = 0;
+	int	j = 0;
+
+	while (i < 3)
+	{
+		j = 0;
+		while (j < 3)
+		{
+			printf("i: %i j: %i m[i][j]: %i", i, j,  matrix[i][j]);
+			j++;
+		}
+		i++;
+	}
 }

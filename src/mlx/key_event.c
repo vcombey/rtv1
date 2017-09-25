@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:51:07 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 16:10:51 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 //	printf("vert %f, %f, %f\n", norm_vert->x, norm_vert->y,norm_vert->z); 
 }
 
-#define TETA_ROT 0.01
+#define TETA_ROT 0.1
 
 int			recalc_img(void *scene)
 {
