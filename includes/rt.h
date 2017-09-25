@@ -159,6 +159,7 @@ void	calc(t_env *env, t_scene *scene);
 void				ft_pixelput(t_env *env, int x, int y, int color);
 
 void	parse_file(char *filename, t_scene *scene);
+void	debug_scene(t_scene *scene);
 cl_float3	get_coordinates(cl_float3	res, char *value);
 void	parse_scene(t_yaml *lines, size_t len, t_scene *scene);
 size_t	get_name(t_yaml *lines, size_t i, t_scene *scene, size_t len);

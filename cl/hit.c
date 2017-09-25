@@ -65,11 +65,11 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			obj = objs[i];
 			pos_translated = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
-			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			if (obj.type != PLAN && obj.type != SPHERE)
 				result_hit->ray = calc_rotation_figure(ray, obj.dir);
 			else
 				result_hit->ray = ray;
+			t = calc_obj(&obj, pos_translated, result_hit->ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, result_hit->ray, &obj);
 			if (dist > 0.0001 && dist < result_hit->dist)

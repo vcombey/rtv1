@@ -41,7 +41,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	alpha = 0.6;
 	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
-	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dir);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -100,7 +100,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	coef_2;
 	float	coef_div;
 
-	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dir);
 
 	a = ray.x * ray.x + ray.y * ray.y;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;

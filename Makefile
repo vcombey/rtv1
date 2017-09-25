@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/24 14:51:34 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/25 13:47:25 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,17 +23,17 @@ endif
 NAME =	rtv1
 
 SRC =	main.c			\
-		ft_pixelput.c	\
-		key_pressed.c	\
-		key_event.c	\
-		parse_lights.c	\
-		parsing.c	\
-		env.c			\
-		parse_scene.c	\
-		parse_objects.c	\
-		get_coordinates.c	\
-		cl_get_error_string.c \
-		cl_methods.c \
+		mlx/key_pressed.c	\
+		mlx/key_event.c	\
+		mlx/env.c			\
+		parsing/parse_lights.c	\
+		parsing/parsing.c	\
+		parsing/parse_scene.c	\
+		parsing/parse_objects.c	\
+		parsing/get_coordinates.c	\
+		parsing/debug.c	\
+		opencl/cl_methods.c \
+		opencl/cl_methods2.c	\
 		mouse/mouse_ray.c \
 		mouse/opp_double.c \
 		mouse/opp_double_vect.c \
@@ -65,7 +65,10 @@ fclean: clean
 re: fclean all
 
 objs/%.o : src/%.c
-	mkdir -p ./objs/mouse
+	@mkdir -p ./objs/mouse
+	@mkdir -p ./objs/opencl
+	@mkdir -p ./objs/mlx
+	@mkdir -p ./objs/parsing
 	@/bin/mkdir -p objs
 	gcc $(INCLUDE) $(SANITIZER) $(CFLAGS) -c -o $@ $<
 

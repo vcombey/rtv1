@@ -168,6 +168,7 @@ float3 rot(float3 v, float teta);
 void	mat_mult(float res[3][3], float a[3][3], float b[3][3]);
 float3	mat_mult_vect(float a[3][3], float3 x);
 float3	calc_rotation_figure(float3 ray, float3 v);
+float3	euler_rotation(float3 ray, float3 v);
 float3	rodrigues(float3 input, float3 v, float teta);
 #endif
 int	calc_rayon(__global t_obj *objs, __global t_light *lights, t_scene scene, float3 ray)
@@ -307,7 +308,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	alpha = 0.6;
 	float	tan_alpha_carre = tan(alpha) * tan(alpha);
 
-	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dir);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
 	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
@@ -366,7 +367,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	coef_2;
 	float	coef_div;
 
-	ray = calc_rotation_figure(ray, obj->dir);
+//	ray = calc_rotation_figure(ray, obj->dir);
 
 	a = ray.x * ray.x + ray.y * ray.y;
 	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y;
@@ -493,11 +494,11 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 			obj = objs[i];
 			pos_translated = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
-			t = calc_obj(&obj, pos_translated, ray); //TODO objs est ds la stack de la fct
 			if (obj.type != PLAN && obj.type != SPHERE)
 				result_hit->ray = calc_rotation_figure(ray, obj.dir);
 			else
 				result_hit->ray = ray;
+			t = calc_obj(&obj, pos_translated, result_hit->ray); //TODO objs est ds la stack de la fct
 			//printf("t %f", t );
 			dist = calc_dist(t, result_hit->ray, &obj);
 			if (dist > 0.0001 && dist < result_hit->dist)
@@ -808,13 +809,35 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 		{0, 0, 1},
 	};
 	float	res[3][3];
-	mat_mult(res, mat_y, mat_x);
+
+	//mat_mult(res, mat_y, mat_x);
+	mat_mult(res, mat_z, mat_x);
 	ray = mat_mult_vect(res, ray);
 
 	ray = NORMALIZE(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;
+}
+
+float3	euler_rotation(float3 ray, float3 v)
+{
+	v = NORMALIZE(v);
+
+	float	c1 = v.x;
+	float	s1 = v.y;
+	float	c2 = v.z;
+	float	s2 = sqrt(v.x * v.x + v.y * v.y);
+	float	c3 = 1;
+	float	s3 = 0;
+	float	mat[3][3] = {
+		{c2, s3 * s2, c3 * s2},
+		{s1*s2, c1*c3 - c2*s1*s3, -c1*s3-c2*c3*s1},
+		{-c1*s2, c3*s1 + c1*c2*s3, c1*c2*c3 - s1*s3},
+	};
+	ray = mat_mult_vect(mat, ray);
+	ray = NORMALIZE(ray);
+	return (ray);
 }
 
 float3	rodrigues(float3 input, float3 v, float teta)

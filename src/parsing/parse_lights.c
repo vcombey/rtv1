@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opp_double_vect.c                                  :+:      :+:    :+:   */
+/*   parse_lights.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:44:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 13:44:31 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-#include <math.h>
-float	norme_carre(cl_float3 v)
-{
-	return (v.x * v.x + v.y * v.y + v.z * v.z);
-}
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "libft.h"
 
-float	scalar_product(cl_float3 u, cl_float3 v)
+size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
-	return (v.x * u.x + v.y * u.y + v.z * u.z);
-}
+	size_t	tab;
+	t_light	*new_light;
 
-cl_float3	NORMALIZE(cl_float3 v)
-{
-	return (div_vect(v, sqrt(norme_carre(v))));
+	(void)len;
+	new_light = &scene->lights[scene->lights_number];
+	tab = lines[i].tab;
+	if (lines[i].value[0])
+		fatal("bad light");
+	i++;
+	printf("origin\n");
+	if (ft_strequ(lines[i].key, "origin"))
+		new_light->pos = get_coordinates(new_light->pos, lines[i].value);
+	else
+		fatal("bad light propriety");
+	i++;
+	scene->lights_number++;
+	return (i);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_event.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
+/*   Updated: 2017/09/25 13:51:07 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt.h"
 #include "math.h"
 #include "stdlib.h"
@@ -72,6 +84,7 @@ void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 }
 
 #define TETA_ROT 0.01
+
 int			recalc_img(void *scene)
 {
 	t_env	*env;
