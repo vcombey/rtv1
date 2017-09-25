@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:44:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 14:48:09 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ cl_float3	mat_mult_vect(float a[3][3], cl_float3 x)
 
 cl_float3	calc_rotation_figure(cl_float3 ray, cl_float3 v)
 {
-//	v = NORMALIZE(v);
+//	v = normalize(v);
 	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},

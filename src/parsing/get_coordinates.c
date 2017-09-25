@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 14:31:47 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 14:35:17 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,10 @@ cl_float3	get_coordinates(cl_float3	res, char *value)
 	coord = value;
 	if (!(ft_strtof(coord, &coord, &res.x)))
 		fatal("invalid coordinates");
-	printf("%f\n", res.x);
 	if (!(ft_strtof(coord, &coord, &res.y)))
 		fatal("invalid coordinates");
-	printf("%f\n", res.y);
 	if (!(ft_strtof(coord, &coord, &res.z)))
 		fatal("invalid coordinates");
-	printf("%f\n", res.z);
 	if (!ft_str_is_clear(coord))
 		fatal("invalid coordinates");
 	return (res);
@@ -97,7 +94,7 @@ double		get_rayon(char *value)
 
 	res = strtof(value, &value);
 	if (!ft_str_is_clear(value))
-		fatal("invalid valueinates");
+		fatal("invalid rayon");
 	return (res);
 }
 
@@ -107,6 +104,6 @@ double		get_hexa(char *value)
 
 	res = strtof(value, &value);
 	if (!ft_str_is_clear(value))
-		fatal("invalid valueinates");
+		fatal("invalid hexadecimal value");
 	return (res);
 }

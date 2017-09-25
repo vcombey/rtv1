@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:50:27 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/25 14:53:28 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <mlx.h>
 
-t_env	*singleton_env()
+t_env	*singleton_env(void)
 {
 	static t_env	env;
 
@@ -39,7 +39,6 @@ void	init_cam(t_scene *scene)
 	scene->cam.dir.x = 0;
 	scene->cam.dir.y = -1;
 	scene->cam.dir.z = 0;
-
 	scene->cam.pos.x = 0;
 	scene->cam.pos.y = 12;
 	scene->cam.pos.z = 0;

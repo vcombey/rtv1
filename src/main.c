@@ -7,7 +7,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <OpenCL/opencl.h>
-
 #include <mlx.h>
 #include "mlx.h"
 #include "rt.h"
@@ -15,12 +14,13 @@
 #include <stdio.h>
 #include "cl.h"
 
-
 int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 {
-	cl_program program;                 // compute program
+	cl_program program;
 	char	*source_str;
+	int		i;
 
+	i = 0;
 	cl->data_size = env->width * env->height * sizeof(int);
 	printf("envwidht %i envheight %i", env->width, env->height);
 	if (cl_init(cl))
@@ -41,7 +41,6 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 		exit(1);
 	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
 		exit(1);
-	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
@@ -54,7 +53,6 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_hor);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_vert);
-
 	if (cl_exec(cl, env->width * env->height, cl->kernel))
 		exit(1);
 	if (cl_read_results(cl, cl->output, cl->data_size, (int *)env->ptr))
@@ -67,7 +65,9 @@ int		recalc_scene(t_env *env)
 {
 	struct	s_cl *cl;
 	struct s_cl_args *cl_args;
+	int		i;
 
+	i = 0;
 	cl = env->cl;
 	cl_args = env->cl_args;
 	recalc_img(env->scene);
@@ -77,7 +77,6 @@ int		recalc_scene(t_env *env)
 		if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
 			exit(1);
 	}
-	int		i = 0;
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->lights_buffer);
@@ -90,7 +89,6 @@ int		recalc_scene(t_env *env)
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->cam.pos);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_hor);
 	cl_set_arg(cl->kernel, sizeof(cl_float3), &i, &env->scene->norm_vert);
-
 	if (cl_exec(cl, env->width * env->height, cl->kernel))
 		exit(1);
 	ft_memset(env->ptr, 0x00, env->width * env->height * 4);
@@ -115,15 +113,10 @@ int		main(int ac, char **av)
 	parse_file(av[1], &scene);
 	env->width = scene.width;
 	env->height = scene.height;
-	env->name = "rt";
-	//	printf("env width %zu, env height %zu env name %s\n", env->width, env->height, env->name);
+	env->name = scene.name;
 	env->width_per_height = (float)env->width / (float)env->height;
 	init_env(env);
-	//	init_cam(&scene);
-
-
 	ft_bzero(&cl, sizeof(struct s_cl));
-
 	scene2.objs_number = scene.objs_number;
 	scene2.lights_number = scene.lights_number;
 	scene2.cam = scene.cam;
@@ -131,30 +124,26 @@ int		main(int ac, char **av)
 	env->scene = &scene;
 	env->scene2 = scene2;
 	env->cl_args = &cl_args;
-
 	cl_args.objs = scene.objs;
 	cl_args.lights = scene.lights;
 	cl_args.objs_size = scene.objs_number * (sizeof(t_obj) + 1);
 	cl_args.lights_size = scene.lights_number * (sizeof(t_light) + 1);
-
 	env->cl_args = &cl_args;
-
 	recalc_img(env->scene);
 	init_norm_cam_dir(&scene.norm_vert, &scene.norm_hor, scene.cam.dir);
 	calc_scene(&cl, &cl_args, env);
-
 	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
 	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
-	//	mlx_hook(env->win, MOTIONNOTIFY, POINTERMOTIONMASK, &mouse_event, NULL);
 	mlx_loop_hook(env->mlx, recalc_scene, env);
 	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_mouse_hook(env->win, &mouse_event, NULL);
 	mlx_loop(env->mlx);
-	/*	clReleaseMemObject(output);
+	/*
+		clReleaseMemObject(output);
 		clReleaseProgram(program);
 		clReleaseKernel(kernel);
 		clReleaseCommandQueue(commands);
 		clReleaseContext(context);
-		*/
-	return 0;
+	*/
+	return (0);
 }

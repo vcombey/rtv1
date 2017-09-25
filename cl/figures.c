@@ -11,23 +11,14 @@ float	calc_plan(t_obj *obj, float3 pos, float3 ray)
 {
 	float	t;
 	float	diviseur;
-	/*
-**		float	obj->dir[3];
-**	
-**		obj->dir.x = 1;
-**		obj->dir.y = 1;
-**		obj->dir.z = 1;
-*/
 	//ray = calc_rotation_figure(ray, obj->dir);
 	diviseur = obj->dir.x * ray.x + obj->dir.y * ray.y + obj->dir.z * ray.z;
 	if (ft_abs_float(diviseur) < 0.01)
 		return (0);
 	t = pos.x * obj->dir.x + pos.y * obj->dir.y + pos.z * obj->dir.z;
 	t = -t / diviseur;
-
 	if (t < 0.001)
 		return (0);
-
 	return (t);
 }
 
@@ -38,8 +29,7 @@ float	calc_cone(t_obj *obj, float3 pos, float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	alpha = 0.6;
-	float	tan_alpha_carre = tan(alpha) * tan(alpha);
+	float	tan_alpha_carre = tan(obj->alpha) * tan(obj->alpha);
 
 //	ray = calc_rotation_figure(ray, obj->dir);
 	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
