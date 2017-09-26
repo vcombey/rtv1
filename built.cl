@@ -145,7 +145,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 float	calc_dist(float t, float3 ray, t_obj *obj);
-void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);
 int	calc_color(float coef_lum, int color);
@@ -439,11 +439,10 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 	return (dist);
 }
 
-void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
+void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
 	output->intersect = mult_vect(ray, output->t);
 	output->intersect = add_vect(output->intersect, pos);
-	output->norm = output->intersect; //c'est le vecteur d intersection si la position de lobjet vaut 0
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
@@ -452,6 +451,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	(void)pos;
 	(void)ray;
 	(void)t;
+	output->norm = output->intersect; //c'est le vecteur d intersection si la position de lobjet vaut 0
 	if (obj.type == PLAN)
 		output->norm = obj.dirz;
 	if (obj.type == CYLINDRE)
@@ -461,7 +461,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 		float3	hor;
 		hor = output->norm;
 		hor.z = 0;
-		if (output->intersect.z > obj.pos.z)
+		if (output->intersect.z > 0)
 			teta = M_PI / 2;
 		else
 			teta = -M_PI / 2;
@@ -471,17 +471,6 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	}
 }
 
-/*
-**						inverted_matrix[0][0] = 1;
-**						inverted_matrix[0][1] = 0;
-**						inverted_matrix[0][2] = 0;
-**						inverted_matrix[1][0] = 0;
-**						inverted_matrix[1][1] = 1;
-**						inverted_matrix[1][2] = 0;
-**						inverted_matrix[2][0] = 0;
-**						inverted_matrix[2][1] = 0;
-**						inverted_matrix[2][2] = 1;
-*/
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
 {
 	float	dist;
@@ -496,35 +485,20 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 
 	hit = 0;
 	result_hit->dist = 100000.0;
-//	printf ("scene objsnumber", scene.objs_number);
 	while (i < objs_number)
 	{
 			obj = objs[i];
 			pos_transformed = sub_vect(cam_pos, obj.pos);
-		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
-/*
-**					float3	vx;
-**					vx.x = 0; vx.y = 0; vx.z = 1;
-**					float3	vy;
-**					vy.x = 0; vy.y = 1; vy.z = 0;
-**					float3	vz;
-**					vz.x = -1; vz.y = 0; vz.z = 0;
-*/
 				set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
-				//debug_mat(matrix);
 				invert_matrix(matrix, inverted_matrix);
-				
-				//debug_mat(inverted_matrix);
 				pos_transformed = mat_mult_vect(inverted_matrix, pos_transformed);
 				ray_transformed = mat_mult_vect(inverted_matrix, ray);
-
 			}
 			else
 				ray_transformed = ray;
 			t = calc_obj(&obj, pos_transformed, ray_transformed);
-			//printf("t %f", t );
 			dist = calc_dist(t, ray_transformed, &obj);
 			if (dist > 0.0001 && dist < result_hit->dist)
 			{
@@ -532,12 +506,12 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				result_hit->dist = dist;
 				result_hit->t = t;
 				result_hit->obj = obj;
-				assign_intersect_norm_vect(obj, t, pos_transformed, ray_transformed, result_hit);
-				assign_norm_vect(obj, t, pos_transformed, ray_transformed, result_hit);
+				assign_intersect_vect(obj, t, pos_transformed, ray_transformed, result_hit);
+				assign_norm_vect(obj, t, pos_transformed, ray_transformed, result_hit); //must be call just after asign_intersect_vect
 				if (obj.type != PLAN && obj.type != SPHERE)
 				{
 					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
-	result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
 					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
 					result_hit->ray = mat_mult_vect(matrix, ray_transformed);
 				}

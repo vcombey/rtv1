@@ -145,7 +145,7 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray);
 float	calc_sphere(t_obj *obj, float3 pos, float3 ray);
 float	calc_obj(t_obj *obj, float3 pos, float3 ray);
 float	calc_dist(float t, float3 ray, t_obj *obj);
-void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
+void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output);
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit);
 int	calc_color(float coef_lum, int color);
