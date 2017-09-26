@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:29:06 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 #include <OpenCL/opencl.h>
 #include "libft.h"
-#include "private_cl.h"
+#include "cl.h"
 #include "rt.h"
 
 int		cl_init(struct s_cl *cl)
