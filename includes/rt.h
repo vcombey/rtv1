@@ -198,4 +198,7 @@ float	calc_delta(float a, float b, float c);
 cl_float3	rot_x(cl_float3 v, float teta);
 cl_float3	rot_y(cl_float3 v, float teta);
 cl_float3	rot_z(cl_float3 v, float teta);
+void	set_rotation_matrix(float m[3][3], cl_float3 vx, cl_float3 vy, cl_float3 vz);
+int		invert_matrix(float m[3][3], float inv_m[3][3]);
+cl_float3	mat_mult_vect(float a[3][3], cl_float3 v);
 #endif

@@ -41,24 +41,13 @@ void	mat_mult(float res[3][3], float a[3][3], float b[3][3])
 	}
 }
 
-static float	mat_mult_vect_coef(float a[3][3], float3 b, int a_line)
-{
-	float	res;
-
-	res = 0;
-	res += a[a_line][0] * b.x;
-	res += a[a_line][1] * b.y;
-	res += a[a_line][2] * b.z;
-	return (res);
-}
-
-float3	mat_mult_vect(float a[3][3], float3 x)
+float3	mat_mult_vect(float a[3][3], float3 v)
 {
 	float3	res;
 
-	res.x = mat_mult_vect_coef(a, x, 0);
-	res.y = mat_mult_vect_coef(a, x, 1);
-	res.z = mat_mult_vect_coef(a, x, 2);
+	res.x = a[0][0] * v.x + a[0][1] * v.y + a[0][2] * v.z;
+	res.y = a[1][0] * v.x + a[1][1] * v.y + a[1][2] * v.z;
+	res.z = a[2][0] * v.x + a[2][1] * v.y + a[2][2] * v.z;
 	return (res);
 }
 

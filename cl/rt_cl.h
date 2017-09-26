@@ -168,7 +168,7 @@ float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
 float3 rot(float3 v, float teta);
 void	mat_mult(float res[3][3], float a[3][3], float b[3][3]);
-float3	mat_mult_vect(float a[3][3], float3 x);
+float3	mat_mult_vect(float a[3][3], float3 v);
 float3	calc_rotation_figure(float3 ray, float3 v);
 float3	euler_rotation(float3 ray, float3 v);
 float3	rodrigues(float3 input, float3 v, float teta);

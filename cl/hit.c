@@ -7,11 +7,10 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 	cam_to_obj = mult_vect(ray, t);
 	dist = norme_carre(cam_to_obj);
 	
-	/*
+/*
 **			if (dist < 0.1)
 **				return (0);
 */
-
 	return (dist);
 }
 
