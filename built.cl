@@ -444,7 +444,6 @@ void	assign_intersect_norm_vect(t_obj obj, float t, float3 pos, float3 ray, stru
 	output->intersect = mult_vect(ray, output->t);
 	output->intersect = add_vect(output->intersect, pos);
 	output->norm = output->intersect; //c'est le vecteur d intersection si la position de lobjet vaut 0
-	output->intersect = add_vect(output->intersect, obj.pos);
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
@@ -472,7 +471,7 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 	}
 }
 
-				/*
+/*
 **						inverted_matrix[0][0] = 1;
 **						inverted_matrix[0][1] = 0;
 **						inverted_matrix[0][2] = 0;
@@ -486,7 +485,8 @@ void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_resul
 int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  struct s_result_hit *result_hit)
 {
 	float	dist;
-	float3	pos_translated;
+	float3	pos_transformed;
+	float3	ray_transformed;
 	float	t;
 	int	i = 0;
 	t_obj	obj;
@@ -500,7 +500,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	while (i < objs_number)
 	{
 			obj = objs[i];
-			pos_translated = sub_vect(cam_pos, obj.pos);
+			pos_transformed = sub_vect(cam_pos, obj.pos);
 		//	printf("scene.cam_pos %f, %f, %f", scene.cam_pos.x, scene.cam_pos.y, scene.cam_pos.z);
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
@@ -517,27 +517,34 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				invert_matrix(matrix, inverted_matrix);
 				
 				//debug_mat(inverted_matrix);
-				result_hit->ray = mat_mult_vect(inverted_matrix, ray);
-				pos_translated = mat_mult_vect(inverted_matrix, pos_translated);
+				pos_transformed = mat_mult_vect(inverted_matrix, pos_transformed);
+				ray_transformed = mat_mult_vect(inverted_matrix, ray);
+
 			}
 			else
-				result_hit->ray = ray;
-			t = calc_obj(&obj, pos_translated, result_hit->ray); //TODO objs est ds la stack de la fct
+				ray_transformed = ray;
+			t = calc_obj(&obj, pos_transformed, ray_transformed);
 			//printf("t %f", t );
-			dist = calc_dist(t, result_hit->ray, &obj);
+			dist = calc_dist(t, ray_transformed, &obj);
 			if (dist > 0.0001 && dist < result_hit->dist)
 			{
-		//	printf("dist %f", dist);
 				hit = 1;
 				result_hit->dist = dist;
 				result_hit->t = t;
 				result_hit->obj = obj;
-				assign_intersect_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
-				assign_norm_vect(obj, t, pos_translated, result_hit->ray, result_hit);
+				assign_intersect_norm_vect(obj, t, pos_transformed, ray_transformed, result_hit);
+				assign_norm_vect(obj, t, pos_transformed, ray_transformed, result_hit);
 				if (obj.type != PLAN && obj.type != SPHERE)
 				{
 					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
+	result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
 					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
+					result_hit->ray = mat_mult_vect(matrix, ray_transformed);
+				}
+				else
+				{
+					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->ray = ray;
 				}
 			}
 		i++;
@@ -639,6 +646,7 @@ int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, 
 	intensite_specular = 0;
 	intensite_diffuse = 0.3;
 
+	ray = result_hit->ray;
 	i = 0;
 	while (i < scene.lights_number)
 	{

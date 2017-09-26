@@ -91,6 +91,7 @@ int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, 
 	intensite_specular = 0;
 	intensite_diffuse = 0.3;
 
+	ray = result_hit->ray;
 	i = 0;
 	while (i < scene.lights_number)
 	{
