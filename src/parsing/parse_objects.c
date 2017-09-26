@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 21:50:50 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:08:51 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "libft.h"
 

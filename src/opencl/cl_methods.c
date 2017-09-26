@@ -6,12 +6,11 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 23:58:00 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -81,7 +80,6 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str,\
 	char	buffer[5000000];
 
 	err = 0;
-	ft_putstr_fd("cl_load_program_from_source enter\n", 2);
 	*program = clCreateProgramWithSource(cl->context, 1, (const char **)\
 			source_str, NULL, &err);
 	if (err || !*program)

@@ -6,14 +6,13 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 21:49:55 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "libft.h"
 #include <math.h>
-#include <stdio.h>
 
 float	calc_dist(float t, cl_float3 ray)
 {

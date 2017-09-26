@@ -6,12 +6,11 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 21:30:35 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:05:27 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:45 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -23,7 +22,6 @@
 #include "mlx.h"
 #include "rt.h"
 #include "libft.h"
-#include <stdio.h>
 #include "cl.h"
 
 void	calc_scene_set_arg(struct s_cl *cl, struct s_cl_args *cl_args,\
@@ -106,14 +104,6 @@ void	mlx(t_env *env)
 	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_mouse_hook(env->win, &mouse_event, NULL);
 	mlx_loop(env->mlx);
-}
-
-void	init_env_scene(t_env *env, t_scene scene)
-{
-	env->width = scene.width;
-	env->height = scene.height;
-	env->name = scene.name;
-	env->width_per_height = (float)env->width / (float)env->height;
 }
 
 int		main(int ac, char **av)

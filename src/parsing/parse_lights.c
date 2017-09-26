@@ -6,14 +6,13 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:44:31 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:04 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "libft.h"
 
@@ -28,7 +27,6 @@ size_t	get_light(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	if (lines[i].value[0])
 		fatal("bad light");
 	i++;
-	printf("origin\n");
 	if (ft_strequ(lines[i].key, "origin"))
 		new_light->pos = get_coordinates(new_light->pos, lines[i].value);
 	else

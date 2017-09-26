@@ -6,14 +6,13 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 21:47:52 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:08:51 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <stdio.h>
 #include "libft.h"
 
 void	parse_line(char *line, t_yaml *new)

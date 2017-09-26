@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:55:06 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "math.h"
 #include "stdlib.h"
 #include <mlx.h>
-#include <stdio.h>
 #include "libft.h"
 
 void	mv_forward(t_cam *cam)

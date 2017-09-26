@@ -6,13 +6,12 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:52:09 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 int		ft_key_pressed_rot(int keycode, t_env *cast)
 {
