@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 19:36:09 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:37:12 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:33:27 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ void	get_vecteur(t_obj *new, char *line)
 	new->dirx = normalize(new->dirx);
 	new->diry = normalize(new->diry);
 }
-

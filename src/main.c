@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/26 21:30:35 by vcombey           #+#    #+#             */
+/*   Updated: 2017/09/26 22:03:57 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,13 +28,12 @@
 
 int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 {
-	cl_program program;
-	char	*source_str;
-	int		i;
+	cl_program	program;
+	char		*source_str;
+	int			i;
 
 	i = 0;
 	cl->data_size = env->width * env->height * sizeof(int);
-	printf("envwidht %i envheight %i", env->width, env->height);
 	if (cl_init(cl))
 		exit(1);
 	if (file_to_str("./built.cl", &source_str))
@@ -33,13 +44,17 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 		exit(1);
 	if (cl_create_buffer(cl, CL_MEM_WRITE_ONLY, cl->data_size, &cl->output))
 		exit(1);
-	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->objs_size, &cl_args->objs_buffer))
+	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->objs_size,\
+				&cl_args->objs_buffer))
 		exit(1);
-	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->lights_size, &cl_args->lights_buffer))
+	if (cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->lights_size,\
+				&cl_args->lights_buffer))
 		exit(1);
-	if (cl_write_buffer(cl, cl_args->lights_buffer, cl_args->lights, cl_args->lights_size))
+	if (cl_write_buffer(cl, cl_args->lights_buffer, cl_args->lights,\
+				cl_args->lights_size))
 		exit(1);
-	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
+	if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs,\
+				cl_args->objs_size))
 		exit(1);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl_args->objs_buffer);
@@ -63,9 +78,9 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 
 int		recalc_scene(t_env *env)
 {
-	struct	s_cl *cl;
-	struct s_cl_args *cl_args;
-	int		i;
+	struct s_cl			*cl;
+	struct s_cl_args	*cl_args;
+	int					i;
 
 	i = 0;
 	cl = env->cl;
@@ -74,7 +89,8 @@ int		recalc_scene(t_env *env)
 	if (env->obj_has_changed)
 	{
 		env->obj_has_changed = 0;
-		if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs, cl_args->objs_size))
+		if (cl_write_buffer(cl, cl_args->objs_buffer, cl_args->objs,\
+					cl_args->objs_size))
 			exit(1);
 	}
 	cl_set_arg(cl->kernel, sizeof(cl_mem), &i, &cl->output);
@@ -98,6 +114,16 @@ int		recalc_scene(t_env *env)
 	return (EXIT_SUCCESS);
 }
 
+void	mlx(t_env *env)
+{
+	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
+	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
+	mlx_loop_hook(env->mlx, recalc_scene, env);
+	mlx_hook(env->win, 17, 1, &quit, NULL);
+	mlx_mouse_hook(env->win, &mouse_event, NULL);
+	mlx_loop(env->mlx);
+}
+
 int		main(int ac, char **av)
 {
 	t_env				*env;
@@ -106,7 +132,7 @@ int		main(int ac, char **av)
 	struct s_cl_args	cl_args;
 
 	if (ac != 2)
-		fatal ("usage: rt_v1 <filename>");
+		fatal("usage: rt_v1 <filename>");
 	init_scene(&scene);
 	env = singleton_env();
 	parse_file(av[1], &scene);
@@ -127,11 +153,6 @@ int		main(int ac, char **av)
 	recalc_img(env->scene);
 	init_norm_cam_dir(&scene.norm_vert, &scene.norm_hor, scene.cam.dir);
 	calc_scene(&cl, &cl_args, env);
-	mlx_hook(env->win, KEYPRESS, KEYPRESSMASK, &ft_key_pressed, env);
-	mlx_hook(env->win, KEYRELEA, KEYRELEAMASK, &ft_key_release, env);
-	mlx_loop_hook(env->mlx, recalc_scene, env);
-	mlx_hook(env->win, 17, 1, &quit, NULL);
-	mlx_mouse_hook(env->win, &mouse_event, NULL);
-	mlx_loop(env->mlx);
+	mlx(env);
 	return (0);
 }

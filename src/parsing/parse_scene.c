@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 18:02:43 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:50:25 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,8 @@ size_t	get_camera(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	{
 		if (ft_strequ(lines[i].key, "vecteur"))
 			scene->cam.dir = get_coordinates(scene->cam.dir, lines[i].value);
-		//printf("rotate\n");
-		//printf("origin\n");
 		if (ft_strequ(lines[i].key, "origin"))
 			scene->cam.pos = get_coordinates(scene->cam.pos, lines[i].value);
-		//printf("origin\n");
 		i++;
 	}
 	return (i);
@@ -87,13 +84,10 @@ void	parse_scene(t_yaml *lines, size_t len, t_scene *scene)
 	scene->lights_number = 0;
 	while (i < len)
 	{
-		//printf("tab: %zu, key: %s, value: %s\n", lines[i].tab, lines[i].key, lines[i].value);
 		k = 0;
-		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))
-		{
-		//	printf("key: %s\n", g_scene_func[k].key);
+		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key,\
+					lines[i].key))
 			k++;
-		}
 		if (g_scene_func[k].f == NULL)
 			fatal("bad scene content");
 		i = g_scene_func[k].f(lines, i, scene, len);

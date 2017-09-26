@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:37:25 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:50:50 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	new = &scene->objs[scene->objs_number];
-	printf("sphere\n");
 	new->type = SPHERE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -42,7 +41,6 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
-		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
@@ -65,7 +63,6 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	new = &scene->objs[scene->objs_number];
-	printf("plan\n");
 	new->type = PLAN;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -73,7 +70,6 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
-		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
@@ -94,7 +90,6 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	new = &scene->objs[scene->objs_number];
-	printf("cylindre\n");
 	new->type = CYLINDRE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -102,7 +97,6 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
-		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
@@ -125,7 +119,6 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 
 	(void)len;
 	new = &scene->objs[scene->objs_number];
-	printf("cone\n");
 	new->type = CONE;
 	tab = lines[i].tab;
 	if (lines[i].value[0])
@@ -133,7 +126,6 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	i++;
 	while (i < len && lines[i].tab == tab + 1)
 	{
-		printf("\tpropriety: %s\n", lines[i].key);
 		if (ft_strequ(lines[i].key, "origin"))
 			new->pos = get_coordinates(new->pos, lines[i].value);
 		else if (ft_strequ(lines[i].key, "vecteur"))
@@ -152,7 +144,7 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t		k;
-	size_t	tab;
+	size_t		tab;
 
 	tab = lines[i].tab;
 	if (lines[i].value[0])

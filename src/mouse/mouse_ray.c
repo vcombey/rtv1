@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 20:47:39 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:49:55 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,15 @@ int		hit(t_scene *scene, cl_float3 cam_pos, cl_float3 ray,\
 		ray_transformed = ray;
 		if (obj.type != PLAN && obj.type != SPHERE)
 			change_repere(obj, &pos_transformed, &ray_transformed);
-		if ((hit = hit_calc_dist(obj, pos_transformed, ray_transformed, result_hit)) == 1)
+		if ((hit = hit_calc_dist(obj, pos_transformed, ray_transformed,\
+						result_hit)) == 1)
 			result_hit->indice = i;
 		i++;
 	}
 	return (result_hit->dist != 10000.0);
 }
 
-int	mouse_event(int button, int x, int y)
+int		mouse_event(int button, int x, int y)
 {
 	cl_float3			ray;
 	float				coef;
@@ -93,9 +94,7 @@ int	mouse_event(int button, int x, int y)
 	{
 		env = singleton_env();
 		cam_dir = env->scene->cam.dir;
-		ray.x = cam_dir.x;
-		ray.y = cam_dir.y;
-		ray.z = cam_dir.z;
+		ray = add_vect(cam_dir, (cl_float3){.x = 0, .y = 0, .z = 0});
 		ray = normalize(ray);
 		coef = (((float)y - ((float)env->height / 2)) /\
 				((float)env->height / 2)) * 0.3;

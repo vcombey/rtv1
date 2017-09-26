@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:44:29 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:44:03 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			ft_str_is_clear(char *str)
 	return (1);
 }
 
-cl_float3	get_coordinates(cl_float3	res, char *value)
+cl_float3	get_coordinates(cl_float3 res, char *value)
 {
 	char	*coord;
 
