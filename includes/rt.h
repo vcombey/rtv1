@@ -4,6 +4,7 @@
 #include <string.h>
 #include <mlx.h>
 #include <OpenCL/opencl.h>
+#define TETA_ROT 0.1
 
 typedef struct		s_point
 {

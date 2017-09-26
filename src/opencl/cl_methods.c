@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:44:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:57:27 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@ int		cl_init(struct s_cl *cl)
 	err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &cl->device_id, NULL);
 	if (err != CL_SUCCESS)
 	{
-		printf("Error: Failed to create a device group!\n");
+		ft_putstr_fd("Error: Failed to create a device group!\n", 2);
 		return (EXIT_FAILURE);
 	}
 	cl->context = clCreateContext(0, 1, &cl->device_id, NULL, NULL, &err);
 	if (!cl->context)
 	{
-		printf("Error: Failed to create a compute context!\n");
+		ft_putstr_fd("Error: Failed to create a compute context!\n", 2);
 		return (EXIT_FAILURE);
 	}
 	cl->commands = clCreateCommandQueue(cl->context, cl->device_id, 0, &err);
 	if (!cl->commands)
 	{
-		printf("Error: Failed to create a command commands!\n");
+		ft_putstr_fd("Error: Failed to create a command commands!\n", 2);
 		return (EXIT_FAILURE);
 	}
-	//printf("Init ok\n");
+	//ft_putstr_fd("Init ok\n", 2);
 	return (EXIT_SUCCESS);
 }
 
@@ -60,18 +60,18 @@ int		file_to_str(char *filename, char **source_str)
 	fp = fopen(filename, "r");
 	if (!fp)
 	{
-		fprintf(stderr, "Failed to load kernel.\n");
+		ft_putstr_fd("Failed to load kernel.\n", 2);
 		exit(1);
 	}
 	*source_str = ft_strnew(max_source_size);
 	source_size = fread(*source_str, 1, max_source_size, fp);
 	if (source_size == 0)
 	{
-		fprintf(stderr, "fread failed.\n");
+		ft_putstr_fd("fread failed.\n", 2);
 		exit(1);
 	}
 	fclose(fp);
-	//printf("File_to_str ok\n");
+	//ft_putstr_fd("File_to_str ok\n", 2);
 	return (EXIT_SUCCESS);
 }
 
@@ -83,24 +83,24 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str,\
 	char	buffer[5000000];
 
 	err = 0;
-	printf("cl_load_program_from_source enter\n");
+	ft_putstr_fd("cl_load_program_from_source enter\n", 2);
 	*program = clCreateProgramWithSource(cl->context, 1, (const char **)\
 			source_str, NULL, &err);
 	if (err || !*program)
 	{
-		printf("Error: Failed to create compute program!\n");
+		ft_putstr_fd("Error: Failed to create compute program!\n", 2);
 		return (EXIT_FAILURE);
 	}
 	err = clBuildProgram(*program, 0, NULL, NULL, NULL, NULL);
 	if (err != CL_SUCCESS)
 	{
-		fprintf(stderr, "Error: Failed to build program executable!%d\n", err);
+		ft_putstr_fd("Error: Failed to build program executable!\n", 2);
 		clGetProgramBuildInfo(*program, cl->device_id, CL_PROGRAM_BUILD_LOG,\
 				sizeof(buffer), buffer, &len);
-		fprintf(stderr, "%s\n", buffer);
+		ft_putstr_fd(buffer, 2);
 		exit(1);
 	}
-	//printf("cl_load_program_from_source ok\n");
+	//ft_putstr_fd("cl_load_program_from_source ok\n", 2);
 	return (EXIT_SUCCESS);
 }
 
@@ -113,9 +113,9 @@ int		cl_create_kernel_from_program(cl_program program, char *func_name,\
 	*kernel = clCreateKernel(program, func_name, &err);
 	if (!*kernel || err != CL_SUCCESS)
 	{
-		printf("Error: Failed to create compute kernel! \n");
+		ft_putstr_fd("Error: Failed to create compute kernel! \n", 2);
 		exit(1);
 	}
-	//printf("cl_create_kernel_from_program ok\n");
+	//ft_putstr_fd("cl_create_kernel_from_program ok\n", 2);
 	return (EXIT_SUCCESS);
 }

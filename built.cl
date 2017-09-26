@@ -264,8 +264,8 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray.z += -coef * norm_vert.z;
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray.y += coef * norm_hor.y;
-	ray.x += coef * norm_hor.x;
+	ray.y -= coef * norm_hor.y;
+	ray.x -= coef * norm_hor.x;
 	ray = NORMALIZE(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);
