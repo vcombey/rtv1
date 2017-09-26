@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 17:26:48 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 18:19:47 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ int		mouse_event(int button, int x, int y)
 		ray.z += -coef * env->scene->norm_vert.z;
 		coef = (((float)x - ((float)env->width / 2)) /\
 				((float)env->width / 2)) * 0.3 * env->width_per_height;
-		ray.y += coef * env->scene->norm_hor.y;
-		ray.x += coef * env->scene->norm_hor.x;
+		ray.y -= coef * env->scene->norm_hor.y;
+		ray.x -= coef * env->scene->norm_hor.x;
 		ray = normalize(ray);
 		if (hit(env->scene->objs, env->scene->objs_number,\
 					env->scene->cam.pos, ray, &result_hit))
