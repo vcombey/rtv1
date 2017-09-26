@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/25 13:47:25 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/26 16:59:05 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC =	main.c			\
 		opencl/cl_methods.c \
 		opencl/cl_methods2.c	\
 		mouse/mouse_ray.c \
+		mouse/matrix.c \
 		mouse/opp_double.c \
 		mouse/opp_double_vect.c \
 		mouse/opp_vect.c \

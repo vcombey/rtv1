@@ -172,7 +172,7 @@ float3	mat_mult_vect(float a[3][3], float3 v);
 float3	calc_rotation_figure(float3 ray, float3 v);
 float3	euler_rotation(float3 ray, float3 v);
 float3	rodrigues(float3 input, float3 v, float teta);
-int		invert_matrix(float matrix[3][3], float inverted_matrix[3][3]);
+int		invert_matrix(float m[3][3], float inv_m[3][3]);
 void	set_rotation_matrix(float matrix[3][3], float3 vx, float3 vy, float3 vz);
 void	debug_mat(float matrix[3][3]);
 #endif

@@ -172,7 +172,7 @@ float3	mat_mult_vect(float a[3][3], float3 v);
 float3	calc_rotation_figure(float3 ray, float3 v);
 float3	euler_rotation(float3 ray, float3 v);
 float3	rodrigues(float3 input, float3 v, float teta);
-int		invert_matrix(float matrix[3][3], float inverted_matrix[3][3]);
+int		invert_matrix(float m[3][3], float inv_m[3][3]);
 void	set_rotation_matrix(float matrix[3][3], float3 vx, float3 vy, float3 vz);
 void	debug_mat(float matrix[3][3]);
 #endif
@@ -875,26 +875,27 @@ float3	rodrigues(float3 input, float3 v, float teta)
 	return (res);
 }
 
-int		invert_matrix(float matrix[3][3], float inverted_matrix[3][3])
+int		invert_matrix(float m[3][3], float inv_m[3][3])
 {
 	float	det;
 
-	det = matrix[0][0] * (matrix[1][4%3] * matrix[2][8%6] - matrix[2][7%6] * matrix[1][5%3])
-		- matrix[0][1] * (matrix[1][3%3] * matrix[2][8%6] - matrix[2][6%6] * matrix[1][5%3])
-		+ matrix[0][2] * (matrix[1][3%3] * matrix[2][7%6] - matrix[2][6%6] * matrix[1][4%3]);
-	if (fabs(det) < 0.0005)
+	det = m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
+		- m[0][1] * (m[1][0] * m[2][2] - m[2][0] * m[1][2])
+		+ m[0][2] * (m[1][0] * m[2][1] - m[2][0] * m[1][1]);
+	if (fabsf(det) < 0.0005)
 		return (0);
-	inverted_matrix[0][0] = matrix[1][4%3] * matrix[2][8%6] - matrix[1][5%3] * matrix[2][7%6] / det;
-	inverted_matrix[0][1] = -(matrix[0][1] * matrix[2][8%6] - matrix[2][7%6] * matrix[0][2]) / det;
-	inverted_matrix[0][2] = matrix[0][1] * matrix[1][5%3] - matrix[1][4%3] * matrix[0][2] / det;
-	inverted_matrix[1][3%3] = -(matrix[1][3%3] * matrix[2][8%6] - matrix[1][5%3] * matrix[2][6%6]) / det;
-	inverted_matrix[1][4%3] = matrix[0][0] * matrix[2][8%6] - matrix[2][6%6] * matrix[0][2] / det;
-	inverted_matrix[1][5%3] = -(matrix[0][0] * matrix[1][5%3] - matrix[1][3%3] * matrix[0][2]) / det;
-	inverted_matrix[2][6%6] = matrix[1][3%3] * matrix[2][7%6] - matrix[2][6%6] * matrix[1][4%3] / det;
-	inverted_matrix[2][7%6] = -(matrix[0][0] * matrix[2][7%6] - matrix[2][6%6] * matrix[0][1]) / det;
-	inverted_matrix[2][8%6] = matrix[0][0] * matrix[1][4%3] - matrix[0][1] * matrix[1][3%3] / det;
+	inv_m[0][0] = m[1][1] * m[2][2] - m[1][2] * m[2][1] / det;
+	inv_m[0][1] = -(m[0][1] * m[2][2] - m[2][1] * m[0][2]) / det;
+	inv_m[0][2] = m[0][1] * m[1][2] - m[1][1] * m[0][2] / det;
+	inv_m[1][0] = -(m[1][0] * m[2][2] - m[1][2] * m[2][0]) / det;
+	inv_m[1][1] = m[0][0] * m[2][2] - m[2][0] * m[0][2] / det;
+	inv_m[1][2] = -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) / det;
+	inv_m[2][0] = m[1][0] * m[2][1] - m[2][0] * m[1][1] / det;
+	inv_m[2][1] = -(m[0][0] * m[2][1] - m[2][0] * m[0][1]) / det;
+	inv_m[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0] / det;
 	return (1);
 }
+
 
 void	set_rotation_matrix(float matrix[3][3], float3 vx, float3 vy, float3 vz)
 {
