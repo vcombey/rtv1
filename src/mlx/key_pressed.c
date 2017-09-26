@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 17:49:06 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 18:33:15 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ int		ft_key_pressed(int keycode, void *env)
 		cast->up = 1;
 	if (keycode == KEY_DOWN)
 		cast->down = 1;
+	if (keycode == KEY_SPACE)
+		cast->forward = 1;
+	if (keycode == KEY_B)
+		cast->backward = 1;
 	if (keycode == KEY_RIGHT)
 		cast->right = 1;
 	if (keycode == KEY_LEFT)
@@ -92,6 +96,10 @@ int		ft_key_release(int keycode, void *env)
 		cast->up = 0;
 	if (keycode == KEY_DOWN)
 		cast->down = 0;
+	if (keycode == KEY_SPACE)
+		cast->forward = 0;
+	if (keycode == KEY_B)
+		cast->backward = 0;
 	if (keycode == KEY_RIGHT)
 		cast->right = 0;
 	if (keycode == KEY_LEFT)

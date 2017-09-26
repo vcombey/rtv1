@@ -67,6 +67,8 @@ typedef struct		s_env
 	int				height;
 	size_t			up;
 	size_t			down;
+	size_t			forward;
+	size_t			backward;
 	size_t			right;
 	size_t			left;
 	size_t			key_shift_left;
@@ -120,6 +122,7 @@ typedef struct	s_func
 # define KEY_RIGHT 124
 # define KEY_UP 126
 # define KEY_B 11
+# define KEY_SPACE 49
 # define KEY_PAD_SUB 78
 # define KEY_PAD_ADD 69
 # define KEY_R 15
@@ -203,4 +206,5 @@ void	set_rotation_matrix(float m[3][3], cl_float3 vx, cl_float3 vy, cl_float3 vz
 int		invert_matrix(float m[3][3], float inv_m[3][3]);
 cl_float3	mat_mult_vect(float a[3][3], cl_float3 v);
 float	ft_min_positiv(float a, float b);
+cl_float3	rodrigues(cl_float3 input, cl_float3 v, float teta);
 #endif

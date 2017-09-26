@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 18:04:36 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 18:34:43 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,23 @@
 #include "libft.h"
 #define TETA 0.02
 
-void	mv_up(t_cam *cam)
+void	mv_up(t_cam *cam, t_scene *scene)
+{
+	cam->dir = rodrigues(cam->dir, scene->norm_hor, -TETA);
+}
+
+void	mv_down(t_cam *cam, t_scene *scene)
+{
+	cam->dir = rodrigues(cam->dir, scene->norm_hor, TETA);
+}
+
+void	mv_forward(t_cam *cam)
 {
 	cam->pos.x += cam->dir.x * 0.4;
 	cam->pos.y += cam->dir.y * 0.4;
 }
 
-void	mv_down(t_cam *cam)
+void	mv_backward(t_cam *cam)
 {
 	cam->pos.x -= cam->dir.x * 0.4;
 	cam->pos.y -= cam->dir.y * 0.4;
@@ -71,9 +81,13 @@ int			recalc_img(void *scene)
 	s = (t_scene *)scene;
 	env = singleton_env();
 	if (env->up)
-		mv_up(&s->cam);
+		mv_up(&s->cam, s);
 	if (env->down)
-		mv_down(&s->cam);
+		mv_down(&s->cam, s);
+	if (env->forward)
+		mv_forward(&s->cam);
+	if (env->backward)
+		mv_backward(&s->cam);
 	if (env->left)
 		rot_right(&s->cam);
 	if (env->right)
