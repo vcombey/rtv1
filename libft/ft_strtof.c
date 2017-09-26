@@ -1,7 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtof.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/27 00:13:40 by vcombey           #+#    #+#             */
+/*   Updated: 2017/09/27 00:14:48 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static float	ft_strtof_get_number(char *str, char **end_ptr, float r)
 {
+	float	dec_exp;
+
+	dec_exp = 1;
 	while (*str && ft_isdigit(*str))
 	{
 		r = r * 10 + *str - '0';
@@ -10,8 +25,6 @@ static float	ft_strtof_get_number(char *str, char **end_ptr, float r)
 	if (*str == '.')
 	{
 		str++;
-		float	dec_exp;
-		dec_exp = 1;
 		while (*str && ft_isdigit(*str))
 		{
 			dec_exp = dec_exp / 10;
@@ -23,10 +36,10 @@ static float	ft_strtof_get_number(char *str, char **end_ptr, float r)
 	return (r);
 }
 
-int		ft_strtof(char *str, char **end_ptr, float *res)
+int				ft_strtof(char *str, char **end_ptr, float *res)
 {
-	float r;
-	int neg;
+	float	r;
+	int		neg;
 
 	r = 0;
 	neg = 1;
@@ -44,4 +57,3 @@ int		ft_strtof(char *str, char **end_ptr, float *res)
 	*res = r * neg;
 	return (1);
 }
-
