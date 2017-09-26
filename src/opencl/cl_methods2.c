@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 21:04:21 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 23:58:22 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 	if (err)
 	{
 		ft_putstr_fd("Error: Failed to execute kernel!\n", 2);
-		return (EXIT_FAILURE);
+		exit(1);
 	}
 	clFinish(cl->commands);
 	return (EXIT_SUCCESS);

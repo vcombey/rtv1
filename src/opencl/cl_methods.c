@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 21:04:09 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 23:58:00 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ int		cl_init(struct s_cl *cl)
 	if (err != CL_SUCCESS)
 	{
 		ft_putstr_fd("Error: Failed to create a device group!\n", 2);
-		return (EXIT_FAILURE);
+		exit(1);
 	}
 	cl->context = clCreateContext(0, 1, &cl->device_id, NULL, NULL, &err);
 	if (!cl->context)
 	{
 		ft_putstr_fd("Error: Failed to create a compute context!\n", 2);
-		return (EXIT_FAILURE);
+		exit(1);
 	}
 	cl->commands = clCreateCommandQueue(cl->context, cl->device_id, 0, &err);
 	if (!cl->commands)
 	{
 		ft_putstr_fd("Error: Failed to create a command commands!\n", 2);
-		return (EXIT_FAILURE);
+		exit(1);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -87,7 +87,7 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str,\
 	if (err || !*program)
 	{
 		ft_putstr_fd("Error: Failed to create compute program!\n", 2);
-		return (EXIT_FAILURE);
+		exit(1);
 	}
 	err = clBuildProgram(*program, 0, NULL, NULL, NULL, NULL);
 	if (err != CL_SUCCESS)

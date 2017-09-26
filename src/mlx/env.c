@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 14:53:28 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:07:05 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ void	init_cam(t_scene *scene)
 
 int		init_env(t_env *env)
 {
+	env->width = env->scene->width;
+	env->height = env->scene->height;
+	env->name = env->scene->name;
+	env->width_per_height = (float)env->width / (float)env->height;
 	env->win = NULL;
 	env->img = NULL;
 	env->mlx = NULL;
