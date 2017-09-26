@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 17:57:27 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:04:09 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,32 +46,30 @@ int		cl_init(struct s_cl *cl)
 		ft_putstr_fd("Error: Failed to create a command commands!\n", 2);
 		return (EXIT_FAILURE);
 	}
-	//ft_putstr_fd("Init ok\n", 2);
 	return (EXIT_SUCCESS);
 }
 
 int		file_to_str(char *filename, char **source_str)
 {
 	size_t	max_source_size;
-	FILE	*fp;
+	int		fd;
 	size_t	source_size;
 
 	max_source_size = 50000;
-	fp = fopen(filename, "r");
-	if (!fp)
+	fd = open(filename, O_RDONLY);
+	if (!fd)
 	{
-		ft_putstr_fd("Failed to load kernel.\n", 2);
+		ft_putstr_fd("open failed.\n", 2);
 		exit(1);
 	}
 	*source_str = ft_strnew(max_source_size);
-	source_size = fread(*source_str, 1, max_source_size, fp);
+	source_size = read(fd, *source_str, max_source_size);
 	if (source_size == 0)
 	{
-		ft_putstr_fd("fread failed.\n", 2);
+		ft_putstr_fd("read failed.\n", 2);
 		exit(1);
 	}
-	fclose(fp);
-	//ft_putstr_fd("File_to_str ok\n", 2);
+	close(fd);
 	return (EXIT_SUCCESS);
 }
 
@@ -100,7 +98,6 @@ int		cl_load_program_from_source(struct s_cl *cl, char **source_str,\
 		ft_putstr_fd(buffer, 2);
 		exit(1);
 	}
-	//ft_putstr_fd("cl_load_program_from_source ok\n", 2);
 	return (EXIT_SUCCESS);
 }
 
@@ -116,6 +113,5 @@ int		cl_create_kernel_from_program(cl_program program, char *func_name,\
 		ft_putstr_fd("Error: Failed to create compute kernel! \n", 2);
 		exit(1);
 	}
-	//ft_putstr_fd("cl_create_kernel_from_program ok\n", 2);
 	return (EXIT_SUCCESS);
 }

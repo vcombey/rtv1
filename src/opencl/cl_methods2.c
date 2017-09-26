@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 17:56:39 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 21:04:21 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size,\
 		ft_putstr_fd("Error: Failed to allocate device memory!\n", 2);
 		exit(1);
 	}
-	//ft_putstr_fd("cl_create_buffer ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -49,7 +48,6 @@ int		cl_write_buffer(struct s_cl *cl, cl_mem buffer, void *data,\
 		ft_putstr_fd("Error: Failed to write to source array!\n", 2);
 		exit(1);
 	}
-	//ft_putstr_fd("write buffer ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -67,7 +65,6 @@ int		cl_set_arg(cl_kernel kernel, size_t size, int *i, void *ptr)
 		ft_putstr_fd("Error: Failed to set kernel arguments! %d\n", 2);
 		exit(1);
 	}
-	//ft_putstr_fd("cl_set_arg ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -91,7 +88,6 @@ int		cl_exec(struct s_cl *cl, size_t global, cl_kernel kernel)
 		return (EXIT_FAILURE);
 	}
 	clFinish(cl->commands);
-	//ft_putstr_fd("cl_exec ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -108,6 +104,5 @@ int		cl_read_results(struct s_cl *cl, cl_mem output, size_t output_size,\
 		ft_putstr_fd("Error: Failed to read output array! \n", 2);
 		exit(1);
 	}
-	//ft_putstr_fd("cl_read_results ok\n");
 	return (EXIT_SUCCESS);
 }

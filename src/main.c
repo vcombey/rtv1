@@ -100,10 +100,10 @@ int		recalc_scene(t_env *env)
 
 int		main(int ac, char **av)
 {
-	t_env		*env;
-	t_scene		scene;
-	struct s_cl cl;
-	struct s_cl_args cl_args;
+	t_env				*env;
+	t_scene				scene;
+	struct s_cl			cl;
+	struct s_cl_args	cl_args;
 
 	if (ac != 2)
 		fatal ("usage: rt_v1 <filename>");
@@ -116,9 +116,9 @@ int		main(int ac, char **av)
 	env->width_per_height = (float)env->width / (float)env->height;
 	init_env(env);
 	ft_bzero(&cl, sizeof(struct s_cl));
+	ft_bzero(&cl_args, sizeof(struct s_cl));
 	env->cl = &cl;
 	env->scene = &scene;
-	env->cl_args = &cl_args;
 	cl_args.objs = scene.objs;
 	cl_args.lights = scene.lights;
 	cl_args.objs_size = scene.objs_number * (sizeof(t_obj) + 1);
@@ -133,12 +133,5 @@ int		main(int ac, char **av)
 	mlx_hook(env->win, 17, 1, &quit, NULL);
 	mlx_mouse_hook(env->win, &mouse_event, NULL);
 	mlx_loop(env->mlx);
-	/*
-		clReleaseMemObject(output);
-		clReleaseProgram(program);
-		clReleaseKernel(kernel);
-		clReleaseCommandQueue(commands);
-		clReleaseContext(context);
-	*/
 	return (0);
 }
