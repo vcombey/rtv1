@@ -5,6 +5,7 @@
 #include <mlx.h>
 #include <OpenCL/opencl.h>
 #define TETA_ROT 0.1
+#define TETA 0.02
 
 typedef struct		s_point
 {
@@ -207,4 +208,8 @@ int		invert_matrix(float m[3][3], float inv_m[3][3]);
 cl_float3	mat_mult_vect(float a[3][3], cl_float3 v);
 float	ft_min_positiv(float a, float b);
 cl_float3	rodrigues(cl_float3 input, cl_float3 v, float teta);
+void	move_arows(t_env *env, t_scene *s);
+void	get_vecteur(t_obj *new, char *line);
+void	rot_obj(t_env *env, t_scene *s, cl_float3 (f_rot)(cl_float3, float),\
+		int sign_rot);
 #endif

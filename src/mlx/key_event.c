@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 18:34:43 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 19:55:06 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,6 @@
 #include <mlx.h>
 #include <stdio.h>
 #include "libft.h"
-#define TETA 0.02
-
-void	mv_up(t_cam *cam, t_scene *scene)
-{
-	cam->dir = rodrigues(cam->dir, scene->norm_hor, -TETA);
-}
-
-void	mv_down(t_cam *cam, t_scene *scene)
-{
-	cam->dir = rodrigues(cam->dir, scene->norm_hor, TETA);
-}
 
 void	mv_forward(t_cam *cam)
 {
@@ -40,58 +29,30 @@ void	mv_backward(t_cam *cam)
 	cam->pos.y -= cam->dir.y * 0.4;
 }
 
-void	rot_right(t_cam *cam)
-{
-	cam->dir = rot(cam->dir, TETA);
-}
-
-void	rot_left(t_cam *cam)
-{
-	cam->dir = rot(cam->dir, -TETA);
-}
-
-static void	rot_arround_left(t_cam *cam)
+void	rot_arround_left(t_cam *cam)
 {
 	cam->pos = rot(cam->pos, -TETA * 3);
 	cam->dir = rot(cam->dir, -TETA * 3);
 }
 
-static void	rot_arround_right(t_cam *cam)
+void	rot_arround_right(t_cam *cam)
 {
 	cam->pos = rot(cam->pos, TETA * 3);
 	cam->dir = rot(cam->dir, TETA * 3);
 }
 
-void	rot_obj(t_env *env, t_scene *s, cl_float3 (f_rot)(cl_float3, float), int sign_rot)
-{
-	s->objs[env->indice_obj].dirx = f_rot(s->objs[env->indice_obj].dirx, \
-			TETA_ROT * sign_rot);
-	s->objs[env->indice_obj].diry = f_rot(s->objs[env->indice_obj].diry, \
-			TETA_ROT * sign_rot);
-	s->objs[env->indice_obj].dirz = f_rot(s->objs[env->indice_obj].dirz, \
-			TETA_ROT * sign_rot);
-	env->obj_has_changed = 1;
-}
-
-int			recalc_img(void *scene)
+int		recalc_img(void *scene)
 {
 	t_env	*env;
 	t_scene	*s;
 
 	s = (t_scene *)scene;
 	env = singleton_env();
-	if (env->up)
-		mv_up(&s->cam, s);
-	if (env->down)
-		mv_down(&s->cam, s);
+	move_arows(env, s);
 	if (env->forward)
 		mv_forward(&s->cam);
 	if (env->backward)
 		mv_backward(&s->cam);
-	if (env->left)
-		rot_right(&s->cam);
-	if (env->right)
-		rot_left(&s->cam);
 	if (env->key_r)
 		rot_arround_left(&s->cam);
 	if (env->key_t)

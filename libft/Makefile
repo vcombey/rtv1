@@ -6,7 +6,7 @@
 #    By: vcombey <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/09 16:54:16 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/05 04:05:09 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/26 19:44:22 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ NAME = libft.a
 SRC = ft_dtoa.c \
 	ft_mem{alloc,ccpy,chr,cmp,cpy,del,move,set}.c \
 	ft_bzero.c \
+	ft_strtof.c \
 	fatal.c \
 	ft_strlcat.c \
 	ft_strnew.c \

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 18:33:15 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 19:52:09 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int		ft_key_pressed(int keycode, void *env)
 {
 	t_env	*cast;
 
-	printf("\n%d\n", keycode);
 	cast = (t_env *)env;
 	if (keycode == 13)
 		cast->rot_right = 1;
@@ -85,6 +84,7 @@ int		ft_key_release_rot(int keycode, t_env *cast)
 		cast->rotz = 0;
 	return (0);
 }
+
 int		ft_key_release(int keycode, void *env)
 {
 	t_env	*cast;

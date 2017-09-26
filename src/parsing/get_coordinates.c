@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 14:35:17 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 19:44:29 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,47 +28,6 @@ int			ft_str_is_clear(char *str)
 			return (0);
 		i++;
 	}
-	return (1);
-}
-
-int		ft_strtof(char *str, char **end_ptr, float *res)
-{
-	float r;
-	int i;
-	int neg;
-
-	r = 0;
-	i = 0;
-	neg = 1;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			neg *= -1;
-		i++;
-	}
-		if (!(ft_isdigit(str[i])))
-			return (0);
-	while (str[i] && ft_isdigit(str[i]))
-	{
-		r = r * 10 + str[i] - '0';
-		i++;
-	}
-	if (str[i] == '.')
-	{
-		i++;
-		float	dec_exp;
-		dec_exp = 1;
-		while (str[i] && ft_isdigit(str[i]))
-		{
-			dec_exp = dec_exp / 10;
-			r += (str[i] - '0') * dec_exp;
-			i++;
-		}
-	}
-	*end_ptr = str + i;
-	*res = r * neg;
 	return (1);
 }
 

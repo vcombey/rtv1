@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:32:58 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 19:37:25 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,6 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	return (i);
 }
 
-void	get_vecteur(t_obj *new, char *line)
-{
-	new->dirz = get_coordinates(new->dirz, line);
-	if (new->dirz.x == 0 && new->dirz.y == 0)
-	{
-		new->dirx = (cl_float3){.x = 1, .y = 0, .z = 0};
-		new->diry = (cl_float3){.x = 0, .y = 1, .z = 0};
-		return ;
-	}
-	new->dirx = rot(new->dirz, M_PI / 2);
-	new->dirx.z = 0;
-	new->dirz = normalize(new->dirz);
-	new->diry = vectorial_product(new->dirz, new->dirx);
-	new->dirx = normalize(new->dirx);
-	new->diry = normalize(new->diry);
-}
-
 size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 {
 	size_t	tab;
@@ -180,7 +163,8 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	while (i < len && lines[i].tab == tab + 1)
 	{
 		k = 0;
-		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key, lines[i].key))
+		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key,\
+					lines[i].key))
 			k++;
 		if (g_scene_func[k].f == NULL)
 			fatal("invalid object name");

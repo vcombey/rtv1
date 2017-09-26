@@ -6,7 +6,7 @@
 #    By: vcombey <vcombey@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/30 19:59:01 by vcombey           #+#    #+#              #
-#    Updated: 2017/09/26 18:04:53 by vcombey          ###   ########.fr        #
+#    Updated: 2017/09/26 19:55:02 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ NAME =	rtv1
 
 SRC =	main.c			\
 		mlx/key_pressed.c	\
+		mlx/move_arrows.c	\
+		mlx/rot_obj.c	\
 		mlx/key_event.c	\
 		mlx/env.c			\
 		parsing/parse_lights.c	\

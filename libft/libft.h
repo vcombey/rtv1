@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 03:06:17 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/05 04:04:56 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 19:43:55 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ void				ft_str_capitalize(char *s);
 char				*ft_uitoa_base(uintmax_t value, int base);
 void				ft_putnstr(char *str, size_t len);
 size_t				ft_strchri(char *str, char c);
+int					ft_strtof(char *str, char **end_ptr, float *res);
 
 #endif

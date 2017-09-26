@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 18:19:47 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 20:33:10 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,52 +25,60 @@ float	calc_dist(float t, cl_float3 ray)
 	return (dist);
 }
 
-int		hit(t_obj *objs, int objs_number, cl_float3 cam_pos, cl_float3 ray,\
-		struct s_result_hit *result_hit)
+void	change_repere(t_obj obj, cl_float3 *pos_transformed,\
+		cl_float3 *ray_transformed)
 {
-	float		dist;
-	cl_float3	pos_transformed;
-	cl_float3	ray_transformed;
-	float		t;
-	int			i;
-	t_obj		obj;
-	int			hit;
 	float		matrix[3][3];
 	float		inverted_matrix[3][3];
 
+	set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
+	invert_matrix(matrix, inverted_matrix);
+	*pos_transformed = mat_mult_vect(inverted_matrix, *pos_transformed);
+	*ray_transformed = mat_mult_vect(inverted_matrix, *ray_transformed);
+}
+
+int		hit_calc_dist(t_obj obj, cl_float3 pos_transformed,\
+		cl_float3 ray_transformed, struct s_result_hit *result_hit)
+{
+	float		t;
+	float		dist;
+
+	t = calc_obj(&obj, pos_transformed, ray_transformed);
+	if (t < 0.001)
+		t = 0;
+	dist = calc_dist(t, ray_transformed);
+	if (dist > 0.0001 && dist < result_hit->dist)
+	{
+		result_hit->dist = dist;
+		return (1);
+	}
+	return (0);
+}
+
+int		hit(t_scene *scene, cl_float3 cam_pos, cl_float3 ray,\
+		struct s_result_hit *result_hit)
+{
+	cl_float3	pos_transformed;
+	cl_float3	ray_transformed;
+	int			i;
+	t_obj		obj;
+	int			hit;
+
 	i = 0;
 	hit = 0;
-	result_hit->dist = 1000.0;
-	while (i < objs_number)
+	result_hit->dist = 10000.0;
+	while (i < scene->objs_number)
 	{
-		obj = objs[i];
+		obj = scene->objs[i];
 		pos_transformed = sub_vect(cam_pos, obj.pos);
+		ray_transformed = ray;
 		if (obj.type != PLAN && obj.type != SPHERE)
-		{
-			set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
-			invert_matrix(matrix, inverted_matrix);
-			pos_transformed = mat_mult_vect(inverted_matrix, pos_transformed);
-			ray_transformed = mat_mult_vect(inverted_matrix, ray);
-		}
-		else
-			ray_transformed = ray;
-		t = calc_obj(&obj, pos_transformed, ray_transformed);
-		if (t < 0.001)
-			t = 0;
-		dist = calc_dist(t, ray);
-		if (dist > 0.0001 && dist < result_hit->dist)
-		{
-			hit = 1;
-			result_hit->dist = dist;
+			change_repere(obj, &pos_transformed, &ray_transformed);
+		if ((hit = hit_calc_dist(obj, pos_transformed, ray_transformed, result_hit)) == 1)
 			result_hit->indice = i;
-			result_hit->t = t;
-			result_hit->obj = obj;
-		}
 		i++;
 	}
-	if (!hit)
-		return (0);
-	return (1);
+	return (hit);
 }
 
 int		mouse_event(int button, int x, int y)
@@ -97,8 +105,7 @@ int		mouse_event(int button, int x, int y)
 		ray.y -= coef * env->scene->norm_hor.y;
 		ray.x -= coef * env->scene->norm_hor.x;
 		ray = normalize(ray);
-		if (hit(env->scene->objs, env->scene->objs_number,\
-					env->scene->cam.pos, ray, &result_hit))
+		if (hit(env->scene, env->scene->cam.pos, ray, &result_hit))
 			env->indice_obj = result_hit.indice;
 	}
 	return (1);
