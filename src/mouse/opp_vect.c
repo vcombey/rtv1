@@ -6,12 +6,13 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 13:44:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:03:52 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-cl_float3	mult_vect( cl_float3 v, float t)
+
+cl_float3	mult_vect(cl_float3 v, float t)
 {
 	cl_float3	res;
 

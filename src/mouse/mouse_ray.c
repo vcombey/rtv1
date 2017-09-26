@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 16:46:56 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:26:48 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 float	calc_dist(float t, cl_float3 ray)
 {
 	cl_float3	cam_to_obj;
-	float	dist;
+	float		dist;
 
 	cam_to_obj = mult_vect(ray, t);
 	dist = norme_carre(cam_to_obj);
 	return (dist);
 }
-int		hit(t_obj *objs, int objs_number, cl_float3 cam_pos, cl_float3 ray,  struct s_result_hit *result_hit)
+
+int		hit(t_obj *objs, int objs_number, cl_float3 cam_pos, cl_float3 ray,\
+		struct s_result_hit *result_hit)
 {
 	float		dist;
 	cl_float3	pos_transformed;
@@ -33,8 +35,8 @@ int		hit(t_obj *objs, int objs_number, cl_float3 cam_pos, cl_float3 ray,  struct
 	int			i;
 	t_obj		obj;
 	int			hit;
-	float matrix[3][3];
-	float inverted_matrix[3][3];
+	float		matrix[3][3];
+	float		inverted_matrix[3][3];
 
 	i = 0;
 	hit = 0;
@@ -73,27 +75,30 @@ int		hit(t_obj *objs, int objs_number, cl_float3 cam_pos, cl_float3 ray,  struct
 
 int		mouse_event(int button, int x, int y)
 {
+	cl_float3			ray;
+	float				coef;
+	t_env				*env;
+	struct s_result_hit	result_hit;
+	cl_float3			cam_dir;
+
 	if (button == 1)
 	{
-		cl_float3			ray;
-		float				coef;
-		t_env				*env;
-		struct s_result_hit	result_hit;
-		cl_float3			cam_dir;
-
 		env = singleton_env();
 		cam_dir = env->scene->cam.dir;
 		ray.x = cam_dir.x;
 		ray.y = cam_dir.y;
 		ray.z = cam_dir.z;
-		ray = NORMALIZE(ray);
-		coef = (((float)y - ((float)env->height / 2)) / ((float)env->height / 2)) * 0.3;
+		ray = normalize(ray);
+		coef = (((float)y - ((float)env->height / 2)) /\
+				((float)env->height / 2)) * 0.3;
 		ray.z += -coef * env->scene->norm_vert.z;
-		coef = (((float)x - ((float)env->width / 2)) / ((float)env->width / 2)) * 0.3 * env->width_per_height;
+		coef = (((float)x - ((float)env->width / 2)) /\
+				((float)env->width / 2)) * 0.3 * env->width_per_height;
 		ray.y += coef * env->scene->norm_hor.y;
 		ray.x += coef * env->scene->norm_hor.x;
-		ray = NORMALIZE(ray);
-		if (hit(env->scene->objs, env->scene->objs_number, env->scene->cam.pos, ray, &result_hit))
+		ray = normalize(ray);
+		if (hit(env->scene->objs, env->scene->objs_number,\
+					env->scene->cam.pos, ray, &result_hit))
 			env->indice_obj = result_hit.indice;
 	}
 	return (1);

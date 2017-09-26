@@ -186,7 +186,7 @@ float	ft_min(float u, float v);
 float	ft_abs_float(float u);
 float	norme_carre(cl_float3 v);
 float	scalar_product(cl_float3 u, cl_float3 v);
-cl_float3	NORMALIZE(cl_float3 v);
+cl_float3	normalize(cl_float3 v);
 cl_float3	mult_vect( cl_float3 v, float t);
 cl_float3	div_vect(cl_float3 v, float t);
 cl_float3	add_vect(cl_float3 u, cl_float3 v);
@@ -201,4 +201,5 @@ cl_float3	rot_z(cl_float3 v, float teta);
 void	set_rotation_matrix(float m[3][3], cl_float3 vx, cl_float3 vy, cl_float3 vz);
 int		invert_matrix(float m[3][3], float inv_m[3][3]);
 cl_float3	mat_mult_vect(float a[3][3], cl_float3 v);
+float	ft_min_positiv(float a, float b);
 #endif

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 17:00:31 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:39:20 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ cl_float3	rot(cl_float3 v, float teta)
 
 cl_float3	rot_x(cl_float3 v, float teta)
 {
-	static float	mat[3][3] = {
+	float	mat[3][3] = {
 		{1, 0, 0},
 		{0, cos(teta), -sin(teta)},
 		{0, sin(teta), cos(teta)},
@@ -36,7 +36,7 @@ cl_float3	rot_x(cl_float3 v, float teta)
 
 cl_float3	rot_y(cl_float3 v, float teta)
 {
-	static float	mat[3][3] = {
+	float	mat[3][3] = {
 		{cos(teta), 0, sin(teta)},
 		{0, 1, 0},
 		{-sin(teta), 0, cos(teta)},
@@ -47,7 +47,7 @@ cl_float3	rot_y(cl_float3 v, float teta)
 
 cl_float3	rot_z(cl_float3 v, float teta)
 {
-	static float	mat[3][3] = {
+	float	mat[3][3] = {
 		{cos(teta), -sin(teta), 0},
 		{sin(teta), cos(teta), 0},
 		{0, 0, 1},

@@ -6,21 +6,12 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 16:30:50 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:26:49 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include <math.h>
-
-float	ft_min_positiv(float a, float b)
-{
-	if (a < 0 && b > 0)
-		return (b);
-	if (a > 0 && b < 0)
-		return (a);
-	return (ft_min(a, b));
-}
 
 float	calc_plan(t_obj *obj, cl_float3 pos, cl_float3 ray)
 {
@@ -42,17 +33,18 @@ float	calc_cone(t_obj *obj, cl_float3 pos, cl_float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	tan_alpha_carre;
 
-	tan_alpha_carre = tan(obj->alpha) * tan(obj->alpha);
-	(void)obj;
-	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z * tan_alpha_carre;
-	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 * pos.z * ray.z * tan_alpha_carre;
-	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z * tan_alpha_carre;
+	a = ray.x * ray.x + ray.y * ray.y - ray.z * ray.z *\
+		tan(obj->alpha) * tan(obj->alpha);
+	b = 2 * pos.x * ray.x + 2 * pos.y * ray.y - 2 *\
+		pos.z * ray.z * tan(obj->alpha) * tan(obj->alpha);
+	c = pos.x * pos.x + pos.y * pos.y - pos.z * pos.z *\
+		tan(obj->alpha) * tan(obj->alpha);
 	delta = calc_delta(a, b, c);
 	if (delta < 0)
 		return (0x0);
-	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a),\
+			(-b + sqrt(delta)) / (2 * a));
 	return (t);
 }
 
@@ -70,7 +62,8 @@ float	calc_cylindre(t_obj *obj, cl_float3 pos, cl_float3 ray)
 	delta = calc_delta(a, b, c);
 	if (delta < 0)
 		return (0x0);
-	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a), (-b + sqrt(delta)) / (2 * a));
+	t = ft_min_positiv((-b - sqrt(delta)) / (2 * a),\
+			(-b + sqrt(delta)) / (2 * a));
 	return (t);
 }
 
@@ -88,7 +81,8 @@ float	calc_sphere(t_obj *obj, cl_float3 pos, cl_float3 ray)
 	delta = calc_delta(a, b, c);
 	if (delta < 0)
 		return (0);
-	t = ft_min_positiv(((-b - (sqrt(delta))) / (2 * a)), ((-b + (sqrt(delta))) / (2 * a)));
+	t = ft_min_positiv(((-b - (sqrt(delta))) / (2 * a)),\
+			((-b + (sqrt(delta))) / (2 * a)));
 	return (t);
 }
 

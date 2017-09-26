@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/25 18:12:51 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 17:43:33 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	rot_arround_right(t_cam *cam)
 
 void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 {
-	dir = NORMALIZE(dir);
+	dir = normalize(dir);
 //	printf("dir %f, %f, %f\n", dir.x, dir.y,dir.z); 
 	*norm_hor = rot(dir, -M_PI / 2);
 	*norm_vert =  (cl_float3){.x = 0, .y = 0, .z = 1};
@@ -85,13 +85,22 @@ void	init_norm_cam_dir(cl_float3 *norm_vert, cl_float3 *norm_hor, cl_float3 dir)
 
 #define TETA_ROT 0.1
 
+void	rot_obj(t_env *env, t_scene *s, cl_float3 (f_rot)(cl_float3, float), int sign_rot)
+{
+	s->objs[env->indice_obj].dirx = f_rot(s->objs[env->indice_obj].dirx, \
+			TETA_ROT * sign_rot);
+	s->objs[env->indice_obj].diry = f_rot(s->objs[env->indice_obj].diry, \
+			TETA_ROT * sign_rot);
+	s->objs[env->indice_obj].dirz = f_rot(s->objs[env->indice_obj].dirz, \
+			TETA_ROT * sign_rot);
+	env->obj_has_changed = 1;
+}
+
 int			recalc_img(void *scene)
 {
 	t_env	*env;
 	t_scene	*s;
-	int		init;
 
-	init = 1;
 	s = (t_scene *)scene;
 	env = singleton_env();
 	if (env->up)
@@ -106,33 +115,12 @@ int			recalc_img(void *scene)
 		rot_arround_left(&s->cam);
 	if (env->key_t)
 		rot_arround_right(&s->cam);
-	if (env->rotx != 0)
-	{
-		s->objs[env->indice_obj].dirx = rot_x(s->objs[env->indice_obj].dirx, TETA_ROT * env->rotx);//segf
-		s->objs[env->indice_obj].diry = rot_x(s->objs[env->indice_obj].diry, TETA_ROT * env->rotx);//segf
-		s->objs[env->indice_obj].dirz = rot_x(s->objs[env->indice_obj].dirz, TETA_ROT * env->rotx);//segf
-		env->obj_has_changed = 1;
-		printf("%f, %f, %f", s->objs[env->indice_obj].dirz.x, s->objs[env->indice_obj].dirz.y, s->objs[env->indice_obj].dirz.z);
-	}
-	if (env->roty != 0)
-	{
-		s->objs[env->indice_obj].dirx = rot_y(s->objs[env->indice_obj].dirx, TETA_ROT * env->roty);//segf
-		s->objs[env->indice_obj].diry = rot_y(s->objs[env->indice_obj].diry, TETA_ROT * env->roty);//segf
-		s->objs[env->indice_obj].dirz = rot_y(s->objs[env->indice_obj].dirz, TETA_ROT * env->roty);//segf
-		env->obj_has_changed = 1;
-	}
-	if (env->rotz != 0)
-	{
-		s->objs[env->indice_obj].dirx = rot_z(s->objs[env->indice_obj].dirx, TETA_ROT * env->rotz);//segf
-		s->objs[env->indice_obj].diry = rot_z(s->objs[env->indice_obj].diry, TETA_ROT * env->rotz);//segf
-		s->objs[env->indice_obj].dirz = rot_z(s->objs[env->indice_obj].dirz, TETA_ROT * env->rotz);//segf
-		env->obj_has_changed = 1;
-	}
-
-	else
-		init = 0;
+	if (env->rotx != 0 && env->indice_obj < s->objs_number)
+		rot_obj(env, s, &rot_x, env->rotx);
+	if (env->roty != 0 && env->indice_obj < s->objs_number)
+		rot_obj(env, s, &rot_y, env->roty);
+	if (env->rotz != 0 && env->indice_obj < s->objs_number)
+		rot_obj(env, s, &rot_z, env->rotz);
 	init_norm_cam_dir(&s->norm_vert, &s->norm_hor, s->cam.dir);
-//	printf("camdir %f, %f, %f\n", s->cam.dir.x, s->cam.dir.y, s->cam.dir.z);
-//	printf("campos %f, %af, %f\n", s->cam.pos.x, s->cam.pos.y, s->cam.pos.z);
 	return (0);
 }
