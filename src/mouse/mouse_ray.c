@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 20:33:10 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/26 20:40:52 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		hit(t_scene *scene, cl_float3 cam_pos, cl_float3 ray,\
 			result_hit->indice = i;
 		i++;
 	}
-	return (hit);
+	return (result_hit->dist != 10000.0);
 }
 
 int		mouse_event(int button, int x, int y)
