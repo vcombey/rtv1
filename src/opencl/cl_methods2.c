@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:29:04 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 00:32:57 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 #include <sys/stat.h>
 #include <OpenCL/opencl.h>
 #include "libft.h"
-#include "rt.h"
 #include "cl.h"
+#include "rt.h"
 
 int		cl_create_buffer(struct s_cl *cl, int rights, size_t data_size,\
 		cl_mem *output)

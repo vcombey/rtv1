@@ -8,7 +8,7 @@ scene:
 		cylindre:
 			origin: 0 0 0
 			vecteur:  0 0 1
-			colorRGB: 0x3498db
+			colorRGB: 0X3498DB
 			rayon: 0.5
 	light:
 		origin: 4.5 4.5 0

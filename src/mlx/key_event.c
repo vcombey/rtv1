@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:09:30 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 03:07:23 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ void	mv_forward(t_cam *cam)
 {
 	cam->pos.x += cam->dir.x * 0.4;
 	cam->pos.y += cam->dir.y * 0.4;
+	cam->pos.z += cam->dir.z * 0.4;
 }
 
 void	mv_backward(t_cam *cam)
 {
 	cam->pos.x -= cam->dir.x * 0.4;
 	cam->pos.y -= cam->dir.y * 0.4;
+	cam->pos.z -= cam->dir.z * 0.4;
 }
 
 void	rot_arround_left(t_cam *cam)

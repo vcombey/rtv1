@@ -1,38 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/10 02:55:52 by vcombey           #+#    #+#             */
-/*   Updated: 2017/10/04 22:53:11 by vcombey          ###   ########.fr       */
+/*   Created: 2017/10/04 22:33:58 by vcombey           #+#    #+#             */
+/*   Updated: 2017/10/04 22:45:38 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *a)
+int	ft_atoi_hexa(const char *a, char **end_ptr, size_t *res)
 {
-	int res;
-	int i;
-	int neg;
+	int		ret;
+	int		i;
+	size_t	tmp;
 
-	res = 0;
+	ret = 0;
 	i = 0;
-	neg = 1;
 	while (a[i] == ' ' || (a[i] >= 9 && a[i] <= 13))
 		i++;
-	if (a[i] == '-' || a[i] == '+')
+	if (a[i] != '0' || a[i + 1] != 'X')
+		return (0);
+	i += 2;
+	while (a[i] && (ft_isdigit(a[i]) || (a[i] >= 'A' && a[i] <= 'F')))
 	{
-		if (a[i] == '-')
-			neg *= -1;
+		tmp = (ft_isdigit(a[i])) ? a[i] - '0' : a[i] - 'A' + 10;
+		ret = ret * 16 + tmp;
 		i++;
 	}
-	while (a[i] && ft_isdigit(a[i]))
-	{
-		res = res * 10 + a[i] - '0';
-		i++;
-	}
-	return (res * neg);
+	*res = ret;
+	*end_ptr = (char *)a + i;
+	return (1);
 }

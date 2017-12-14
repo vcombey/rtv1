@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:08:51 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 19:18:07 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ size_t	get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
-	(void)len;
 	new = &scene->objs[scene->objs_number];
 	new->type = SPHERE;
 	tab = lines[i].tab;
@@ -60,7 +59,6 @@ size_t	get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
-	(void)len;
 	new = &scene->objs[scene->objs_number];
 	new->type = PLAN;
 	tab = lines[i].tab;
@@ -87,7 +85,6 @@ size_t	get_cylindre(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
-	(void)len;
 	new = &scene->objs[scene->objs_number];
 	new->type = CYLINDRE;
 	tab = lines[i].tab;
@@ -116,7 +113,6 @@ size_t	get_cone(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	size_t	tab;
 	t_obj	*new;
 
-	(void)len;
 	new = &scene->objs[scene->objs_number];
 	new->type = CONE;
 	tab = lines[i].tab;
@@ -151,7 +147,7 @@ size_t	get_all_objects(t_yaml *lines, size_t i, t_scene *scene, size_t len)
 	scene->objs = ft_memalloc(sizeof(t_obj) * 15);
 	scene->objs_number = 0;
 	i++;
-	while (i < len && lines[i].tab == tab + 1)
+	while (i < len && lines[i].tab == tab + 1 && scene->objs_number < 15)
 	{
 		k = 0;
 		while (g_scene_func[k].key && !ft_strequ(g_scene_func[k].key,\

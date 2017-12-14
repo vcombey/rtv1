@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 19:49:48 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:49:57 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/09/27 01:55:17 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	rot_right(t_cam *cam)
 void	mv_up(t_cam *cam, t_scene *scene)
 {
 	cam->dir = rodrigues(cam->dir, scene->norm_hor, -TETA);
+	cam->dir = normalize(cam->dir);
 }
 
 void	mv_down(t_cam *cam, t_scene *scene)
 {
 	cam->dir = rodrigues(cam->dir, scene->norm_hor, TETA);
+	cam->dir = normalize(cam->dir);
 }
 
 void	rot_left(t_cam *cam)

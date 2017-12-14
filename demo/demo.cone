@@ -1,14 +1,14 @@
 scene:
-	name: demo_2 					#nom de fenetre
+	name: lala
+	windows_size: 1280 800
 	camera:
 		origin: 7 0 0
 		vecteur: -1 0 0
-	windows_size: 1280 800
 	object:
 		cone:
 			origin: 1 -2 0
-			alpha:0.5
-			colorRGB: 0xd35400
-			vecteur: 1 0 0
+			alpha: 0.5
+			colorRGB: 0XD35400
+			vecteur: 0 0 1
 	light:
 		origin: 4 4 0

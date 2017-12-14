@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/27 00:17:20 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:23:07 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/10/04 23:00:41 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ size_t		get_plan(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 size_t		get_sphere(t_yaml *lines, size_t i, t_scene *scene, size_t len);
 void		ft_obj_add(t_obj *new_node, t_obj **first);
 double		get_rayon(char *value);
-double		get_hexa(char *value);
+size_t		get_hexa(char *value);
 void		ft_obj_add(t_obj *new_node, t_obj **first);
 t_obj		*ft_new_obj(void);
 void		assign_obj_func(t_scene *scene);
@@ -117,4 +117,5 @@ void		move_arows(t_env *env, t_scene *s);
 void		get_vecteur(t_obj *new, char *line);
 void		rot_obj(t_env *env, t_scene *s,\
 		cl_float3 (f_rot)(cl_float3, float), int sign_rot);
+int			ft_str_is_clear(char *str);
 #endif

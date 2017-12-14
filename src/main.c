@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/26 21:30:35 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:10:04 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/10/04 23:23:47 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 	cl_init(cl);
 	file_to_str("./built.cl", &source_str);
 	cl_load_program_from_source(cl, &source_str, &program);
+	free(source_str);
 	cl_create_kernel_from_program(program, "calc", &cl->kernel);
 	cl_create_buffer(cl, CL_MEM_WRITE_ONLY, cl->data_size, &cl->output);
 	cl_create_buffer(cl, CL_MEM_READ_ONLY, cl_args->objs_size,\

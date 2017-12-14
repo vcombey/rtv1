@@ -261,11 +261,10 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray = NORMALIZE(ray);
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray.z += -coef * norm_vert.z;
+	ray = add_vect(mult_vect(norm_vert, -coef), ray);
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray.y -= coef * norm_hor.y;
-	ray.x -= coef * norm_hor.x;
+	ray = add_vect(mult_vect(norm_hor, -coef), ray);
 	ray = NORMALIZE(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);

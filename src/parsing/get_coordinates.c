@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 13:44:26 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/27 00:08:50 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/10/04 22:41:43 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,21 @@ cl_float3	get_coordinates(cl_float3 res, char *value)
 
 double		get_rayon(char *value)
 {
-	double	res;
+	float	res;
 
-	res = strtof(value, &value);
+	if (!(ft_strtof(value, &value, &res)))
+		fatal("invalid rayon");
 	if (!ft_str_is_clear(value))
 		fatal("invalid rayon");
 	return (res);
 }
 
-double		get_hexa(char *value)
+size_t		get_hexa(char *value)
 {
-	double	res;
+	size_t	res;
 
-	res = strtof(value, &value);
+	if (!(ft_atoi_hexa(value, &value, &res)))
+		fatal("invalid hexadecimal values");
 	if (!ft_str_is_clear(value))
 		fatal("invalid hexadecimal value");
 	return (res);

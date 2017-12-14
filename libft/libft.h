@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 03:06:17 by vcombey           #+#    #+#             */
-/*   Updated: 2017/09/26 19:43:55 by vcombey          ###   ########.fr       */
+/*   Updated: 2017/10/04 22:53:39 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-void	fatal(const char *error_str);
+void				fatal(const char *error_str);
 void				ft_error(char *str, char *name);
 void				ft_fill_str(char *str, char c, size_t n);
 void				ft_exit(char *message, int sortie);
@@ -109,5 +109,7 @@ char				*ft_uitoa_base(uintmax_t value, int base);
 void				ft_putnstr(char *str, size_t len);
 size_t				ft_strchri(char *str, char c);
 int					ft_strtof(char *str, char **end_ptr, float *res);
+int					ft_atoi_hexa(const char *a, char **end_ptr, size_t *res);
+int					ft_atoi_safe(const char *a, char **end_ptr, int *res);
 
 #endif
