@@ -10,7 +10,7 @@ make && ./rtv1 scene/demo.[nb]
 
 ### Screenshots
 
-![ScreenShot](https://cdn.rawgit.com/vcombey/rtv1/master/screenshots/capture-1.png)
+![ScreenShot](https://raw.githubusercontent.com/vcombey/rtv1/master/screenshots/capture-1.png?token=AWg-K-4lJ4XaiiJ7itVNRwlcJM1i8e2gks5aPC5gwA%3D%3D)
 
 ## Authors
 
