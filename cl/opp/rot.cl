@@ -57,7 +57,6 @@ float3	mat_mult_vect(float a[3][3], float x[3])
 
 float3	calc_rotation_figure(float3 ray, float3 v)
 {
-//	v = NORMALIZE(v);
 	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},

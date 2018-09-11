@@ -80,7 +80,7 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray.y = cam_dir.y;
 	ray.z = cam_dir.z;
 
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
 	ray.z += -coef * norm_vert.z;
@@ -88,7 +88,7 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 //	printf("coef %f\n", coef);
 	ray.y -= coef * norm_hor.y;
 	ray.x -= coef * norm_hor.x;
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);
 }

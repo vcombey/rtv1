@@ -4,7 +4,7 @@ float	ft_min_positiv(float a, float b)
 		return (b);
 	if (a > 0 && b < 0)
 		return (a);
-	return (ft_min(a, b));
+	return (fmin(a, b));
 }
 
 float	calc_plan(t_obj *obj, float3 pos, float3 ray)
@@ -86,9 +86,6 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	coef_1;
-	float	coef_2;
-	float	coef_div;
 
 //	ray = calc_rotation_figure(ray, obj->dirz);
 
@@ -116,7 +113,7 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 
 	a = norme_carre(ray);
-	b = 2 * scalar_product(ray, pos);
+	b = 2 * dot(ray, pos);
 	c = norme_carre(pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);

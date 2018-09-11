@@ -4,11 +4,11 @@ int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 l
 	float3		obj_obj;
 	float3		obj_light;
 
-	lum_vect = mult_vect(lum_vect, -1);
+	lum_vect = lum_vect * -1;
 	if (!hit(objs, scene.objs_number, hit_forward.intersect, lum_vect, &hit_backward))
 		return (0);
-	obj_obj = sub_vect(hit_forward.intersect, hit_backward.intersect);
-	obj_light = sub_vect(hit_forward.intersect, lum.pos);
+	obj_obj = hit_forward.intersect - hit_backward.intersect;
+	obj_light = hit_forward.intersect - lum.pos;
 //	if (hit_forward.obj == hit_backward.obj)
 //		return (0);
 	if (norme_carre(obj_obj) < norme_carre(obj_light))

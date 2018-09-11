@@ -45,10 +45,10 @@ float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_
 	float	intensite_specular;
 	float3	reflection_vect;
 
-	reflection_vect = mult_vect(result_hit->norm, 2 * scalar_product(lum_vect, result_hit->norm));
-	reflection_vect = sub_vect(reflection_vect, lum_vect);
-	ray = NORMALIZE(ray); //??
-	intensite_specular = scalar_product(reflection_vect, ray);
+	reflection_vect = result_hit->norm * (float)(2.0 * dot(lum_vect, result_hit->norm));
+	reflection_vect = reflection_vect - lum_vect;
+	ray = normalize(ray); //??
+	intensite_specular = dot(reflection_vect, ray);
 	if (intensite_specular < 0)
 		return (0);
 	intensite_specular = 0.3 * pow(intensite_specular, 11);
@@ -60,10 +60,10 @@ float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_v
 	float	intensite_diffuse;
 
 	(void)ray;
-	result_hit->norm = NORMALIZE(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
+	result_hit->norm = normalize(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
 	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 	//	obj->intersectalize(obj->intersect); // pk obj->intersect-sphere n est pas de obj->intersecte rayon ?
-	intensite_diffuse = scalar_product(lum_vect, result_hit->norm);
+	intensite_diffuse = dot(lum_vect, result_hit->norm);
 	if (intensite_diffuse > 0)
 		return (0);
 	return (ft_abs_float(intensite_diffuse));
@@ -73,9 +73,8 @@ float3	calc_lum_vect(float3 intersect, t_light lum)
 {
 	float3 lum_vect;
 	//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
-	//	sub_vect(lum_pos, lum.pos, obj->pos);
-	lum_vect = sub_vect(intersect, lum.pos);
-	lum_vect = NORMALIZE(lum_vect);
+	lum_vect = intersect - lum.pos;
+	lum_vect = normalize(lum_vect);
 	return (lum_vect);
 }
 

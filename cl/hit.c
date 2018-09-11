@@ -4,7 +4,7 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 	float	dist;
 
 	(void)obj;
-	cam_to_obj = mult_vect(ray, t);
+	cam_to_obj = ray * t;
 	dist = norme_carre(cam_to_obj);
 	
 /*
@@ -16,8 +16,8 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 
 void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
-	output->intersect = mult_vect(ray, output->t);
-	output->intersect = add_vect(output->intersect, pos);
+	output->intersect = ray * output->t;
+	output->intersect = output->intersect + pos;
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
@@ -63,7 +63,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	while (i < objs_number)
 	{
 			obj = objs[i];
-			pos_transformed = sub_vect(cam_pos, obj.pos);
+			pos_transformed = cam_pos - obj.pos;
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
 				set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
@@ -86,13 +86,13 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				if (obj.type != PLAN && obj.type != SPHERE)
 				{
 					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
 					result_hit->ray = mat_mult_vect(matrix, ray_transformed);
 				}
 				else
 				{
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->ray = ray;
 				}
 			}

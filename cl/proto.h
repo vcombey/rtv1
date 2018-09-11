@@ -124,7 +124,7 @@ struct		s_result_hit
 **	void	vectorial_product(float3 res, float3 u, float3 v);
 */
 
-int	calc_rayon(t_scene scene, float3 ray);
+/*int	calc_rayon(t_scene scene, float3 ray);
 void	init_norm_cam_dir(float3 *norm_vert, float3 *norm_hor, float3 dir);
 float	calc_plan(t_obj *obj, float3 pos, float3 ray);
 float	calc_cone(t_obj *obj, float3 pos, float3 ray);
@@ -159,5 +159,5 @@ float3	vectorial_product(float3 u, float3 v);
 void	mat_mult(float3 res[3], float3 a[3], float3 b[3]);
 void	mat_mult_vect(float3 res, float3 a[3], float3 x);
 void	calc_rotation_figure(float3 ray, float3 v);
-
+*/
 #endif

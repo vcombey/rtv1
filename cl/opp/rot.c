@@ -53,7 +53,7 @@ float3	mat_mult_vect(float a[3][3], float3 v)
 
 float3	calc_rotation_figure(float3 ray, float3 v)
 {
-	v = NORMALIZE(v);
+	v = normalize(v);
 	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},
@@ -76,7 +76,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 		mat_mult(res, mat_y, mat_x);
 		ray = mat_mult_vect(res, ray);
 
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;
@@ -85,7 +85,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 /*
 **	float3	rotation_change_repere(float3 ray, float3 v)
 **	{
-**		v = NORMALIZE(v);
+**		v = normalize(v);
 **		float	mat_x[3][3] = {
 **			{v.x, 0, 0},
 **			{v.y, v.z, -v.y},
@@ -96,7 +96,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 **		mat_mult(res, mat_y, mat_x);
 **		ray = mat_mult_vect(res, ray);
 **	
-**		ray = NORMALIZE(ray);
+**		ray = normalize(ray);
 **		return (ray);
 **		(void)mat_y;
 **		(void)mat_z;
@@ -105,7 +105,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 
 float3	euler_rotation(float3 ray, float3 v)
 {
-	v = NORMALIZE(v);
+	v = normalize(v);
 
 	float	c1 = v.x;
 	float	s1 = v.y;
@@ -119,7 +119,7 @@ float3	euler_rotation(float3 ray, float3 v)
 		{-c1*s2, c3*s1 + c1*c2*s3, c1*c2*c3 - s1*s3},
 	};
 	ray = mat_mult_vect(mat, ray);
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	return (ray);
 }
 

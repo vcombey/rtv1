@@ -156,16 +156,8 @@ float3	calc_lum_vect(float3 intersect, t_light lum);
 int	calc_all_lum(__global t_light *lights, __global t_obj *objs, t_scene scene, struct s_result_hit *result_hit, float3 ray);
 int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 lum_vect, struct s_result_hit  hit_forward);
 float	calc_delta(float a, float b, float c);
-float	ft_min(float u, float v);
 float	ft_abs_float(float u);
 float	norme_carre(float3 v);
-float	scalar_product(float3 u, float3 v);
-float3	NORMALIZE(float3 v);
-float3	mult_vect( float3 v, float t);
-float3	div_vect(float3 v, float t);
-float3	add_vect(float3 u, float3 v);
-float3	sub_vect(float3 u, float3 v);
-float3	vectorial_product(float3 u, float3 v);
 float3 rot(float3 v, float teta);
 void	mat_mult(float res[3][3], float a[3][3], float b[3][3]);
 float3	mat_mult_vect(float a[3][3], float3 v);
@@ -258,14 +250,15 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray.y = cam_dir.y;
 	ray.z = cam_dir.z;
 
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray = add_vect(mult_vect(norm_vert, -coef), ray);
+	ray.z += -coef * norm_vert.z;
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray = add_vect(mult_vect(norm_hor, -coef), ray);
-	ray = NORMALIZE(ray);
+	ray.y -= coef * norm_hor.y;
+	ray.x -= coef * norm_hor.x;
+	ray = normalize(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);
 }
@@ -275,7 +268,7 @@ float	ft_min_positiv(float a, float b)
 		return (b);
 	if (a > 0 && b < 0)
 		return (a);
-	return (ft_min(a, b));
+	return (fmin(a, b));
 }
 
 float	calc_plan(t_obj *obj, float3 pos, float3 ray)
@@ -357,9 +350,6 @@ float	calc_cylindre(t_obj *obj, float3 pos, float3 ray)
 	float	b;
 	float	c;
 	float	t;
-	float	coef_1;
-	float	coef_2;
-	float	coef_div;
 
 //	ray = calc_rotation_figure(ray, obj->dirz);
 
@@ -387,7 +377,7 @@ float	calc_sphere(t_obj *obj, float3 pos, float3 ray)
 	float	t;
 
 	a = norme_carre(ray);
-	b = 2 * scalar_product(ray, pos);
+	b = 2 * dot(ray, pos);
 	c = norme_carre(pos) - obj->rayon * obj->rayon;
 
 	delta = calc_delta(a, b, c);
@@ -427,7 +417,7 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 	float	dist;
 
 	(void)obj;
-	cam_to_obj = mult_vect(ray, t);
+	cam_to_obj = ray * t;
 	dist = norme_carre(cam_to_obj);
 	
 /*
@@ -439,8 +429,8 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 
 void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
-	output->intersect = mult_vect(ray, output->t);
-	output->intersect = add_vect(output->intersect, pos);
+	output->intersect = ray * output->t;
+	output->intersect = output->intersect + pos;
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
@@ -486,7 +476,7 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 	while (i < objs_number)
 	{
 			obj = objs[i];
-			pos_transformed = sub_vect(cam_pos, obj.pos);
+			pos_transformed = cam_pos - obj.pos;
 			if (obj.type != PLAN && obj.type != SPHERE)
 			{
 				set_rotation_matrix(matrix, obj.dirx, obj.diry, obj.dirz);
@@ -509,13 +499,13 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				if (obj.type != PLAN && obj.type != SPHERE)
 				{
 					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
 					result_hit->ray = mat_mult_vect(matrix, ray_transformed);
 				}
 				else
 				{
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->ray = ray;
 				}
 			}
@@ -572,10 +562,10 @@ float	calc_lum_specular(struct s_result_hit *result_hit, float3 ray, float3 lum_
 	float	intensite_specular;
 	float3	reflection_vect;
 
-	reflection_vect = mult_vect(result_hit->norm, 2 * scalar_product(lum_vect, result_hit->norm));
-	reflection_vect = sub_vect(reflection_vect, lum_vect);
-	ray = NORMALIZE(ray); //??
-	intensite_specular = scalar_product(reflection_vect, ray);
+	reflection_vect = result_hit->norm * (float)(2.0 * dot(lum_vect, result_hit->norm));
+	reflection_vect = reflection_vect - lum_vect;
+	ray = normalize(ray); //??
+	intensite_specular = dot(reflection_vect, ray);
 	if (intensite_specular < 0)
 		return (0);
 	intensite_specular = 0.3 * pow(intensite_specular, 11);
@@ -587,10 +577,10 @@ float	calc_lum_diffuse(struct s_result_hit *result_hit, float3 ray, float3 lum_v
 	float	intensite_diffuse;
 
 	(void)ray;
-	result_hit->norm = NORMALIZE(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
+	result_hit->norm = normalize(result_hit->norm); /////////////////////////////////////////////////////////////////////////////TODO danger
 	//printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
 	//	obj->intersectalize(obj->intersect); // pk obj->intersect-sphere n est pas de obj->intersecte rayon ?
-	intensite_diffuse = scalar_product(lum_vect, result_hit->norm);
+	intensite_diffuse = dot(lum_vect, result_hit->norm);
 	if (intensite_diffuse > 0)
 		return (0);
 	return (ft_abs_float(intensite_diffuse));
@@ -600,9 +590,8 @@ float3	calc_lum_vect(float3 intersect, t_light lum)
 {
 	float3 lum_vect;
 	//	printf("\nobj->intersect x %f, y %f, z %f\n", obj->intersect.x, obj->intersect.y, obj->intersect.z);
-	//	sub_vect(lum_pos, lum.pos, obj->pos);
-	lum_vect = sub_vect(intersect, lum.pos);
-	lum_vect = NORMALIZE(lum_vect);
+	lum_vect = intersect - lum.pos;
+	lum_vect = normalize(lum_vect);
 	return (lum_vect);
 }
 
@@ -645,11 +634,11 @@ int	obj_between_light(t_scene scene, __global t_obj *objs, t_light lum, float3 l
 	float3		obj_obj;
 	float3		obj_light;
 
-	lum_vect = mult_vect(lum_vect, -1);
+	lum_vect = lum_vect * -1;
 	if (!hit(objs, scene.objs_number, hit_forward.intersect, lum_vect, &hit_backward))
 		return (0);
-	obj_obj = sub_vect(hit_forward.intersect, hit_backward.intersect);
-	obj_light = sub_vect(hit_forward.intersect, lum.pos);
+	obj_obj = hit_forward.intersect - hit_backward.intersect;
+	obj_light = hit_forward.intersect - lum.pos;
 //	if (hit_forward.obj == hit_backward.obj)
 //		return (0);
 	if (norme_carre(obj_obj) < norme_carre(obj_light))
@@ -663,11 +652,6 @@ float	calc_delta(float a, float b, float c)
 	return (b * b - 4 * a * c);
 }
 
-float	ft_min(float u, float v)
-{
-	return (u < v ? u : v);
-}
-
 float	ft_abs_float(float u)
 {
 	return (u > 0 ? u : -u);
@@ -675,65 +659,6 @@ float	ft_abs_float(float u)
 float	norme_carre(float3 v)
 {
 	return (v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
-float	scalar_product(float3 u, float3 v)
-{
-	return (v.x * u.x + v.y * u.y + v.z * u.z);
-}
-
-float3	NORMALIZE(float3 v)
-{
-	return (div_vect(v, sqrt(norme_carre(v))));
-}
-float3	mult_vect( float3 v, float t)
-{
-	float3	res;
-
-	res.x = v.x * t;
-	res.y = v.y * t;
-	res.z = v.z * t;
-	return (res);
-}
-
-float3	div_vect(float3 v, float t)
-{
-	float3	res;
-
-	res.x = v.x / t;
-	res.y = v.y / t;
-	res.z = v.z / t;
-	return (res);
-}
-
-float3	add_vect(float3 u, float3 v)
-{
-	float3	res;
-
-	res.x = u.x + v.x;
-	res.y = u.y + v.y;
-	res.z = u.z + v.z;
-	return (res);
-}
-
-float3	sub_vect(float3 u, float3 v)
-{
-	float3	res;
-
-	res.x = u.x - v.x;
-	res.y = u.y - v.y;
-	res.z = u.z - v.z;
-	return (res);
-}
-
-float3	vectorial_product(float3 u, float3 v)
-{
-	float3	res;
-
-	res.x = u.y * v.z - u.z * v.y;
-	res.y = u.z * v.x - u.x * v.z;
-	res.z = u.x * v.y - u.y * v.x;
-	return (res);
 }
 float3 rot(float3 v, float teta)
 {
@@ -790,7 +715,7 @@ float3	mat_mult_vect(float a[3][3], float3 v)
 
 float3	calc_rotation_figure(float3 ray, float3 v)
 {
-	v = NORMALIZE(v);
+	v = normalize(v);
 	float	mat_x[3][3] = {
 		{1, 0, 0},
 		{0, v.z, -v.y},
@@ -813,7 +738,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 		mat_mult(res, mat_y, mat_x);
 		ray = mat_mult_vect(res, ray);
 
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	return (ray);
 	(void)mat_y;
 	(void)mat_z;
@@ -822,7 +747,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 /*
 **	float3	rotation_change_repere(float3 ray, float3 v)
 **	{
-**		v = NORMALIZE(v);
+**		v = normalize(v);
 **		float	mat_x[3][3] = {
 **			{v.x, 0, 0},
 **			{v.y, v.z, -v.y},
@@ -833,7 +758,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 **		mat_mult(res, mat_y, mat_x);
 **		ray = mat_mult_vect(res, ray);
 **	
-**		ray = NORMALIZE(ray);
+**		ray = normalize(ray);
 **		return (ray);
 **		(void)mat_y;
 **		(void)mat_z;
@@ -842,7 +767,7 @@ float3	calc_rotation_figure(float3 ray, float3 v)
 
 float3	euler_rotation(float3 ray, float3 v)
 {
-	v = NORMALIZE(v);
+	v = normalize(v);
 
 	float	c1 = v.x;
 	float	s1 = v.y;
@@ -856,7 +781,7 @@ float3	euler_rotation(float3 ray, float3 v)
 		{-c1*s2, c3*s1 + c1*c2*s3, c1*c2*c3 - s1*s3},
 	};
 	ray = mat_mult_vect(mat, ray);
-	ray = NORMALIZE(ray);
+	ray = normalize(ray);
 	return (ray);
 }
 
